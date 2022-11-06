@@ -72,11 +72,11 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 
 build cmake_object_order_depends_target_curl-demo: phony || CMakeFiles/curl-demo.dir
 
-build CMakeFiles/curl-demo.dir/contenful.cpp.o: CXX_COMPILER__curl-demo_Debug /cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/Caso_5_ED/contenful.cpp || cmake_object_order_depends_target_curl-demo
-  DEP_FILE = CMakeFiles/curl-demo.dir/contenful.cpp.o.d
+build CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o: CXX_COMPILER__curl-demo_Debug /cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/Caso_5_ED/contentful/contenful.cpp || cmake_object_order_depends_target_curl-demo
+  DEP_FILE = CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o.d
   FLAGS = -g -std=gnu++14
   OBJECT_DIR = CMakeFiles/curl-demo.dir
-  OBJECT_FILE_DIR = CMakeFiles/curl-demo.dir
+  OBJECT_FILE_DIR = CMakeFiles/curl-demo.dir/contentful
 
 
 # =============================================================================
@@ -86,7 +86,7 @@ build CMakeFiles/curl-demo.dir/contenful.cpp.o: CXX_COMPILER__curl-demo_Debug /c
 #############################################
 # Link the executable curl-demo.exe
 
-build curl-demo.exe: CXX_EXECUTABLE_LINKER__curl-demo_Debug CMakeFiles/curl-demo.dir/contenful.cpp.o | /usr/lib/libcurl.dll.a
+build curl-demo.exe: CXX_EXECUTABLE_LINKER__curl-demo_Debug CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o | /usr/lib/libcurl.dll.a
   FLAGS = -g
   LINK_FLAGS = -Wl,--enable-auto-import
   LINK_LIBRARIES = /usr/lib/libcurl.dll.a
