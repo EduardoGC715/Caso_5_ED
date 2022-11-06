@@ -1,0 +1,5 @@
+# ninja log v5
+30	7051	1667754654728979400	CMakeFiles/Caso_5_ED.dir/contenful.cpp.o	62787983c61cf2f
+454	1321	1667754793551792300	build.ninja	934c3b60adf5c8d2
+1	6093	1667754799751286800	CMakeFiles/curl-demo.dir/contenful.cpp.o	8ad5987ffc906c68
+6587	8585	1667754801665978700	curl-demo.exe	cc2f704d5510deaa
