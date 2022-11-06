@@ -1,8 +1,6 @@
 # ninja log v5
-6587	8585	1667754801665978700	curl-demo.exe	cc2f704d5510deaa
-1	6093	1667754799751286800	CMakeFiles/curl-demo.dir/contenful.cpp.o	8ad5987ffc906c68
-454	1321	1667756708246995900	build.ninja	934c3b60adf5c8d2
-30	7051	1667754654728979400	CMakeFiles/Caso_5_ED.dir/contenful.cpp.o	62787983c61cf2f
-7	2314	1667756708246995900	build.ninja	934c3b60adf5c8d2
-2	6868	1667756715380663900	CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o	32473efa4b73ae57
 6870	8791	1667756717121939000	curl-demo.exe	a149876ee67196cd
+1	6093	1667754799751286800	CMakeFiles/curl-demo.dir/contenful.cpp.o	8ad5987ffc906c68
+7	2314	1667758488536990800	build.ninja	934c3b60adf5c8d2
+30	7051	1667754654728979400	CMakeFiles/Caso_5_ED.dir/contenful.cpp.o	62787983c61cf2f
+2	6868	1667756715380663900	CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o	32473efa4b73ae57
