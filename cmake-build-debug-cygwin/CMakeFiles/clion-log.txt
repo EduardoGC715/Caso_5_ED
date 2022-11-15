@@ -1,4 +1,4 @@
-C:\Users\joseg\AppData\Local\JetBrains\CLion2022.2\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/ED/Caso_5_ED -B /cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin
+C:\Users\joseg\AppData\Local\JetBrains\CLion2022.2\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED -B /cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin
 -- The C compiler identification is GNU 11.3.0
 -- The CXX compiler identification is GNU 11.3.0
 -- Detecting C compiler ABI info
@@ -14,4 +14,4 @@ C:\Users\joseg\AppData\Local\JetBrains\CLion2022.2\cygwin_cmake\bin\cmake.exe -D
 -- Found CURL: /usr/lib/libcurl.dll.a (found version "7.85.0")  
 -- Configuring done
 -- Generating done
--- Build files have been written to: /cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin
+-- Build files have been written to: /cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin

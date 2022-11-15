@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin"
+			"value" : "/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -679,7 +679,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/ED/Caso_5_ED"
+			"value" : "/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1375,7 +1375,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin"
+			"value" : "/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin"
 		},
 		{
 			"name" : "Caso_5_ED_IS_TOP_LEVEL",
@@ -1399,7 +1399,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/ED/Caso_5_ED"
+			"value" : "/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED"
 		},
 		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_CURL",
