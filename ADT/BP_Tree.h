@@ -119,7 +119,7 @@ public:
             }
         }
     }
-    void insertInternal(T* t_key, BP_Node<T> *t_child) {
+    void insert_internal(T* t_key, BP_Node<T> *t_child) {
         BP_Node<T> cursor=t_child->get_parent();
         if (cursor->get_size() < m_degree) {
             int i = 0;
@@ -174,7 +174,7 @@ public:
                 new_root->set_size(1);
                 m_root = new_root;
             } else {
-                insertInternal(cursor.get_spcf_key(cursor.get_size()), new_internal);
+                insert_internal(cursor.get_spcf_key(cursor.get_size()), new_internal);
             }
         }
     }
