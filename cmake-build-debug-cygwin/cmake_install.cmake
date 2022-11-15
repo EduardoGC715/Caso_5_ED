@@ -1,4 +1,4 @@
-# Install script for directory: /cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/Caso_5_ED
+# Install script for directory: /cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/ED/Caso_5_ED
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/Caso_5_ED/cmake-build-debug-cygwin/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/cygdrive/c/Users/joseg/OneDrive/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
