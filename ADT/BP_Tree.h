@@ -48,7 +48,7 @@ public:
         }
     }
 
-    void insert(T t_key) {
+    void insert(T* t_key) {
         if(m_root== nullptr) {
             m_root = new BP_Node<T>(m_degree);
             m_root->set_is_leaf(true);
@@ -69,7 +69,7 @@ public:
                     }
                 }
             }
-            if (cursor->get_size() < m_degree) {
+            if (cursor->get_size() < m_degree-1) {
                 int i = 0;
                 while (t_key > cursor->get_spcf_key(i) && i < cursor->get_size())
                     i++;
@@ -82,14 +82,12 @@ public:
                 cursor->set_spcf_child(nullptr,cursor->get_size()-1);
             } else {
                 auto *new_leaf = new BP_Node<T>(m_degree);
-                T aux_key[m_degree + 1];
-                for (int x = 0; x < m_degree; x++) {
-                    aux_key[x] = cursor->get_spcf_key(x);
-                }
+                std::vector<T*> aux_key;
+                aux_key=cursor->get_keys();
                 int x = 0, y;
                 while (t_key > aux_key[x] && x < m_degree)
                     x++;
-                for (y = m_degree + 1; y > x; y--) {
+                for (y = m_degree; y > x; y--) {
                     aux_key[y] = aux_key[y - 1];
                 }
                 aux_key[x] = t_key;
@@ -121,7 +119,7 @@ public:
             }
         }
     }
-    void insert_internal(T t_key, BP_Node<T> *t_child) {
+    void insert_internal(T* t_key, BP_Node<T> *t_child) {
         BP_Node<T>* cursor=t_child->get_parent();
         if (cursor->get_size() < m_degree) {
             int i = 0;
@@ -139,14 +137,12 @@ public:
         }
         else {
             auto *new_internal = new BP_Node<T>(m_degree);
-            T aux_key[m_degree + 1];
-            BP_Node<T> *aux_child[m_degree + 2];
-            for (int i = 0; i < m_degree; i++) {
-                aux_key[i] = cursor->get_spcf_key(i);
-            }
-            for (int i = 0; i < m_degree + 1; i++) {
-                aux_child[i] = cursor->get_spcf_child(i);
-            }
+            std::vector<T*> aux_key;
+            std::vector<BP_Node<T>*> aux_child;
+
+            aux_key=cursor->get_keys();
+            aux_child=cursor->get_children();
+
             int p = 0, q;
             while (t_key > aux_key[p] && p < m_degree)
                 p++;
@@ -185,7 +181,7 @@ public:
     void print_tree(BP_Node<T> *cursor) {
         if (cursor != NULL) {
             for (int i = 0; i < cursor->get_size(); i++) {
-                std::cout << cursor->get_spcf_key(i) << " ";
+                std::cout << *cursor->get_spcf_key(i) << " ";
             }
             std::cout << "\n";
             if (cursor->get_is_leaf() != true) {
