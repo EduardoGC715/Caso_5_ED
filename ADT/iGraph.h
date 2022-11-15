@@ -5,57 +5,78 @@
 template<typename T>
 class iGraph {
     private:
-        int queued_ID = 0;
-        map<int, Vertex<T>*>* node_list;
+        int queued_ID = 1;
+        map<int, Vertex<T>*>* vertices;
 
     public:
-        iGraph() : node_list()
-        {}
+        iGraph() {
+            vertices = new map<int, Vertex<T>*>;
+        }
 
         ~iGraph() {
             clear();
-            delete node_list;
+            delete vertices;
         }
 
         map<int, Vertex<T>*>* get_vertices() {
-            return node_list;
+            return vertices;
         }
 
         Vertex<T>* get_vertex(int pIndex) {
-            return node_list->at(pIndex);
+            try {
+                return vertices->at(pIndex);
+            } catch (const std::out_of_range& exception) {
+                return nullptr;
+            }
         }
 
         int get_size() const {
-            return node_list->size();
+            return vertices->size();
         }
 
         void insert_vertex(T* pData) {
             Vertex<T>* node = new Vertex<T>(queued_ID, pData);
-            node_list->emplace(queued_ID++, node);
+            vertices->emplace(queued_ID, node);
+            ++queued_ID;
         }
 
         T* erase_vertex(int pIndex) {
-            Vertex<T>* node = get_vertex(pIndex);
-            node_list->erase(nodes->begin() + pIndex);
-            T* data = node->get_data();
-            delete node;
+            T* data = nullptr;
+            Vertex<T>* target = get_vertex(pIndex);
+            if (target != nullptr) {
+                vertices->erase(pIndex);
+                for (auto iter = vertices->begin(); iter != vertices->end(); ++iter)
+                {// Eliminar arcos que lleguen al vertice objetivo
+                    Vertex<T>* vertex = iter->second;
+                    if (are_linked(vertex, target)) {
+                        detach(vertex, target);
+                    }
+                }
+                data = target->get_data();
+                delete target;
+            }
             return data;
         }
 
         void clear() {
-            for (auto iter : node_list) { // Elimina nodos individuales
-                delete iter->first;
+            for (auto iter = vertices->begin(); iter != vertices->end(); ++iter) {
+                Vertex<T>* vertex = iter->second;
+                delete vertex; // Elimina nodos individuales
             }
-            node_list->clear();
+            vertices->clear();
         }
 
         bool are_linked(int pIndexA, int pIndexB) {
             Vertex<T>* node_A = get_vertex(pIndexA);
-            return node_A->is_joined(pIndexB);
+            if (node_A != nullptr) {
+                return node_A->is_joined(pIndexB);
+            } else {
+                return false;
+            }
         }
 
         bool are_linked(Vertex<T>* pNodeA, Vertex<T>* pNodeB) {
-            return pNodeA->is_joined(pNodeB)
+            return pNodeA->is_joined(pNodeB);
         }
 
         virtual void join(Vertex<T>*, Vertex<T>*, int) = 0;

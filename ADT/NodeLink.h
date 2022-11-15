@@ -7,7 +7,7 @@ class Vertex;
 template<typename T>
 class NodeLink {
     private:
-        const int weight;
+        int weight;
         Vertex<T>* origin;
         Vertex<T>* end;
 
@@ -26,5 +26,9 @@ class NodeLink {
 
         int get_weight() const {
             return weight;
+        }
+
+        void set_weight(int pWeight) {
+            weight = pWeight;
         }
 };

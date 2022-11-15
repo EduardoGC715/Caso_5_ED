@@ -6,7 +6,7 @@
 using std::map;
 
 template<typename T>
-class Vertex : iNode<int,T> {
+class Vertex : public iNode<int,T> {
     typedef NodeLink<T> Link;
 
     private:
@@ -27,6 +27,22 @@ class Vertex : iNode<int,T> {
             delete link_list;
         }
 
+        map<int, Link*>* get_links() {
+            return link_list;
+        }
+
+        Link* get_link(int pKey) {
+            try {
+                return link_list->at(pKey);
+            } catch (const std::out_of_range& exception) {
+                return nullptr;
+            }
+        }
+
+        Link* get_link(Vertex<T>* pNode) {
+            return get_link(pNode->get_key());
+        }
+
         // Interfaz para adyacencias
         void join(Vertex<T>* pNode, int pWeight) {
             Link* link = new Link(this, pNode, pWeight);
@@ -39,15 +55,18 @@ class Vertex : iNode<int,T> {
 
         void detach(int pKey) {
             Link* link = link_list->at(pKey);
-            link_list->erase(pKey);
-            delete link;
+            if (link != nullptr) {
+                link_list->erase(pKey);
+                delete link;
+            }
         }
 
         void clear_links() {
-            for (auto iter : link_list) { // Elimina links individuales
-                delete iter->first;
+            for (auto iter = link_list->begin(); iter != link_list->end(); ++iter) {
+                Link* link = iter->second;
+                delete link; // Elimina punteros del dato
             }
-            link_list->clear();
+            link_list->clear(); // Vacia contenedor
         }
 
         bool is_joined(Vertex<T>* pNode) {
