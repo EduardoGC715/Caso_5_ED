@@ -48,7 +48,7 @@ public:
         }
     }
 
-    void insert(T* t_key) {
+    void insert(T t_key) {
         if(m_root== nullptr) {
             m_root = new BP_Node<T>(m_degree);
             m_root->set_is_leaf(true);
@@ -82,17 +82,17 @@ public:
                 cursor->set_spcf_child(nullptr,cursor->get_size()-1);
             } else {
                 auto *new_leaf = new BP_Node<T>(m_degree);
-                T* aux_node[m_degree + 1];
+                T aux_key[m_degree + 1];
                 for (int x = 0; x < m_degree; x++) {
-                    aux_node[x] = cursor->get_spcf_key(x);
+                    aux_key[x] = cursor->get_spcf_key(x);
                 }
                 int x = 0, y;
-                while (t_key > aux_node[x] && x < m_degree)
+                while (t_key > aux_key[x] && x < m_degree)
                     x++;
                 for (y = m_degree + 1; y > x; y--) {
-                    aux_node[y] = aux_node[y - 1];
+                    aux_key[y] = aux_key[y - 1];
                 }
-                aux_node[x] = t_key;
+                aux_key[x] = t_key;
                 new_leaf->set_is_leaf(true);
                 cursor->set_size((m_degree + 1) / 2);
                 new_leaf->set_size(m_degree + 1 - (m_degree + 1) / 2);
@@ -100,16 +100,18 @@ public:
                 new_leaf->set_spcf_child(cursor->get_spcf_child(m_degree), new_leaf->get_size());
                 cursor->set_spcf_child(nullptr, m_degree);
                 for (x = 0; x < cursor->get_size(); x++) {
-                    cursor->set_spcf_key(aux_node[x],x);
+                    cursor->set_spcf_key(aux_key[x], x);
                 }
                 for (x = 0, y = cursor->get_size(); x < new_leaf->get_size(); x++, y++) {
-                    new_leaf->set_spcf_key(aux_node[y], x);
+                    new_leaf->set_spcf_key(aux_key[y], x);
                 }
                 if (cursor == m_root) {
                     auto *new_root = new BP_Node<T>(m_degree);
                     new_root->set_spcf_key(new_leaf->get_spcf_key(0), 0);
                     new_root->set_spcf_child(cursor, 0);
                     new_root->set_spcf_child(new_leaf, 1);
+                    cursor->set_parent(new_root);
+                    new_leaf->set_parent(new_root);
                     new_root->set_is_leaf(false);
                     new_root->set_size(1);
                     m_root = new_root;
@@ -119,31 +121,31 @@ public:
             }
         }
     }
-    void insert_internal(T* t_key, BP_Node<T> *t_child) {
-        BP_Node<T> cursor=t_child->get_parent();
+    void insert_internal(T t_key, BP_Node<T> *t_child) {
+        BP_Node<T>* cursor=t_child->get_parent();
         if (cursor->get_size() < m_degree) {
             int i = 0;
-            while (t_key > cursor.get_spcf_key(i) && i < cursor.get_size())
+            while (t_key > cursor->get_spcf_key(i) && i < cursor->get_size())
                 i++;
-            for (int j = cursor.get_size(); j > i; j--) {
-                cursor.set_spcf_key(cursor.get_spcf_key(j-1),j);
+            for (int j = cursor->get_size(); j > i; j--) {
+                cursor->set_spcf_key(cursor->get_spcf_key(j-1),j);
             }
             for (int j = cursor->get_size() + 1; j > i + 1; j--) {
-                cursor.set_spcf_child(cursor.get_spcf_child(j-1),j);
+                cursor->set_spcf_child(cursor->get_spcf_child(j-1),j);
             }
-            cursor.set_spcf_key(t_key,i);
+            cursor->set_spcf_key(t_key,i);
             cursor->inc_size();
-            cursor.set_spcf_child(t_child,i+1);
+            cursor->set_spcf_child(t_child,i+1);
         }
         else {
             auto *new_internal = new BP_Node<T>(m_degree);
-            T* aux_key[m_degree + 1];
+            T aux_key[m_degree + 1];
             BP_Node<T> *aux_child[m_degree + 2];
             for (int i = 0; i < m_degree; i++) {
-                aux_key[i] = cursor.get_spcf_key(i);
+                aux_key[i] = cursor->get_spcf_key(i);
             }
             for (int i = 0; i < m_degree + 1; i++) {
-                aux_child[i] = cursor.get_spcf_child(i);
+                aux_child[i] = cursor->get_spcf_child(i);
             }
             int p = 0, q;
             while (t_key > aux_key[p] && p < m_degree)
@@ -167,14 +169,16 @@ public:
             }
             if (cursor == m_root) {
                 auto *new_root = new BP_Node<T>(m_degree);
-                new_root->set_spcf_key(cursor.get_spcf_key(cursor.get_size()),0);
+                new_root->set_spcf_key(cursor->get_spcf_key(cursor->get_size()),0);
                 new_root->set_spcf_child(cursor,0);
                 new_root->set_spcf_child(new_internal,1);
+                cursor->set_parent(new_root);
+                new_internal->set_parent(new_root);
                 new_root->set_is_leaf(false);
                 new_root->set_size(1);
                 m_root = new_root;
             } else {
-                insert_internal(cursor.get_spcf_key(cursor.get_size()), new_internal);
+                insert_internal(cursor->get_spcf_key(cursor->get_size()), new_internal);
             }
         }
     }

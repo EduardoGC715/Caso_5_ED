@@ -18,13 +18,13 @@ public:
         m_degree = t_degree;
         m_size = 0;
 
-        T* aux_keys = new T[m_degree-1];
+        T aux_keys [m_degree-1];
         for(int i=0; i<m_degree-1; i++){
             aux_keys[i] = 0;
         }
         m_keys = aux_keys;
 
-        BP_Node<T>** aux_children = new BP_Node<T>*[m_degree];
+        BP_Node<T>* aux_children[m_degree];
         for(int i=0; i<m_degree; i++){
             aux_children[i] = nullptr;
         }
@@ -55,10 +55,10 @@ public:
     T* get_keys(){
         return m_keys;
     }
-    void set_spcf_key(T* t_key, int pos){
+    void set_spcf_key(T t_key, int pos){
         m_keys[pos]=t_key;
     }
-    T* get_spcf_key(int pos){
+    T get_spcf_key(int pos){
         return m_keys[pos];
     }
 
