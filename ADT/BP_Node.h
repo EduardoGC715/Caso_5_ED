@@ -8,7 +8,7 @@ class BP_Node {
 private:
     bool m_is_leaf;
     int m_degree; // maximum number of children
-    int m_size; // current number of items
+    int m_size; // current number of keys
     T* m_keys;
     BP_Node<T>** m_children;
     BP_Node<T>* m_parent;
@@ -32,13 +32,16 @@ public:
         m_parent = nullptr;
     }
 
-    void set_is_leaf(bool t_value){
-        m_is_leaf=t_value;
+    void set_is_leaf(bool t_bool){
+        m_is_leaf=t_bool;
     }
     bool get_is_leaf(){
         return m_is_leaf;
     }
 
+    void inc_size(){
+        m_size++;
+    }
     void set_size(int t_size){
         m_size=t_size;
     }
@@ -52,12 +55,24 @@ public:
     T* get_keys(){
         return m_keys;
     }
+    void set_spcf_key(T* t_key, int pos){
+        m_keys[pos]=t_key;
+    }
+    T* get_spcf_key(int pos){
+        return m_keys[pos];
+    }
 
     void set_children(BP_Node<T>** t_children){
         m_children=t_children;
     }
     BP_Node<T>** get_children(){
         return m_children;
+    }
+    void set_spcf_child(BP_Node<T>* t_child, int pos){
+        m_children[pos]=t_child;
+    }
+    BP_Node<T>* get_spcf_child(int pos){
+        return m_children[pos];
     }
 
     void set_parent(BP_Node<T>* t_parent){
