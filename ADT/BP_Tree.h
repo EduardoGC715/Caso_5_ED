@@ -120,75 +120,75 @@ public:
         }
     }
     void insertInternal(T* t_key, BP_Node<T> *t_child) {
+        BP_Node<T> cursor=t_child->get_parent();
         if (cursor->get_size() < m_degree) {
             int i = 0;
-            while (x > cursor->key[i] && i < cursor->size)
+            while (t_key > cursor.get_spcf_key(i) && i < cursor.get_size())
                 i++;
-            for (int j = cursor->size; j > i; j--) {
-                cursor->key[j] = cursor->key[j - 1];
+            for (int j = cursor.get_size(); j > i; j--) {
+                cursor.set_spcf_key(cursor.get_spcf_key(j-1),j);
             }
-            for (int j = cursor->size + 1; j > i + 1; j--) {
-                cursor->ptr[j] = cursor->ptr[j - 1];
+            for (int j = cursor->get_size() + 1; j > i + 1; j--) {
+                cursor.set_spcf_child(cursor.get_spcf_child(j-1),j);
             }
-            cursor->key[i] = x;
-            cursor->size++;
-            cursor->ptr[i + 1] = child;
-        } else {
-            Node *newInternal = new Node;
-            int virtualKey[MAX + 1];
-            Node *virtualPtr[MAX + 2];
-            for (int i = 0; i < MAX; i++) {
-                virtualKey[i] = cursor->key[i];
+            cursor.set_spcf_key(t_key,i);
+            cursor->inc_size();
+            cursor.set_spcf_child(t_child,i+1);
+        }
+        else {
+            auto *new_internal = new BP_Node<T>(m_degree);
+            T* aux_key[m_degree + 1];
+            BP_Node<T> *aux_child[m_degree + 2];
+            for (int i = 0; i < m_degree; i++) {
+                aux_key[i] = cursor.get_spcf_key(i);
             }
-            for (int i = 0; i < MAX + 1; i++) {
-                virtualPtr[i] = cursor->ptr[i];
+            for (int i = 0; i < m_degree + 1; i++) {
+                aux_child[i] = cursor.get_spcf_child(i);
             }
-            int i = 0, j;
-            while (x > virtualKey[i] && i < MAX)
-                i++;
-            for (int j = MAX + 1; j > i; j--) {
-                virtualKey[j] = virtualKey[j - 1];
+            int p = 0, q;
+            while (t_key > aux_key[p] && p < m_degree)
+                p++;
+            for (q = m_degree + 1; q > p; q--) {
+                aux_key[q] = aux_key[q - 1];
             }
-            virtualKey[i] = x;
-            for (int j = MAX + 2; j > i + 1; j--) {
-                virtualPtr[j] = virtualPtr[j - 1];
+            aux_key[p] = t_key;
+            for (q = m_degree + 2; q > p + 1; q--) {
+                aux_child[q] = aux_child[q - 1];
             }
-            virtualPtr[i + 1] = child;
-            newInternal->IS_LEAF = false;
-            cursor->size = (MAX + 1) / 2;
-            newInternal->size = MAX - (MAX + 1) / 2;
-            for (i = 0, j = cursor->size + 1; i < newInternal->size; i++, j++) {
-                newInternal->key[i] = virtualKey[j];
+            aux_child[p + 1] = t_child;
+            new_internal->set_is_leaf(false);
+            cursor->set_size((m_degree + 1) / 2);
+            new_internal->set_size(m_degree - (m_degree + 1) / 2);
+            for (p = 0, q = cursor->get_size() + 1; p < new_internal->get_size(); p++, q++) {
+                new_internal->set_spcf_key(aux_key[q],p);
             }
-            for (i = 0, j = cursor->size + 1; i < newInternal->size + 1; i++, j++) {
-                newInternal->ptr[i] = virtualPtr[j];
+            for (p = 0, q = cursor->get_size() + 1;p < new_internal->get_size() + 1; p++, q++) {
+                new_internal->set_spcf_child(aux_child[q],p);
             }
-            if (cursor == root) {
-                Node *newRoot = new Node;
-                newRoot->key[0] = cursor->key[cursor->size];
-                newRoot->ptr[0] = cursor;
-                newRoot->ptr[1] = newInternal;
-                newRoot->IS_LEAF = false;
-                newRoot->size = 1;
-                root = newRoot;
+            if (cursor == m_root) {
+                auto *new_root = new BP_Node<T>(m_degree);
+                new_root->set_spcf_key(cursor.get_spcf_key(cursor.get_size()),0);
+                new_root->set_spcf_child(cursor,0);
+                new_root->set_spcf_child(new_internal,1);
+                new_root->set_is_leaf(false);
+                new_root->set_size(1);
+                m_root = new_root;
             } else {
-                insertInternal(cursor->key[cursor->size], findParent(root, cursor), newInternal);
+                insertInternal(cursor.get_spcf_key(cursor.get_size()), new_internal);
+            }
+        }
+    }
+    void print_tree(BP_Node<T> *cursor) {
+        if (cursor != NULL) {
+            for (int i = 0; i < cursor->get_size(); i++) {
+                std::cout << cursor->get_spcf_key(i) << " ";
+            }
+            std::cout << "\n";
+            if (cursor->get_is_leaf() != true) {
+                for (int i = 0; i < cursor->get_size() + 1; i++) {
+                    print_tree(cursor->get_spcf_child(i));
+                }
             }
         }
     }
 };
-
-// Print the tree
-void BPTree::display(Node *cursor) {
-    if (cursor != NULL) {
-        for (int i = 0; i < cursor->size; i++) {
-            cout << cursor->key[i] << " ";
-        }
-        cout << "\n";
-        if (cursor->IS_LEAF != true) {
-            for (int i = 0; i < cursor->size + 1; i++) {
-                display(cursor->ptr[i]);
-            }
-        }
-    }
-}
