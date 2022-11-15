@@ -1,1 +1,1 @@
-/usr/bin/c++.exe -g -Wl,--enable-auto-import "CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o" -o curl-demo.exe -Wl,--out-implib,libcurl-demo.dll.a -Wl,--major-image-version,0,--minor-image-version,0  /usr/lib/libcurl.dll.a 
+/usr/bin/c++.exe -g -Wl,--enable-auto-import "CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o" "CMakeFiles/curl-demo.dir/Main.cpp.o" -o curl-demo.exe -Wl,--out-implib,libcurl-demo.dll.a -Wl,--major-image-version,0,--minor-image-version,0  /usr/lib/libcurl.dll.a 

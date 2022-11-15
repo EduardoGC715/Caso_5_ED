@@ -80,6 +80,15 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/ADT/BP_Node.h">
+			<Option target="curl-demo"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/ADT/BP_Tree.h">
+			<Option target="curl-demo"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/Main.cpp">
+			<Option target="curl-demo"/>
+		</Unit>
 		<Unit filename="/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/contentful/contenful.cpp">
 			<Option target="curl-demo"/>
 		</Unit>

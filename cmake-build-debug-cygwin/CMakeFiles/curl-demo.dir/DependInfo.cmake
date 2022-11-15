@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/Main.cpp" "CMakeFiles/curl-demo.dir/Main.cpp.o" "gcc" "CMakeFiles/curl-demo.dir/Main.cpp.o.d"
   "/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/contentful/contenful.cpp" "CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o" "gcc" "CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o.d"
   )
 
