@@ -1,4 +1,6 @@
 # include <iostream>
+# include <fstream>
+# include <string>
 # include "Digraph.h"
 # include "Graph.h"
 
@@ -44,12 +46,52 @@ void graph_test(iGraph<T>* pGraph) {
     }
 }
 
+template<typename T>
+void output_graph(iGraph<T>* pGraph) {
+    using namespace std;
+    ofstream file("./Output/test_output.html");
+    
+    string line;
+    ifstream temp("./templates/SankeyDiagram.txt");
+    int i = 1;
+    while (getline(temp, line) && i != 16) { // Primera parte del template
+        file << line << "\n";
+        ++i;
+    }
+
+    // Insertar datos nodos en formato ['{Origin Data}', '{Endpoint Data}', {weight}]
+    string output;
+    auto vertices = pGraph->get_vertices();
+    for (auto itr = vertices->begin(); itr != vertices->end(); ++itr) {
+        Vertex<T>* origin_node = itr->second;
+        origin_node->set_processed(true);
+        auto links = origin_node->get_links();
+        T* origin_data = origin_node->get_data();
+        for (auto itrB = links->begin(); itrB != links->end(); ++itrB) {
+            Vertex<T>* end_node = itrB->second->get_endpoint();
+            if (end_node->is_processed()) {
+                continue;
+            }
+            T* end_data = end_node->get_data();
+            int weight = itrB->second->get_weight();
+            output = "['" + to_string(*origin_data) + "', '" + to_string(*end_data) + "', " + to_string(weight) + "],\n";
+            file << output;
+        }
+    }
+
+    do { // Segunda parte del template
+        file << line << "\n";
+    } while (getline(temp, line));
+    temp.close();
+    file.close();
+}
+
 int main() {
     char data[] = {'A', 'B', 'C', 'D', 'E'};
     Graph<char>* graph = new Graph<char>;
 
     for (char c : data) {
-        graph->insert_vertex(&c);
+        graph->insert_vertex(new char(c));
     }
 
     graph->join(1, 2, 1); // A-B
@@ -68,7 +110,6 @@ int main() {
          |  \  |
         (D) - (E)
     */
-
     graph_test(graph);
 
     graph->join(1, 2, 10); // Update existing link's weight
@@ -76,8 +117,6 @@ int main() {
     graph->erase_vertex(2); // Erase vertex and links that point to it
     graph->erase_vertex(20); // Attempt to erase non-existing vertex
     graph_test(graph);
-
-    delete graph;
 
     Digraph<char>* digraph = new Digraph<char>;
     for (char c : data) {
@@ -106,5 +145,9 @@ int main() {
     digraph->erase_vertex(10); // Erase non-existing vertex
     graph_test(digraph);
 
+    output_graph(graph);
+    
+    delete graph;
+    delete digraph;
     return 0;
 }

@@ -78,12 +78,24 @@ class Vertex : public iNode<int,T> {
         }
 
         // Interfaz para recorridos
+        Vertex<T>* is_previous() {
+            return previous;
+        }
+
         void set_previous(Vertex<T>* pPrev) {
             previous = pPrev;
         }
 
+        bool is_processed() {
+            return processed;
+        }
+
         void set_processed(bool pFlag) {
             processed = pFlag;
+        }
+
+        bool is_visited() {
+            return visited;
         }
 
         void set_visited(bool pFlag) {
