@@ -62,7 +62,7 @@ public:
         m_item[pos]=*t_key;
     }
     T* get_item(int pos){
-        return m_item[pos];
+        return new std::string(m_item[pos]);
     }
 
     void set_child( int pos, BP_Node<T>* t_child){

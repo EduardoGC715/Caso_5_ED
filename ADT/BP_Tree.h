@@ -148,7 +148,7 @@ public:
     void insert_prnt(BP_Node<T>* par, BP_Node<T>* child, T data){
         //overflow check
         BP_Node<T>* cursor = par;
-        if(cursor->m_size < this->m_degree - 1){//not overflow, just insert in the correct position
+        if(cursor->get_size() < this->m_degree - 1){//not overflow, just insert in the correct position
             //insert m_item, child, and reallocate
             cursor = child_item_insert(cursor,data,child);
             cursor->m_size++;
