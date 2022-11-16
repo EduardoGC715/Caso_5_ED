@@ -337,12 +337,15 @@ public:
             }
         }
     }
+    int get_match_value_s(){
+        return get_match_value(m_root);
+    }
 
     int get_match_value(BP_Node<T>* cursor){
         std::vector<T> leafs;
         int value=0;
         if (cursor->get_is_leaf()) {
-            for (int i = 0; i < cursor->get_size() + 1; ++i){
+            for (int i = 0; i < cursor->get_size(); ++i){
                 leafs.push_back(cursor->get_item(i));
             }
         }

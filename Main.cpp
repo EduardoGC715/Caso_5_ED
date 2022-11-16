@@ -1,11 +1,14 @@
-#include "ADT/BP_Tree.h"
 #include "contentful/contentful_functions.h"
 using namespace std;
 int main(){
     auto contentful_f= new contentful_functions();
     contentful_f->print_all_regs();
-    cout<<contentful_f->string_minimizer("metal_year_2000",2)<<endl;
-    cout<<contentful_f->string_minimizer("rock_odin_gold",1)<<endl;
+    vector<int> matches =contentful_f->match_maker("rock_odin_gold",1);
+    for(int i=0;i<matches.size();i++){
+        cout<<"match "<<i<<" :"<< matches[i]<<endl;
+    }
+
+
     /*
     auto tree= new BP_Tree<string>(5);
     tree->insert("a");

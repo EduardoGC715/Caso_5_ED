@@ -1,8 +1,7 @@
 #pragma once
-
 #include <sstream>
+#include "../ADT/BP_Tree.h"
 #include "contentful.h"
-#include "ADT/BP_Tree.h"
 
 class contentful_functions {
 private:
@@ -58,7 +57,7 @@ public:
         return minimized;
     }
 
-    void bp_insert(vector<string> to_add,BP_Tree<string> t_tree){
+    void bp_insert(vector<string> &to_add,BP_Tree<string> &t_tree){
         for(auto & word : to_add){
             t_tree.insert(word);
         }
@@ -67,20 +66,19 @@ public:
     vector<int> match_maker(string t_nick, int t_opt){//TODO: include date
         int found=find_nickname(t_nick);
         BP_Tree<string> nick_tree (5);
-        BP_Tree<string> aux_tree (5);
+        vector<int> match_values;
 
         if(found!=-1){
             vector<string> offer;
             vector<string> demand;
-            vector<int> match_values;
             if(t_opt==1){//on the nick´s offer see the demand
                 offer = string_minimizer(found,t_opt);
-                bp_insert(offer,nick_tree);
                 for(int pos=0;pos<all_regs.size();pos++){
-                    aux_tree.set_root(nick_tree.get_root());
+                    bp_insert(offer,nick_tree);
                     demand = string_minimizer(pos,2);
-                    bp_insert(demand, aux_tree);
-                    match_values.push_back(aux_tree.get_match_value());
+                    bp_insert(demand,nick_tree);
+                    match_values.push_back(nick_tree.get_match_value_s());
+                    nick_tree.clear();
                 }
             }
             else{
@@ -90,9 +88,10 @@ public:
                     aux_tree.set_root(nick_tree.get_root());
                     offer = string_minimizer(pos,1);
                     bp_insert(offer, aux_tree);
-                    //vector.pushback(get value);
+                    match_values.push_back(aux_tree.get_match_value_s());
                 }
             }
         }
+        return match_values;
     }
 };
