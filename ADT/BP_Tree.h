@@ -111,36 +111,36 @@ public:
 
         return arr;
     }
-    BP_Node<T>** child_insert(BP_Node<T>** child_arr, BP_Node<T>*child,int len,int index){
-        for(int i= len; i > index; i--){
-            child_arr[i] = child_arr[i - 1];
+    BP_Node<T>** child_insert(BP_Node<T>** t_child_arr, BP_Node<T>*t_child, int t_len, int t_index){
+        for(int i= t_len; i > t_index; i--){
+            t_child_arr[i] = t_child_arr[i - 1];
         }
-        child_arr[index] = child;
-        return child_arr;
+        t_child_arr[t_index] = t_child;
+        return t_child_arr;
     }
-    BP_Node<T>* child_item_insert(BP_Node<T>* node, T data, BP_Node<T>* child){
+    BP_Node<T>* child_item_insert(BP_Node<T>* node, T t_data, BP_Node<T>* child){
         int item_index=0;
         int child_index=0;
-        for(int i=0; i< node->m_size; i++){
-            if(data < node->m_item[i]){
+        for(int i=0; i< node->get_size(); i++){
+            if(t_data < node->get_item(i)){
                 item_index = i;
                 child_index = i+1;
                 break;
             }
-            if(i== node->m_size - 1){
-                item_index = node->m_size;
-                child_index = node->m_size + 1;
+            if(i== node->get_size() - 1){
+                item_index = node->get_size();
+                child_index = node->get_size() + 1;
                 break;
             }
         }
-        for(int i = node->m_size; i > item_index; i--){
-            node->m_item[i] = node->m_item[i - 1];
+        for(int i = node->get_size(); i > item_index; i--){
+            node->set_item(i,node->get_item(i - 1));
         }
-        for(int i= node->m_size + 1; i > child_index; i--){
-            node->m_children[i] = node->m_children[i - 1];
+        for(int i= node->get_size() + 1; i > child_index; i--){
+            node->set_child(i, node->get_child(i-1));
         }
 
-        node->m_item[item_index] = data;
+        node->set_item(item_index, t_data);
         node->m_children[child_index] = child;
 
         return node;
@@ -170,54 +170,54 @@ public:
                 child_copy[i] = cursor->get_child(i);
             }
             child_copy[cursor->get_size() + 1] = nullptr;
-            child_copy = child_insert(child_copy, child, cursor->get_size() + 1, find_index(item_copy, data, cursor->m_size + 1));
+            child_copy = child_insert(child_copy, child, cursor->get_size() + 1, find_index(item_copy, data, cursor->get_size() + 1));
 
             //split nodes
-            cursor->m_size = (this->m_degree) / 2;
+            cursor->set_size((m_degree) / 2);
             if((this->m_degree) % 2 == 0){
-                new_node->m_size = (this->m_degree) / 2 - 1;
+                new_node->set_size((m_degree) / 2 - 1);
             }
             else{
-                new_node->m_size = (this->m_degree) / 2;
+                new_node->set_size((m_degree) / 2);
             }
 
-            for(int i=0; i<cursor->m_size; i++){
-                cursor->m_item[i] = item_copy[i];
-                cursor->m_children[i] = child_copy[i];
+            for(int i=0; i<cursor->get_size(); i++){
+                cursor->set_item(i,item_copy[i]);
+                cursor->set_child(i,child_copy[i]);
             }
-            cursor->m_children[cursor->m_size] = child_copy[cursor->m_size];
+            cursor->set_child(cursor->get_size(),child_copy[cursor->get_size()]);
 
-            for(int i=0; i < new_node->m_size; i++){
-                new_node->m_item[i] = item_copy[cursor->m_size + i + 1];
-                new_node->m_children[i] = child_copy[cursor->m_size + i + 1];
-                new_node->m_children[i]->m_parent=new_node;
+            for(int i=0; i < new_node->get_size(); i++){
+                new_node->set_item(i,item_copy[cursor->get_size() + i + 1]);
+                new_node->set_child(i,child_copy[cursor->get_size() + i + 1]);
+                new_node->get_child(i)->set_parent(new_node);
             }
-            new_node->m_children[new_node->m_size] = child_copy[cursor->m_size + new_node->m_size + 1];
-            new_node->m_children[new_node->m_size]->m_parent=new_node;
+            new_node->set_child(new_node->get_size(),child_copy[cursor->get_size() + new_node->get_size() + 1]);
+            new_node->get_child(new_node->get_size())->set_parent(new_node);
 
-            T paritem = item_copy[this->m_degree / 2];
+            T prnt_item = item_copy[m_degree / 2];
 
             delete[] item_copy;
             delete[] child_copy;
 
             //m_parent check
-            if(cursor->m_parent == nullptr){//if there are no m_parent node(m_root case)
+            if(cursor->get_parent() == nullptr){//if there are no m_parent node(m_root case)
                 auto* new_parent = new BP_Node<T>(this->m_degree);
-                cursor->m_parent = new_parent;
-                new_node->m_parent = new_parent;
+                cursor->set_parent(new_parent);
+                new_node->set_parent(new_parent);
 
-                new_parent->m_item[0] = paritem;
-                new_parent->m_size++;
+                new_parent->set_item(0,prnt_item);
+                new_parent->inc_size();
 
-                new_parent->m_children[0] = cursor;
-                new_parent->m_children[1] = new_node;
+                new_parent->set_child(0,cursor);
+                new_parent->set_child(1,new_node);
 
-                this->m_root = new_parent;
+                m_root = new_parent;
 
                 //delete new_parent;
             }
-            else{//if there already have m_parent node
-                insert_prnt(cursor->m_parent, new_node, paritem);
+            else{//if they already have m_parent node
+                insert_prnt(cursor->get_parent(), new_node, prnt_item);
             }
         }
     }
@@ -225,7 +225,7 @@ public:
         if(m_root == nullptr){ //if the tree is empty
             m_root = new BP_Node<T>(m_degree);
             m_root->set_is_leaf(true);
-            m_root->set_item(0,new std::string(t_data));
+            m_root->set_item(0,t_data);
             m_root->set_size(1); //
         }
         else{ //if the tree has at least one node
@@ -268,10 +268,10 @@ public:
                 }
 
                 for(int i=0; i<cursor->get_size(); i++){
-                    cursor->set_item(i,new std::string(item_copy[i]));
+                    cursor->set_item(i,item_copy[i]);
                 }
                 for(int i=0; i < new_node->get_size(); i++){
-                    new_node->set_item(i,new std::string(item_copy[cursor->get_size() + i]));
+                    new_node->set_item(i,item_copy[cursor->get_size() + i]);
                 }
 
                 cursor->set_child(cursor->get_size(),new_node);
@@ -288,7 +288,7 @@ public:
                     cursor->set_parent(new_parent);
                     new_node->set_parent(new_parent);
 
-                    new_parent->set_item(0, new std::string(prnt_item));
+                    new_parent->set_item(0, prnt_item);
                     new_parent->inc_size();
 
                     new_parent->set_child(0,cursor);

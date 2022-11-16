@@ -58,8 +58,8 @@ public:
     T* get_itm_arr(){
         return m_item;
     }
-    void set_item(int pos, T* t_key){
-        m_item[pos]=*t_key;
+    void set_item(int pos, T t_key){
+        m_item[pos]=t_key;
     }
     T get_item(int pos){
         return m_item[pos];
