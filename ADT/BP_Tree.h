@@ -237,67 +237,67 @@ public:
             //overflow check
             if(cursor->get_size() < (m_degree - 1)){ // not overflow, just insert in the correct position
                 //m_item insert and rearrange
-                cursor->m_item = item_insert(cursor->m_item, t_data, cursor->m_size);
-                cursor->m_size++;
+                cursor->set_itm_arr(item_insert(cursor->get_itm_arr(), t_data, cursor->get_size()));
+                cursor->inc_size();
                 //edit pointer(next node)
-                cursor->m_children[cursor->m_size] = cursor->m_children[cursor->m_size - 1];
-                cursor->m_children[cursor->m_size - 1] = nullptr;
+                cursor->set_child(cursor->get_size(),cursor->get_child(cursor->get_size()-1));
+                cursor->set_child(cursor->get_size()-1, nullptr);
             }
             else{//overflow case
                 //make new node
-                auto* Newnode = new BP_Node<T>(this->m_degree);
-                Newnode->m_is_leaf = true;
-                Newnode->m_parent = cursor->m_parent;
+                auto* new_node = new BP_Node<T>(this->m_degree);
+                new_node->set_is_leaf(true);
+                new_node->set_parent(cursor->get_parent());
 
                 //copy m_item
-                T* item_copy = new T[cursor->m_size + 1];
-                for(int i=0; i<cursor->m_size; i++){
-                    item_copy[i] = cursor->m_item[i];
+                T* item_copy = new T[cursor->get_size() + 1];
+                for(int i=0; i<cursor->get_size(); i++){
+                    item_copy[i] = *cursor->get_item(i);
                 }
 
                 //insert and rearrange
-                item_copy = item_insert(item_copy, t_data, cursor->m_size);
+                item_copy = item_insert(item_copy, t_data, cursor->get_size());
 
                 //split nodes
-                cursor->m_size = (this->m_degree) / 2;
-                if((this->m_degree) % 2 == 0){
-                    Newnode->m_size = (this->m_degree) / 2;
+                cursor->set_size((m_degree) / 2);
+                if((m_degree) % 2 == 0){
+                    new_node->set_size((m_degree) / 2);
                 }
                 else{
-                    Newnode->m_size = (this->m_degree) / 2 + 1;
+                    new_node->set_size((m_degree) / 2 + 1);
                 }
 
                 for(int i=0; i<cursor->m_size; i++){
                     cursor->m_item[i] = item_copy[i];
                 }
-                for(int i=0; i < Newnode->m_size; i++){
-                    Newnode->m_item[i] = item_copy[cursor->m_size + i];
+                for(int i=0; i < new_node->m_size; i++){
+                    new_node->m_item[i] = item_copy[cursor->m_size + i];
                 }
 
-                cursor->m_children[cursor->m_size] = Newnode;
-                Newnode->m_children[Newnode->m_size] = cursor->m_children[this->m_degree - 1];
+                cursor->m_children[cursor->m_size] = new_node;
+                new_node->m_children[new_node->m_size] = cursor->m_children[this->m_degree - 1];
                 cursor->m_children[this->m_degree - 1] = nullptr;
 
                 delete[] item_copy;
 
                 //m_parent check
-                T paritem = Newnode->m_item[0];
+                T paritem = new_node->m_item[0];
 
                 if(cursor->m_parent == nullptr){//if there are no m_parent node(m_root case)
                     auto* Newparent = new BP_Node<T>(this->m_degree);
                     cursor->m_parent = Newparent;
-                    Newnode->m_parent = Newparent;
+                    new_node->m_parent = Newparent;
 
                     Newparent->m_item[0] = paritem;
                     Newparent->m_size++;
 
                     Newparent->m_children[0] = cursor;
-                    Newparent->m_children[1] = Newnode;
+                    Newparent->m_children[1] = new_node;
 
                     this->m_root = Newparent;
                 }
                 else{//if there already have m_parent node
-                    InsertPar(cursor->m_parent, Newnode, paritem);
+                    InsertPar(cursor->m_parent, new_node, paritem);
                 }
             }
         }

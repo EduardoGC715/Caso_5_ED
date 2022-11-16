@@ -52,6 +52,12 @@ public:
         return m_size;
     }
 
+    void set_itm_arr(T* t_item){
+        m_item=t_item;
+    }
+    T* get_itm_arr(){
+        return m_item;
+    }
     void set_item(int pos, T* t_key){
         m_item[pos]=t_key;
     }
