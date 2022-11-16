@@ -170,7 +170,7 @@ public:
                 child_copy[i] = cursor->get_child(i);
             }
             child_copy[cursor->get_size() + 1] = nullptr;
-            child_copy = child_insert(child_copy, child, cursor->m_size + 1, find_index(item_copy, data, cursor->m_size + 1));
+            child_copy = child_insert(child_copy, child, cursor->get_size() + 1, find_index(item_copy, data, cursor->m_size + 1));
 
             //split nodes
             cursor->m_size = (this->m_degree) / 2;
