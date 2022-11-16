@@ -2097,14 +2097,14 @@ Exceptions have ids 4xx.
 
 name / id                       | example message | description
 ------------------------------- | --------------- | -------------------------
-json.exception.out_of_range.401 | array index 3 is out of range | The provided array index @a i is larger than @a size-1.
+json.exception.out_of_range.401 | array index 3 is out of range | The provided array index @a i is larger than @a m_size-1.
 json.exception.out_of_range.402 | array index '-' (3) is out of range | The special array index `-` in a JSON Pointer never describes a valid element of the array, but the index past the end. That is, it can only be used to add elements at this position, but not to read it.
 json.exception.out_of_range.403 | key 'foo' not found | The provided key was not found in the JSON object.
 json.exception.out_of_range.404 | unresolved reference token 'foo' | A reference token in a JSON Pointer could not be resolved.
-json.exception.out_of_range.405 | JSON pointer has no parent | The JSON Patch operations 'remove' and 'add' can not be applied to the root element of the JSON value.
+json.exception.out_of_range.405 | JSON pointer has no m_parent | The JSON Patch operations 'remove' and 'add' can not be applied to the m_root element of the JSON value.
 json.exception.out_of_range.406 | number overflow parsing '10E1000' | A parsed number could not be stored as without changing it to NaN or INF.
 json.exception.out_of_range.407 | number overflow serializing '9223372036854775808' | UBJSON and BSON only support integer numbers up to 9223372036854775807. |
-json.exception.out_of_range.408 | excessive array size: 8658170730974374167 | The size (following `#`) of an UBJSON array or object exceeds the maximal capacity. |
+json.exception.out_of_range.408 | excessive array m_size: 8658170730974374167 | The m_size (following `#`) of an UBJSON array or object exceeds the maximal capacity. |
 json.exception.out_of_range.409 | BSON key cannot contain code point U+0000 (at byte 2) | Key identifiers to be serialized to BSON cannot contain code point U+0000, since the key is stored as zero-terminated c-string |
 
 @liveexample{The following code shows how an `out_of_range` exception can be
@@ -4264,7 +4264,7 @@ class input_adapter
         // assertion to check that each element is 1 byte long
         static_assert(
             sizeof(typename iterator_traits<IteratorType>::value_type) == 1,
-            "each element in the iterator range must have the size of 1 byte");
+            "each element in the iterator range must have the m_size of 1 byte");
 
         const auto len = static_cast<size_t>(std::distance(first, last));
         if (JSON_HEDLEY_LIKELY(len > 0))
@@ -4518,7 +4518,7 @@ class json_sax_dom_parser
         if (JSON_HEDLEY_UNLIKELY(len != std::size_t(-1) and len > ref_stack.back()->max_size()))
         {
             JSON_THROW(out_of_range::create(408,
-                                            "excessive object size: " + std::to_string(len)));
+                                            "excessive object m_size: " + std::to_string(len)));
         }
 
         return true;
@@ -4544,7 +4544,7 @@ class json_sax_dom_parser
         if (JSON_HEDLEY_UNLIKELY(len != std::size_t(-1) and len > ref_stack.back()->max_size()))
         {
             JSON_THROW(out_of_range::create(408,
-                                            "excessive array size: " + std::to_string(len)));
+                                            "excessive array m_size: " + std::to_string(len)));
         }
 
         return true;
@@ -4592,7 +4592,7 @@ class json_sax_dom_parser
   private:
     /*!
     @invariant If the ref stack is empty, then the passed value will be the new
-               root.
+               m_root.
     @invariant If the ref stack contains a value, then it is an array or an
                object to which we can add elements
     */
@@ -4706,7 +4706,7 @@ class json_sax_dom_callback_parser
         // check object limit
         if (ref_stack.back() and JSON_HEDLEY_UNLIKELY(len != std::size_t(-1) and len > ref_stack.back()->max_size()))
         {
-            JSON_THROW(out_of_range::create(408, "excessive object size: " + std::to_string(len)));
+            JSON_THROW(out_of_range::create(408, "excessive object m_size: " + std::to_string(len)));
         }
 
         return true;
@@ -4769,7 +4769,7 @@ class json_sax_dom_callback_parser
         // check array limit
         if (ref_stack.back() and JSON_HEDLEY_UNLIKELY(len != std::size_t(-1) and len > ref_stack.back()->max_size()))
         {
-            JSON_THROW(out_of_range::create(408, "excessive array size: " + std::to_string(len)));
+            JSON_THROW(out_of_range::create(408, "excessive array m_size: " + std::to_string(len)));
         }
 
         return true;
@@ -4845,7 +4845,7 @@ class json_sax_dom_callback_parser
                callback function with an empty array or object, respectively.
 
     @invariant If the ref stack is empty, then the passed value will be the new
-               root.
+               m_root.
     @invariant If the ref stack contains a value, then it is an array or an
                object to which we can add elements
 
@@ -4882,7 +4882,7 @@ class json_sax_dom_callback_parser
             return {true, &root};
         }
 
-        // skip this value if we already decided to skip the parent
+        // skip this value if we already decided to skip the m_parent
         // (https://github.com/nlohmann/json/issues/971#issuecomment-413678360)
         if (not ref_stack.back())
         {
@@ -5922,7 +5922,7 @@ class binary_reader
 
     /*!
     @param[in] len  the length of the array or std::size_t(-1) for an
-                    array of indefinite size
+                    array of indefinite m_size
     @return whether array creation completed
     */
     bool get_cbor_array(const std::size_t len)
@@ -5958,7 +5958,7 @@ class binary_reader
 
     /*!
     @param[in] len  the length of the object or std::size_t(-1) for an
-                    object of indefinite size
+                    object of indefinite m_size
     @return whether object creation completed
     */
     bool get_cbor_object(const std::size_t len)
@@ -6582,8 +6582,8 @@ class binary_reader
     }
 
     /*!
-    @param[out] result  determined size
-    @return whether size determination completed
+    @param[out] result  determined m_size
+    @return whether m_size determination completed
     */
     bool get_ubjson_size_value(std::size_t& result)
     {
@@ -6647,24 +6647,24 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
-                return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format_t::ubjson, "expected length type specification (U, i, I, l, L) after '#'; last byte: 0x" + last_token, "size")));
+                return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format_t::ubjson, "expected length type specification (U, i, I, l, L) after '#'; last byte: 0x" + last_token, "m_size")));
             }
         }
     }
 
     /*!
-    @brief determine the type and size for a container
+    @brief determine the type and m_size for a container
 
-    In the optimized UBJSON format, a type and a size can be provided to allow
+    In the optimized UBJSON format, a type and a m_size can be provided to allow
     for a more compact representation.
 
-    @param[out] result  pair of the size and the type
+    @param[out] result  pair of the m_size and the type
 
     @return whether pair creation completed
     */
     bool get_ubjson_size_type(std::pair<std::size_t, int>& result)
     {
-        result.first = string_t::npos; // size
+        result.first = string_t::npos; // m_size
         result.second = 0; // type
 
         get_ignore_noop();
@@ -6685,7 +6685,7 @@ class binary_reader
                     return false;
                 }
                 auto last_token = get_token_string();
-                return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read, exception_message(input_format_t::ubjson, "expected '#' after type information; last byte: 0x" + last_token, "size")));
+                return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read, exception_message(input_format_t::ubjson, "expected '#' after type information; last byte: 0x" + last_token, "m_size")));
             }
 
             return get_ubjson_size_value(result.first);
@@ -7353,7 +7353,7 @@ class lexer
     This function scans a string according to Sect. 7 of RFC 7159. While
     scanning, bytes are escaped and copied into buffer token_buffer. Then the
     function returns successfully, token_buffer is *not* null-terminated (as it
-    may contain \0 bytes), and token_buffer.size() is the number of bytes in the
+    may contain \0 bytes), and token_buffer.m_size() is the number of bytes in the
     string.
 
     @return token_type::value_string if string could be successfully scanned,
@@ -10280,10 +10280,10 @@ class json_pointer
     }
 
     /*!
-    @brief returns the parent of this JSON pointer
+    @brief returns the m_parent of this JSON pointer
 
-    @return parent of this JSON pointer; in case this JSON pointer is the root,
-            the root itself is returned
+    @return m_parent of this JSON pointer; in case this JSON pointer is the m_root,
+            the m_root itself is returned
 
     @complexity Linear in the length of the JSON pointer.
 
@@ -10313,7 +10313,7 @@ class json_pointer
 
     @complexity Constant.
 
-    @throw out_of_range.405 if JSON pointer has no parent
+    @throw out_of_range.405 if JSON pointer has no m_parent
 
     @since version 3.6.0
     */
@@ -10321,7 +10321,7 @@ class json_pointer
     {
         if (JSON_HEDLEY_UNLIKELY(empty()))
         {
-            JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no parent"));
+            JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no m_parent"));
         }
 
         reference_tokens.pop_back();
@@ -10337,7 +10337,7 @@ class json_pointer
 
     @complexity Constant.
 
-    @throw out_of_range.405 if JSON pointer has no parent
+    @throw out_of_range.405 if JSON pointer has no m_parent
 
     @since version 3.6.0
     */
@@ -10345,7 +10345,7 @@ class json_pointer
     {
         if (JSON_HEDLEY_UNLIKELY(empty()))
         {
-            JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no parent"));
+            JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no m_parent"));
         }
 
         return reference_tokens.back();
@@ -10375,9 +10375,9 @@ class json_pointer
     }
 
     /*!
-    @brief return whether pointer points to the root document
+    @brief return whether pointer points to the m_root document
 
-    @return true iff the JSON pointer points to the root document
+    @return true iff the JSON pointer points to the m_root document
 
     @complexity Constant.
 
@@ -10419,7 +10419,7 @@ class json_pointer
     {
         if (JSON_HEDLEY_UNLIKELY(empty()))
         {
-            JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no parent"));
+            JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no m_parent"));
         }
 
         json_pointer result = *this;
@@ -11513,7 +11513,7 @@ class binary_writer
 
             case value_t::array:
             {
-                // step 1: write control byte and the array size
+                // step 1: write control byte and the array m_size
                 const auto N = j.m_value.array->size();
                 if (N <= 0x17)
                 {
@@ -11552,7 +11552,7 @@ class binary_writer
 
             case value_t::object:
             {
-                // step 1: write control byte and the object size
+                // step 1: write control byte and the object m_size
                 const auto N = j.m_value.object->size();
                 if (N <= 0x17)
                 {
@@ -11770,7 +11770,7 @@ class binary_writer
 
             case value_t::array:
             {
-                // step 1: write control byte and the array size
+                // step 1: write control byte and the array m_size
                 const auto N = j.m_value.array->size();
                 if (N <= 15)
                 {
@@ -11800,7 +11800,7 @@ class binary_writer
 
             case value_t::object:
             {
-                // step 1: write control byte and the object size
+                // step 1: write control byte and the object m_size
                 const auto N = j.m_value.object->size();
                 if (N <= 15)
                 {
@@ -12001,8 +12001,8 @@ class binary_writer
     //////////
 
     /*!
-    @return The size of a BSON document entry header, including the id marker
-            and the entry name size (and its null-terminator).
+    @return The m_size of a BSON document entry header, including the id marker
+            and the entry name m_size (and its null-terminator).
     */
     static std::size_t calc_bson_entry_header_size(const string_t& name)
     {
@@ -12049,7 +12049,7 @@ class binary_writer
     }
 
     /*!
-    @return The size of the BSON-encoded string in @a value
+    @return The m_size of the BSON-encoded string in @a value
     */
     static std::size_t calc_bson_string_size(const string_t& value)
     {
@@ -12079,7 +12079,7 @@ class binary_writer
     }
 
     /*!
-    @return The size of the BSON-encoded integer @a value
+    @return The m_size of the BSON-encoded integer @a value
     */
     static std::size_t calc_bson_integer_size(const std::int64_t value)
     {
@@ -12107,7 +12107,7 @@ class binary_writer
     }
 
     /*!
-    @return The size of the BSON-encoded unsigned integer in @a j
+    @return The m_size of the BSON-encoded unsigned integer in @a j
     */
     static constexpr std::size_t calc_bson_unsigned_size(const std::uint64_t value) noexcept
     {
@@ -12149,7 +12149,7 @@ class binary_writer
     }
 
     /*!
-    @return The size of the BSON-encoded array @a value
+    @return The m_size of the BSON-encoded array @a value
     */
     static std::size_t calc_bson_array_size(const typename BasicJsonType::array_t& value)
     {
@@ -12183,8 +12183,8 @@ class binary_writer
     }
 
     /*!
-    @brief Calculates the size necessary to serialize the JSON value @a j with its @a name
-    @return The calculated size for the BSON document entry for @a j with the given @a name.
+    @brief Calculates the m_size necessary to serialize the JSON value @a j with its @a name
+    @return The calculated m_size for the BSON document entry for @a j with the given @a name.
     */
     static std::size_t calc_bson_element_size(const string_t& name,
             const BasicJsonType& j)
@@ -12229,7 +12229,7 @@ class binary_writer
            key @a name.
     @param name The name to associate with the JSON entity @a j within the
                 current BSON document
-    @return The size of the BSON entry
+    @return The m_size of the BSON entry
     */
     void write_bson_element(const string_t& name,
                             const BasicJsonType& j)
@@ -12269,7 +12269,7 @@ class binary_writer
     }
 
     /*!
-    @brief Calculates the size of the BSON serialization of the given
+    @brief Calculates the m_size of the BSON serialization of the given
            JSON-object @a j.
     @param[in] j  JSON value to serialize
     @pre       j.type() == value_t::object
@@ -12591,7 +12591,7 @@ class binary_writer
                enable_if_t < std::is_signed<C>::value and std::is_unsigned<char>::value > * = nullptr >
     static CharType to_char_type(std::uint8_t x) noexcept
     {
-        static_assert(sizeof(std::uint8_t) == sizeof(CharType), "size of CharType must be equal to std::uint8_t");
+        static_assert(sizeof(std::uint8_t) == sizeof(CharType), "m_size of CharType must be equal to std::uint8_t");
         static_assert(std::is_pod<CharType>::value, "CharType must be POD");
         CharType result;
         std::memcpy(&result, &x, sizeof(x));
@@ -12689,7 +12689,7 @@ namespace dtoa_impl
 template <typename Target, typename Source>
 Target reinterpret_bits(const Source source)
 {
-    static_assert(sizeof(Target) == sizeof(Source), "size mismatch");
+    static_assert(sizeof(Target) == sizeof(Source), "m_size mismatch");
 
     Target target;
     std::memcpy(&target, &source, sizeof(Source));
@@ -12914,7 +12914,7 @@ boundaries compute_boundaries(FloatType value)
 //
 //      2^(q - 2 + alpha) <= c * w < 2^(q + gamma)
 //
-// The choice of (alpha,gamma) determines the size of the table and the form of
+// The choice of (alpha,gamma) determines the m_size of the table and the form of
 // the digit generation procedure. Using (alpha,gamma)=(-60,-32) works out well
 // in practice:
 //
@@ -15096,7 +15096,7 @@ class basic_json
     #### Encoding
 
     Strings are stored in UTF-8 encoding. Therefore, functions like
-    `std::string::size()` or `std::string::length()` return the number of
+    `std::string::m_size()` or `std::string::length()` return the number of
     bytes in the string rather than the number of characters or glyphs.
 
     #### String comparison
@@ -15406,7 +15406,7 @@ class basic_json
     null      | null            | *no value is stored*
 
     @note Variable-length types (objects, arrays, and strings) are stored as
-    pointers. The size of the union should not exceed 64 bits if the default
+    pointers. The m_size of the union should not exceed 64 bits if the default
     value types are used.
 
     @since version 1.0.0
@@ -15561,12 +15561,12 @@ class basic_json
 
             while (not stack.empty())
             {
-                // move the last item to local variable to be processed
+                // move the last m_item to local variable to be processed
                 basic_json current_item(std::move(stack.back()));
                 stack.pop_back();
 
                 // if current_item is array/object, move
-                // its children to the stack to be processed later
+                // its m_children to the stack to be processed later
                 if (current_item.is_array())
                 {
                     std::move(current_item.m_value.array->begin(), current_item.m_value.array->end(),
@@ -15585,7 +15585,7 @@ class basic_json
                 }
 
                 // it's now safe that current_item get destructed
-                // since it doesn't have any children
+                // since it doesn't have any m_children
             }
 
             switch (t)
@@ -15676,11 +15676,11 @@ class basic_json
 
     parameter @a event | description | parameter @a depth | parameter @a parsed
     ------------------ | ----------- | ------------------ | -------------------
-    parse_event_t::object_start | the parser read `{` and started to process a JSON object | depth of the parent of the JSON object | a JSON value with type discarded
+    parse_event_t::object_start | the parser read `{` and started to process a JSON object | depth of the m_parent of the JSON object | a JSON value with type discarded
     parse_event_t::key | the parser read a key of a value in an object | depth of the currently parsed JSON object | a JSON string containing the key
-    parse_event_t::object_end | the parser read `}` and finished processing a JSON object | depth of the parent of the JSON object | the parsed JSON object
-    parse_event_t::array_start | the parser read `[` and started to process a JSON array | depth of the parent of the JSON array | a JSON value with type discarded
-    parse_event_t::array_end | the parser read `]` and finished processing a JSON array | depth of the parent of the JSON array | the parsed JSON array
+    parse_event_t::object_end | the parser read `}` and finished processing a JSON object | depth of the m_parent of the JSON object | the parsed JSON object
+    parse_event_t::array_start | the parser read `[` and started to process a JSON array | depth of the m_parent of the JSON array | a JSON value with type discarded
+    parse_event_t::array_end | the parser read `]` and finished processing a JSON array | depth of the m_parent of the JSON array | the parsed JSON array
     parse_event_t::value | the parser finished reading a JSON value | depth of the value | the parsed JSON value
 
     @image html callback_events.png "Example when certain parse events are triggered"
@@ -15822,7 +15822,7 @@ class basic_json
 
     @param[in] val the value to be forwarded to the respective constructor
 
-    @complexity Usually linear in the size of the passed @a val, also
+    @complexity Usually linear in the m_size of the passed @a val, also
                 depending on the implementation of the called `to_json()`
                 method.
 
@@ -15863,7 +15863,7 @@ class basic_json
 
     @param[in] val the @ref basic_json value to be converted.
 
-    @complexity Usually linear in the size of the passed @a val, also
+    @complexity Usually linear in the m_size of the passed @a val, also
                 depending on the implementation of the called `to_json()`
                 method.
 
@@ -15981,7 +15981,7 @@ class basic_json
     would have been created. See @ref object(initializer_list_t)
     for an example.
 
-    @complexity Linear in the size of the initializer list @a init.
+    @complexity Linear in the m_size of the initializer list @a init.
 
     @exceptionsafety Strong guarantee: if an exception is thrown, there are no
     changes to any JSON value.
@@ -16070,7 +16070,7 @@ class basic_json
 
     @return JSON array value
 
-    @complexity Linear in the size of @a init.
+    @complexity Linear in the m_size of @a init.
 
     @exceptionsafety Strong guarantee: if an exception is thrown, there are no
     changes to any JSON value.
@@ -16114,7 +16114,7 @@ class basic_json
     an array would have been created from the passed initializer list @a init.
     See example below.
 
-    @complexity Linear in the size of @a init.
+    @complexity Linear in the m_size of @a init.
 
     @exceptionsafety Strong guarantee: if an exception is thrown, there are no
     changes to any JSON value.
@@ -16330,7 +16330,7 @@ class basic_json
 
     @post `*this == other`
 
-    @complexity Linear in the size of @a other.
+    @complexity Linear in the m_size of @a other.
 
     @exceptionsafety Strong guarantee: if an exception is thrown, there are no
     changes to any JSON value.
@@ -17448,7 +17448,7 @@ class basic_json
     to the JSON value type (e.g., the JSON value is of type boolean, but a
     string is requested); see example below
 
-    @complexity Linear in the size of the JSON value.
+    @complexity Linear in the m_size of the JSON value.
 
     @liveexample{The example below shows several conversions from JSON values
     to other types. There a few things to note: (1) Floating-point numbers can
@@ -17503,7 +17503,7 @@ class basic_json
     @throw type_error.304 if the JSON value is not an array; in this case,
     calling `at` with an index makes no sense. See example below.
     @throw out_of_range.401 if the index @a idx is out of range of the array;
-    that is, `idx >= size()`. See example below.
+    that is, `idx >= m_size()`. See example below.
 
     @exceptionsafety Strong guarantee: if an exception is thrown, there are no
     changes in the JSON value.
@@ -17550,7 +17550,7 @@ class basic_json
     @throw type_error.304 if the JSON value is not an array; in this case,
     calling `at` with an index makes no sense. See example below.
     @throw out_of_range.401 if the index @a idx is out of range of the array;
-    that is, `idx >= size()`. See example below.
+    that is, `idx >= m_size()`. See example below.
 
     @exceptionsafety Strong guarantee: if an exception is thrown, there are no
     changes in the JSON value.
@@ -17602,7 +17602,7 @@ class basic_json
     @exceptionsafety Strong guarantee: if an exception is thrown, there are no
     changes in the JSON value.
 
-    @complexity Logarithmic in the size of the container.
+    @complexity Logarithmic in the m_size of the container.
 
     @sa @ref operator[](const typename object_t::key_type&) for unchecked
     access by reference
@@ -17653,7 +17653,7 @@ class basic_json
     @exceptionsafety Strong guarantee: if an exception is thrown, there are no
     changes in the JSON value.
 
-    @complexity Logarithmic in the size of the container.
+    @complexity Logarithmic in the m_size of the container.
 
     @sa @ref operator[](const typename object_t::key_type&) for unchecked
     access by reference
@@ -17691,7 +17691,7 @@ class basic_json
 
     Returns a reference to the element at specified location @a idx.
 
-    @note If @a idx is beyond the range of the array (i.e., `idx >= size()`),
+    @note If @a idx is beyond the range of the array (i.e., `idx >= m_size()`),
     then the array is silently filled up with `null` values to make `idx` a
     valid reference to the last stored element.
 
@@ -17703,7 +17703,7 @@ class basic_json
     cases, using the [] operator with an index makes no sense.
 
     @complexity Constant if @a idx is in the range of the array. Otherwise
-    linear in `idx - size()`.
+    linear in `idx - m_size()`.
 
     @liveexample{The example below shows how array elements can be read and
     written using `[]` operator. Note the addition of `null`
@@ -17784,7 +17784,7 @@ class basic_json
     @throw type_error.305 if the JSON value is not an object or null; in that
     cases, using the [] operator with a key makes no sense.
 
-    @complexity Logarithmic in the size of the container.
+    @complexity Logarithmic in the m_size of the container.
 
     @liveexample{The example below shows how object elements can be read and
     written using the `[]` operator.,operatorarray__key_type}
@@ -17833,7 +17833,7 @@ class basic_json
     @throw type_error.305 if the JSON value is not an object; in that case,
     using the [] operator with a key makes no sense.
 
-    @complexity Logarithmic in the size of the container.
+    @complexity Logarithmic in the m_size of the container.
 
     @liveexample{The example below shows how object elements can be read using
     the `[]` operator.,operatorarray__key_type_const}
@@ -17872,7 +17872,7 @@ class basic_json
     @throw type_error.305 if the JSON value is not an object or null; in that
     cases, using the [] operator with a key makes no sense.
 
-    @complexity Logarithmic in the size of the container.
+    @complexity Logarithmic in the m_size of the container.
 
     @liveexample{The example below shows how object elements can be read and
     written using the `[]` operator.,operatorarray__key_type}
@@ -17923,7 +17923,7 @@ class basic_json
     @throw type_error.305 if the JSON value is not an object; in that case,
     using the [] operator with a key makes no sense.
 
-    @complexity Logarithmic in the size of the container.
+    @complexity Logarithmic in the m_size of the container.
 
     @liveexample{The example below shows how object elements can be read using
     the `[]` operator.,operatorarray__key_type_const}
@@ -17986,7 +17986,7 @@ class basic_json
     @throw type_error.306 if the JSON value is not an object; in that case,
     using `value()` with a key makes no sense.
 
-    @complexity Logarithmic in the size of the container.
+    @complexity Logarithmic in the m_size of the container.
 
     @liveexample{The example below shows how object elements can be queried
     with a default value.,basic_json__value}
@@ -18061,7 +18061,7 @@ class basic_json
     @throw type_error.306 if the JSON value is not an object; in that case,
     using `value()` with a key makes no sense.
 
-    @complexity Logarithmic in the size of the container.
+    @complexity Logarithmic in the m_size of the container.
 
     @liveexample{The example below shows how object elements can be queried
     with a default value.,basic_json__value_ptr}
@@ -18321,7 +18321,7 @@ class basic_json
     `"iterators out of range"`
 
     @complexity The complexity depends on the type:
-    - objects: `log(size()) + std::distance(first, last)`
+    - objects: `log(m_size()) + std::distance(first, last)`
     - arrays: linear in the distance between @a first and @a last, plus linear
       in the distance between @a last and end of the container
     - strings: linear in the length of the string
@@ -18417,7 +18417,7 @@ class basic_json
     @throw type_error.307 when called on a type other than JSON object;
     example: `"cannot use erase() with null"`
 
-    @complexity `log(size()) + count(key)`
+    @complexity `log(m_size()) + count(key)`
 
     @liveexample{The example shows the effect of `erase()`.,erase__key_type}
 
@@ -18449,7 +18449,7 @@ class basic_json
 
     @throw type_error.307 when called on a type other than JSON object;
     example: `"cannot use erase() with null"`
-    @throw out_of_range.401 when `idx >= size()`; example: `"array index 17
+    @throw out_of_range.401 when `idx >= m_size()`; example: `"array index 17
     is out of range"`
 
     @complexity Linear in distance between @a idx and the end of the container.
@@ -18508,7 +18508,7 @@ class basic_json
     element is found or the JSON value is not an object, past-the-end (see
     @ref end()) iterator is returned.
 
-    @complexity Logarithmic in the size of the JSON object.
+    @complexity Logarithmic in the m_size of the JSON object.
 
     @liveexample{The example shows how `find()` is used.,find__key_type}
 
@@ -18561,7 +18561,7 @@ class basic_json
     @return Number of elements with key @a key. If the JSON value is not an
     object, the return value will be `0`.
 
-    @complexity Logarithmic in the size of the JSON object.
+    @complexity Logarithmic in the m_size of the JSON object.
 
     @liveexample{The example shows how `count()` is used.,count}
 
@@ -18590,7 +18590,7 @@ class basic_json
     element with such key is found or the JSON value is not an object,
     false is returned.
 
-    @complexity Logarithmic in the size of the JSON object.
+    @complexity Logarithmic in the m_size of the JSON object.
 
     @liveexample{The following code shows an example for `contains()`.,contains}
 
@@ -18624,7 +18624,7 @@ class basic_json
     @throw parse_error.106   if an array index begins with '0'
     @throw parse_error.109   if an array index was not a number
 
-    @complexity Logarithmic in the size of the JSON object.
+    @complexity Logarithmic in the m_size of the JSON object.
 
     @liveexample{The following code shows an example for `contains()`.,contains_json_pointer}
 
@@ -19082,7 +19082,7 @@ class basic_json
     /*!
     @brief checks whether the container is empty.
 
-    Checks if a JSON value has no elements (i.e. whether its @ref size is `0`).
+    Checks if a JSON value has no elements (i.e. whether its @ref m_size is `0`).
 
     @return The return value depends on the different types and is
             defined as follows:
@@ -19116,7 +19116,7 @@ class basic_json
     - The complexity is constant.
     - Has the semantics of `begin() == end()`.
 
-    @sa @ref size() -- returns the number of elements
+    @sa @ref m_size() -- returns the number of elements
 
     @since version 1.0.0
     */
@@ -19163,14 +19163,14 @@ class basic_json
             boolean     | `1`
             string      | `1`
             number      | `1`
-            object      | result of function object_t::size()
-            array       | result of function array_t::size()
+            object      | result of function object_t::m_size()
+            array       | result of function array_t::m_size()
 
-    @liveexample{The following code calls `size()` on the different value
-    types.,size}
+    @liveexample{The following code calls `m_size()` on the different value
+    types.,m_size}
 
     @complexity Constant, as long as @ref array_t and @ref object_t satisfy
-    the Container concept; that is, their size() functions have constant
+    the Container concept; that is, their m_size() functions have constant
     complexity.
 
     @iterators No changes.
@@ -19204,19 +19204,19 @@ class basic_json
 
             case value_t::array:
             {
-                // delegate call to array_t::size()
+                // delegate call to array_t::m_size()
                 return m_value.array->size();
             }
 
             case value_t::object:
             {
-                // delegate call to object_t::size()
+                // delegate call to object_t::m_size()
                 return m_value.object->size();
             }
 
             default:
             {
-                // all other types have size 1
+                // all other types have m_size 1
                 return 1;
             }
         }
@@ -19233,10 +19233,10 @@ class basic_json
             defined as follows:
             Value type  | return value
             ----------- | -------------
-            null        | `0` (same as `size()`)
-            boolean     | `1` (same as `size()`)
-            string      | `1` (same as `size()`)
-            number      | `1` (same as `size()`)
+            null        | `0` (same as `m_size()`)
+            boolean     | `1` (same as `m_size()`)
+            string      | `1` (same as `m_size()`)
+            number      | `1` (same as `m_size()`)
             object      | result of function `object_t::max_size()`
             array       | result of function `array_t::max_size()`
 
@@ -19255,10 +19255,10 @@ class basic_json
     [Container](https://en.cppreference.com/w/cpp/named_req/Container)
     requirements:
     - The complexity is constant.
-    - Has the semantics of returning `b.size()` where `b` is the largest
+    - Has the semantics of returning `b.m_size()` where `b` is the largest
       possible JSON value.
 
-    @sa @ref size() -- returns the number of elements
+    @sa @ref m_size() -- returns the number of elements
 
     @since version 1.0.0
     */
@@ -19280,7 +19280,7 @@ class basic_json
 
             default:
             {
-                // all other types have max_size() == size()
+                // all other types have max_size() == m_size()
                 return size();
             }
         }
@@ -19320,7 +19320,7 @@ class basic_json
     @liveexample{The example below shows the effect of `clear()` to different
     JSON types.,clear}
 
-    @complexity Linear in the size of the JSON value.
+    @complexity Linear in the m_size of the JSON value.
 
     @iterators All iterators, pointers and references related to this container
                are invalidated.
@@ -19482,7 +19482,7 @@ class basic_json
     @throw type_error.308 when called on a type other than JSON object or
     null; example: `"cannot use push_back() with number"`
 
-    @complexity Logarithmic in the size of the container, O(log(`size()`)).
+    @complexity Logarithmic in the m_size of the container, O(log(`m_size()`)).
 
     @liveexample{The example shows how `push_back()` and `+=` can be used to
     add elements to a JSON object. Note how the `null` value was silently
@@ -19535,7 +19535,7 @@ class basic_json
 
     @param[in] init  an initializer list
 
-    @complexity Linear in the size of the initializer list @a init.
+    @complexity Linear in the m_size of the initializer list @a init.
 
     @note This function is required to resolve an ambiguous overload error,
           because pairs like `{"key", "value"}` can be both interpreted as
@@ -19636,7 +19636,7 @@ class basic_json
     @throw type_error.311 when called on a type other than JSON object or
     null; example: `"cannot use emplace() with number"`
 
-    @complexity Logarithmic in the size of the container, O(log(`size()`)).
+    @complexity Logarithmic in the m_size of the container, O(log(`m_size()`)).
 
     @liveexample{The example shows how `emplace()` can be used to add elements
     to a JSON object. Note how the `null` value was silently converted to a
@@ -19859,7 +19859,7 @@ class basic_json
     @return iterator pointing to the first element inserted, or @a pos if
     `ilist` is empty
 
-    @complexity Linear in `ilist.size()` plus linear in the distance between
+    @complexity Linear in `ilist.m_size()` plus linear in the distance between
     @a pos and end of the container.
 
     @liveexample{The example shows how `insert()` is used.,insert__ilist}
@@ -19900,7 +19900,7 @@ class basic_json
     @throw invalid_iterator.210 if @a first and @a last do not belong to the
     same JSON value; example: `"iterators do not fit"`
 
-    @complexity Logarithmic: `O(N*log(size() + N))`, where `N` is the number
+    @complexity Logarithmic: `O(N*log(m_size() + N))`, where `N` is the number
     of elements to insert.
 
     @liveexample{The example shows how `insert()` is used.,insert__range_object}
@@ -19940,7 +19940,7 @@ class basic_json
     @throw type_error.312 if called on JSON values other than objects; example:
     `"cannot use update() with string"`
 
-    @complexity O(N*log(size() + N)), where N is the number of elements to
+    @complexity O(N*log(m_size() + N)), where N is the number of elements to
                 insert.
 
     @liveexample{The example shows how `update()` is used.,update}
@@ -19991,7 +19991,7 @@ class basic_json
     @throw invalid_iterator.210 if @a first and @a last do not belong to the
     same JSON value; example: `"iterators do not fit"`
 
-    @complexity O(N*log(size() + N)), where N is the number of elements to
+    @complexity O(N*log(m_size() + N)), where N is the number of elements to
                 insert.
 
     @liveexample{The example shows how `update()` is used__range.,update}
@@ -20683,7 +20683,7 @@ class basic_json
 
     This function reads from a compatible input. Examples are:
     - an array of 1-byte values
-    - strings with character/literal type with size of 1 byte
+    - strings with character/literal type with m_size of 1 byte
     - input streams
     - container with contiguous storage of 1-byte values. Compatible container
       types include `std::vector`, `std::string`, `std::array`,
@@ -20692,7 +20692,7 @@ class basic_json
       containers can be used as long as they implement random-access iterators
       and a contiguous storage.
 
-    @pre Each element of the container has a size of 1 byte. Violating this
+    @pre Each element of the container has a m_size of 1 byte. Violating this
     precondition yields undefined behavior. **This precondition is enforced
     with a static assertion.**
 
@@ -20763,7 +20763,7 @@ class basic_json
 
     This function reads from a compatible input. Examples are:
     - an array of 1-byte values
-    - strings with character/literal type with size of 1 byte
+    - strings with character/literal type with m_size of 1 byte
     - input streams
     - container with contiguous storage of 1-byte values. Compatible container
       types include `std::vector`, `std::string`, `std::array`,
@@ -20772,7 +20772,7 @@ class basic_json
       containers can be used as long as they implement random-access iterators
       and a contiguous storage.
 
-    @pre Each element of the container has a size of 1 byte. Violating this
+    @pre Each element of the container has a m_size of 1 byte. Violating this
     precondition yields undefined behavior. **This precondition is enforced
     with a static assertion.**
 
@@ -20833,7 +20833,7 @@ class basic_json
 
     @pre The iterator range is contiguous. Violating this precondition yields
     undefined behavior. **This precondition is enforced with an assertion.**
-    @pre Each element in the range has a size of 1 byte. Violating this
+    @pre Each element in the range has a m_size of 1 byte. Violating this
     precondition yields undefined behavior. **This precondition is enforced
     with a static assertion.**
 
@@ -21064,16 +21064,16 @@ class basic_json
     string          | *length*: 256..65535                       | UTF-8 string (2 bytes follow)      | 0x79
     string          | *length*: 65536..4294967295                | UTF-8 string (4 bytes follow)      | 0x7A
     string          | *length*: 4294967296..18446744073709551615 | UTF-8 string (8 bytes follow)      | 0x7B
-    array           | *size*: 0..23                              | array                              | 0x80..0x97
-    array           | *size*: 23..255                            | array (1 byte follow)              | 0x98
-    array           | *size*: 256..65535                         | array (2 bytes follow)             | 0x99
-    array           | *size*: 65536..4294967295                  | array (4 bytes follow)             | 0x9A
-    array           | *size*: 4294967296..18446744073709551615   | array (8 bytes follow)             | 0x9B
-    object          | *size*: 0..23                              | map                                | 0xA0..0xB7
-    object          | *size*: 23..255                            | map (1 byte follow)                | 0xB8
-    object          | *size*: 256..65535                         | map (2 bytes follow)               | 0xB9
-    object          | *size*: 65536..4294967295                  | map (4 bytes follow)               | 0xBA
-    object          | *size*: 4294967296..18446744073709551615   | map (8 bytes follow)               | 0xBB
+    array           | *m_size*: 0..23                              | array                              | 0x80..0x97
+    array           | *m_size*: 23..255                            | array (1 byte follow)              | 0x98
+    array           | *m_size*: 256..65535                         | array (2 bytes follow)             | 0x99
+    array           | *m_size*: 65536..4294967295                  | array (4 bytes follow)             | 0x9A
+    array           | *m_size*: 4294967296..18446744073709551615   | array (8 bytes follow)             | 0x9B
+    object          | *m_size*: 0..23                              | map                                | 0xA0..0xB7
+    object          | *m_size*: 23..255                            | map (1 byte follow)                | 0xB8
+    object          | *m_size*: 256..65535                         | map (2 bytes follow)               | 0xB9
+    object          | *m_size*: 65536..4294967295                  | map (4 bytes follow)               | 0xBA
+    object          | *m_size*: 4294967296..18446744073709551615   | map (8 bytes follow)               | 0xBB
 
     @note The mapping is **complete** in the sense that any JSON value type
           can be converted to a CBOR value.
@@ -21101,7 +21101,7 @@ class basic_json
     @param[in] j  JSON value to serialize
     @return MessagePack serialization as byte vector
 
-    @complexity Linear in the size of the JSON value @a j.
+    @complexity Linear in the m_size of the JSON value @a j.
 
     @liveexample{The example shows the serialization of a JSON value to a byte
     vector in CBOR format.,to_cbor}
@@ -21167,12 +21167,12 @@ class basic_json
     string          | *length*: 32..255                 | str 8            | 0xD9
     string          | *length*: 256..65535              | str 16           | 0xDA
     string          | *length*: 65536..4294967295       | str 32           | 0xDB
-    array           | *size*: 0..15                     | fixarray         | 0x90..0x9F
-    array           | *size*: 16..65535                 | array 16         | 0xDC
-    array           | *size*: 65536..4294967295         | array 32         | 0xDD
-    object          | *size*: 0..15                     | fix map          | 0x80..0x8F
-    object          | *size*: 16..65535                 | map 16           | 0xDE
-    object          | *size*: 65536..4294967295         | map 32           | 0xDF
+    array           | *m_size*: 0..15                     | fixarray         | 0x90..0x9F
+    array           | *m_size*: 16..65535                 | array 16         | 0xDC
+    array           | *m_size*: 65536..4294967295         | array 32         | 0xDD
+    object          | *m_size*: 0..15                     | fix map          | 0x80..0x8F
+    object          | *m_size*: 16..65535                 | map 16           | 0xDE
+    object          | *m_size*: 65536..4294967295         | map 32           | 0xDF
 
     @note The mapping is **complete** in the sense that any JSON value type
           can be converted to a MessagePack value.
@@ -21198,7 +21198,7 @@ class basic_json
     @param[in] j  JSON value to serialize
     @return MessagePack serialization as byte vector
 
-    @complexity Linear in the size of the JSON value @a j.
+    @complexity Linear in the m_size of the JSON value @a j.
 
     @liveexample{The example shows the serialization of a JSON value to a byte
     vector in MessagePack format.,to_msgpack}
@@ -21280,7 +21280,7 @@ class basic_json
           function which serializes NaN or Infinity to `null`.
 
     @note The optimized formats for containers are supported: Parameter
-          @a use_size adds size information to the beginning of a container and
+          @a use_size adds m_size information to the beginning of a container and
           removes the closing marker. Parameter @a use_type further checks
           whether all elements of a container have the same type and adds the
           type marker to the beginning of the container. The @a use_type
@@ -21290,12 +21290,12 @@ class basic_json
           immediately informed on the number of elements of the container.
 
     @param[in] j  JSON value to serialize
-    @param[in] use_size  whether to add size annotations to container types
+    @param[in] use_size  whether to add m_size annotations to container types
     @param[in] use_type  whether to add type annotations to container types
                          (must be combined with @a use_size = true)
     @return UBJSON serialization as byte vector
 
-    @complexity Linear in the size of the JSON value @a j.
+    @complexity Linear in the m_size of the JSON value @a j.
 
     @liveexample{The example shows the serialization of a JSON value to a byte
     vector in UBJSON format.,to_ubjson}
@@ -21372,7 +21372,7 @@ class basic_json
     @param[in] j  JSON value to serialize
     @return BSON serialization as byte vector
 
-    @complexity Linear in the size of the JSON value @a j.
+    @complexity Linear in the m_size of the JSON value @a j.
 
     @liveexample{The example shows the serialization of a JSON value to a byte
     vector in BSON format.,to_bson}
@@ -21496,7 +21496,7 @@ class basic_json
     used in the given input @a v or if the input is not valid CBOR
     @throw parse_error.113 if a string was expected as map key, but not found
 
-    @complexity Linear in the size of the input @a i.
+    @complexity Linear in the m_size of the input @a i.
 
     @liveexample{The example shows the deserialization of a byte vector in CBOR
     format to a JSON value.,from_cbor}
@@ -21603,7 +21603,7 @@ class basic_json
     used in the given input @a i or if the input is not valid MessagePack
     @throw parse_error.113 if a string was expected as map key, but not found
 
-    @complexity Linear in the size of the input @a i.
+    @complexity Linear in the m_size of the input @a i.
 
     @liveexample{The example shows the deserialization of a byte vector in
     MessagePack format to a JSON value.,from_msgpack}
@@ -21693,7 +21693,7 @@ class basic_json
     @throw parse_error.112 if a parse error occurs
     @throw parse_error.113 if a string could not be parsed successfully
 
-    @complexity Linear in the size of the input @a i.
+    @complexity Linear in the m_size of the input @a i.
 
     @liveexample{The example shows the deserialization of a byte vector in
     UBJSON format to a JSON value.,from_ubjson}
@@ -21783,7 +21783,7 @@ class basic_json
 
     @throw parse_error.114 if an unsupported BSON record type is encountered
 
-    @complexity Linear in the size of the input @a i.
+    @complexity Linear in the m_size of the input @a i.
 
     @liveexample{The example shows the deserialization of a byte vector in
     BSON format to a JSON value.,from_bson}
@@ -22000,7 +22000,7 @@ class basic_json
     @note Empty objects and arrays are flattened to `null` and will not be
           reconstructed correctly by the @ref unflatten() function.
 
-    @complexity Linear in the size the JSON value.
+    @complexity Linear in the m_size the JSON value.
 
     @liveexample{The following code shows how a JSON object is flattened to an
     object whose keys consist of JSON pointers.,flatten}
@@ -22034,7 +22034,7 @@ class basic_json
           this example, for a JSON value `j`, the following is always true:
           `j == j.flatten().unflatten()`.
 
-    @complexity Linear in the size the JSON value.
+    @complexity Linear in the m_size the JSON value.
 
     @throw type_error.314  if value is not an object
     @throw type_error.315  if object values are not primitive
@@ -22088,12 +22088,12 @@ class basic_json
     resolved successfully in the current JSON value; example: `"key baz not
     found"`
 
-    @throw out_of_range.405 if JSON pointer has no parent ("add", "remove",
+    @throw out_of_range.405 if JSON pointer has no m_parent ("add", "remove",
     "move")
 
     @throw other_error.501 if "test" operation was unsuccessful
 
-    @complexity Linear in the size of the JSON value and the length of the
+    @complexity Linear in the m_size of the JSON value and the length of the
     JSON patch. As usually only a fraction of the JSON value is affected by
     the patch, the complexity can usually be neglected.
 
@@ -22148,7 +22148,7 @@ class basic_json
         // wrapper for "add" operation; add value at ptr
         const auto operation_add = [&result](json_pointer & ptr, basic_json val)
         {
-            // adding to the root of the target document means replacing it
+            // adding to the m_root of the target document means replacing it
             if (ptr.empty())
             {
                 result = val;
@@ -22162,7 +22162,7 @@ class basic_json
                 result.at(top_pointer);
             }
 
-            // get reference to parent of JSON pointer ptr
+            // get reference to m_parent of JSON pointer ptr
             const auto last_path = ptr.back();
             ptr.pop_back();
             basic_json& parent = result[ptr];
@@ -22199,7 +22199,7 @@ class basic_json
                     break;
                 }
 
-                // if there exists a parent it cannot be primitive
+                // if there exists a m_parent it cannot be primitive
                 default:            // LCOV_EXCL_LINE
                     assert(false);  // LCOV_EXCL_LINE
             }
@@ -22208,7 +22208,7 @@ class basic_json
         // wrapper for "remove" operation; remove value at ptr
         const auto operation_remove = [&result](json_pointer & ptr)
         {
-            // get reference to parent of JSON pointer ptr
+            // get reference to m_parent of JSON pointer ptr
             const auto last_path = ptr.back();
             ptr.pop_back();
             basic_json& parent = result.at(ptr);

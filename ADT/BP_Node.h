@@ -1,31 +1,38 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
+#include <string>
 
 template<typename T>
 class BP_Node {
 private:
     bool m_is_leaf;
-    int m_degree; // maximum number of children
-    int m_size; // current number of keys
-    std::vector<T*> m_keys;
-    std::vector<BP_Node<T>*> m_children;
+    std::size_t m_degree; // maximum number of m_children
+    std::size_t m_size; // current number of m_item
+    T* m_item;
+    BP_Node<T>** m_children;
     BP_Node<T>* m_parent;
+
 public:
-    BP_Node(int t_degree) {
+    BP_Node(std::size_t _degree) {// Constructor
         m_is_leaf = false;
-        m_degree = t_degree;
+        m_degree = _degree;
         m_size = 0;
 
-        for(int i=0; i<m_degree; i++){
-            m_keys.push_back(nullptr);
+        T* _item = new T[m_degree - 1];
+        for(int i=0; i < m_degree - 1; i++){
+            _item[i] = "a";
         }
+        this->m_item = _item;
 
-        for(int i=0; i<m_degree+1; i++){
-            m_children.push_back(nullptr);
+        auto** _children = new BP_Node<T>*[m_degree];
+        for(int i=0; i < m_degree; i++){
+            _children[i] = nullptr;
         }
+        m_children = _children;
+
         m_parent = nullptr;
+
     }
 
     void set_is_leaf(bool t_bool){
@@ -45,14 +52,14 @@ public:
         return m_size;
     }
 
-    void set_key(T* t_key, int pos){
-        m_keys[pos]=t_key;
+    void set_item(int pos, T* t_key){
+        m_item[pos]=t_key;
     }
-    T* get_key(int pos){
-        return m_keys[pos];
+    T* get_item(int pos){
+        return m_item[pos];
     }
 
-    void set_child(BP_Node<T>* t_child, int pos){
+    void set_child( int pos, BP_Node<T>* t_child){
         m_children[pos]=t_child;
     }
     BP_Node<T>* get_child(int pos){
