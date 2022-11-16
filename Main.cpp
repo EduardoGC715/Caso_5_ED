@@ -1,14 +1,12 @@
 #include "ADT/BP_Tree.h"
-#include "contentful/contentful.h"
+#include "contentful/contentful_functions.h"
 using namespace std;
 int main(){
+    auto contentful_f= new contentful_functions();
+    contentful_f->print_all_regs();
+    cout<<contentful_f->string_minimizer("metal_year_2000",2)<<endl;
 
-    Contenful regs;
-
-    //regs.registerUser("badbunny_in_concert", "conciertos a estadio lleno de gente escuchando pum pum con el mismo acorde por 2 horas", "transporte y seguridad en todos los paises que visita y mucha fiesta tambien", "conejo123", 02, 11, 2022);
-    vector<Registered*> allrecords = regs.getRecords();
-    cout << allrecords.at(0)->getNickname() << endl;
-    
+    /*
     auto tree= new BP_Tree<string>(5);
     tree->insert("a");
     tree->insert("b");
@@ -21,6 +19,6 @@ int main(){
     if(tree->search("b")){
         cout<<"found\n";
     }
-    tree->bpt_print();
+    tree->bpt_print();*/
     return 0;
 }

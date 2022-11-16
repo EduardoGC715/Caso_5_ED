@@ -92,6 +92,9 @@
 		<Unit filename="/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/contentful/contentful.h">
 			<Option target="curl-demo"/>
 		</Unit>
+		<Unit filename="/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/contentful/contentful_functions.h">
+			<Option target="curl-demo"/>
+		</Unit>
 		<Unit filename="/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
