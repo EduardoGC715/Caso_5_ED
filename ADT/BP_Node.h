@@ -45,29 +45,17 @@ public:
         return m_size;
     }
 
-    void set_keys(T* t_keys){
-        m_keys=t_keys;
-    }
-    std::vector<T*> get_keys(){
-        return m_keys;
-    }
-    void set_spcf_key(T* t_key, int pos){
+    void set_key(T* t_key, int pos){
         m_keys[pos]=t_key;
     }
-    T* get_spcf_key(int pos){
+    T* get_key(int pos){
         return m_keys[pos];
     }
 
-    void set_children(BP_Node<T>** t_children){
-        m_children=t_children;
-    }
-    std::vector<BP_Node<T> *> get_children(){
-        return m_children;
-    }
-    void set_spcf_child(BP_Node<T>* t_child, int pos){
+    void set_child(BP_Node<T>* t_child, int pos){
         m_children[pos]=t_child;
     }
-    BP_Node<T>* get_spcf_child(int pos){
+    BP_Node<T>* get_child(int pos){
         return m_children[pos];
     }
 
