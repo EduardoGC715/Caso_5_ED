@@ -11,6 +11,9 @@ int main(){
     tree->insert("f");
     tree->insert("a");
 
+    if(tree->search("b")){
+        cout<<"found\n";
+    }
     tree->bpt_print();
     return 0;
 }

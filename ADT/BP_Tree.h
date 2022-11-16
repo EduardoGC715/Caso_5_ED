@@ -20,29 +20,29 @@ public:
         return m_root;
     }
 
-    BP_Node<T>* BPlusTreeSearch(BP_Node<T>* node, T key){
-        if(node == nullptr) { // if m_root is null, return nullptr
+    BP_Node<T>* BPlusTreeSearch(BP_Node<T>* t_node, T t_key){
+        if(t_node == nullptr) { // if m_root is null, return nullptr
             return nullptr;
         }
         else{
-            BP_Node<T>* cursor = node; // cursor finding key
+            BP_Node<T>* cursor = t_node; // cursor finding t_key
 
-            while(!cursor->m_is_leaf){ // until cusor pointer arrive leaf
-                for(int i=0; i<cursor->m_size; i++){ //in this index node, find what we want key
-                    if(key < cursor->m_item[i]){ //find some range, and let find their child also.
-                        cursor = cursor->m_children[i];
+            while(!cursor->get_is_leaf()){ // until cusor pointer arrive leaf
+                for(int i=0; i<cursor->get_size(); i++){ //in this index t_node, find what we want t_key
+                    if(t_key < cursor->get_item(i)){ //find some range, and let find their child also.
+                        cursor = cursor->get_child(i);
                         break;
                     }
-                    if(i == (cursor->m_size) - 1){
-                        cursor = cursor->m_children[i + 1];
+                    if(i == (cursor->get_size()) - 1){
+                        cursor = cursor->get_child(i+1);
                         break;
                     }
                 }
             }
 
-            //search for the key if it exists in leaf node.
-            for(int i=0; i<cursor->m_size; i++){
-                if(cursor->m_item[i] == key){
+            //search for the t_key if it exists in leaf t_node.
+            for(int i=0; i<cursor->get_size(); i++){
+                if(cursor->get_item(i) == t_key){
                     return cursor;
                 }
             }
@@ -50,16 +50,16 @@ public:
             return nullptr;
         }
     }
-    BP_Node<T>* BPlusTreeRangeSearch(BP_Node<T>* node, T key){
-        if(node == nullptr) { // if m_root is null, return nullptr
+    BP_Node<T>* BPlusTreeRangeSearch(BP_Node<T>* t_node, T t_key){
+        if(t_node == nullptr) { // if m_root is null, return nullptr
             return nullptr;
         }
         else{
-            BP_Node<T>* cursor = node; // cursor finding key
+            BP_Node<T>* cursor = t_node; // cursor finding t_key
 
             while(!cursor->get_is_leaf()){ // until cusor pointer arrive leaf
-                for(int i=0; i<cursor->get_size(); i++){ //in this index node, find what we want key
-                    if(key < cursor->get_item(i)){ //find some range, and let find their child also.
+                for(int i=0; i<cursor->get_size(); i++){ //in this index t_node, find what we want t_key
+                    if(t_key < cursor->get_item(i)){ //find some range, and let find their child also.
                         cursor = cursor->get_child(i);
                         break;
                     }
@@ -73,7 +73,7 @@ public:
         }
     }
     bool search(T data) {  // Return true if the m_item exists. Return false if it does not.
-        return BPlusTreeSearch(this->m_root, data) != nullptr;
+        return BPlusTreeSearch(m_root, data) != nullptr;
     }
 
     int find_index(T* arr, T data, int len){
