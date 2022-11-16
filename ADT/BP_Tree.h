@@ -54,9 +54,12 @@ public:
             m_root->set_key(t_key, 0);
             m_root->set_is_leaf(true);
             m_root->inc_size();
+
         } else {
             BP_Node<T> *cursor = m_root;
+            BP_Node<T> *parent;
             while (!cursor->get_is_leaf()) {
+                parent = cursor;
                 for (int i = 0; i < cursor->get_size(); i++) {
                     if (t_key < cursor->get_key(i)) {
                         cursor = cursor->get_child(i);
@@ -110,11 +113,13 @@ public:
                     new_root->set_key(new_leaf->get_key(0), 0);
                     new_root->set_child(cursor, 0);
                     new_root->set_child(new_leaf, 1);
+                    cursor->set_parent(new_root);
+                    new_leaf->set_parent(new_root);
                     new_root->set_is_leaf(false);
                     new_root->set_size(1);
                     m_root = new_root;
                 } else {
-                    insert_internal(new_leaf->get_key(0), cursor, new_leaf);
+                    insert_internal(new_leaf->get_key(0), parent, new_leaf);
                 }
             }
         }
@@ -165,13 +170,15 @@ public:
                 new_internal->set_child(aux_children[j], i);
             }
             if (t_parent == m_root) {
-                auto *newRoot = new BP_Node<T>(m_degree);
-                newRoot->set_key(t_parent->get_key(t_parent->get_size()), 0);
-                newRoot->set_child(t_parent, 0);
-                newRoot->set_child(new_internal, 1);
-                newRoot->set_is_leaf(false);
-                newRoot->set_size(1);
-                m_root = newRoot;
+                auto *new_root = new BP_Node<T>(m_degree);
+                new_root->set_key(t_parent->get_key(t_parent->get_size()), 0);
+                new_root->set_child(t_parent, 0);
+                new_root->set_child(new_internal, 1);
+                t_parent->set_parent(new_root);
+                new_internal->set_parent(new_root);
+                new_root->set_is_leaf(false);
+                new_root->set_size(1);
+                m_root = new_root;
             } else {
                 insert_internal(t_parent->get_key(t_parent->get_size()), t_parent->get_parent(), new_internal);
             }

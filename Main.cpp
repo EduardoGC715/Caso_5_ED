@@ -9,6 +9,9 @@ int main(){
     arbol->insert(new int(4));
     arbol->insert(new int(5));
     arbol->insert(new int(6));
+    arbol->insert(new int(7));
+    arbol->insert(new int(8));
+    arbol->insert(new int(9));
 
     arbol->print_tree(arbol->get_root(),1);
     return 0;
