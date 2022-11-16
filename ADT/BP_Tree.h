@@ -305,13 +305,13 @@ public:
 
     void clear(BP_Node<T>* cursor){
         if(cursor != nullptr){
-            if(!cursor->m_is_leaf){
-                for(int i=0; i <= cursor->m_size; i++){
-                    clear(cursor->m_children[i]);
+            if(!cursor->get_is_leaf()){
+                for(int i=0; i <= cursor->get_size(); i++){
+                    clear(cursor->get_child(i));
                 }
             }
-            delete[] cursor->m_item;
-            delete[] cursor->m_children;
+            delete[] cursor->get_itm_arr();
+            delete[] cursor->get_chldrn_arr();
             delete cursor;
         }
     }

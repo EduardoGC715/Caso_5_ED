@@ -5,7 +5,7 @@ int main(){
     auto contentful_f= new contentful_functions();
     contentful_f->print_all_regs();
     cout<<contentful_f->string_minimizer("metal_year_2000",2)<<endl;
-
+    cout<<contentful_f->string_minimizer("rock_odin_gold",1)<<endl;
     /*
     auto tree= new BP_Tree<string>(5);
     tree->insert("a");

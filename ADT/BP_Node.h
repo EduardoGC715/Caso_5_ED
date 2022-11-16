@@ -71,6 +71,9 @@ public:
     BP_Node<T>* get_child(int pos){
         return m_children[pos];
     }
+    BP_Node<T>** get_chldrn_arr(){
+        return m_children;
+    }
 
     void set_parent(BP_Node<T>* t_parent){
         m_parent=t_parent;
