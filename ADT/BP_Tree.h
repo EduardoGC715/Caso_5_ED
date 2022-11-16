@@ -148,25 +148,25 @@ public:
     void insert_prnt(BP_Node<T>* par, BP_Node<T>* child, T data){
         //overflow check
         BP_Node<T>* cursor = par;
-        if(cursor->get_size() < this->m_degree - 1){//not overflow, just insert in the correct position
+        if(cursor->get_size() < m_degree - 1){//not overflow, just insert in the correct position
             //insert m_item, child, and reallocate
             cursor = child_item_insert(cursor,data,child);
-            cursor->m_size++;
+            cursor->inc_size();
         }
         else{//overflow
             //make new node
-            auto* Newnode = new BP_Node<T>(this->m_degree);
-            Newnode->m_parent = cursor->m_parent;
+            auto* new_node = new BP_Node<T>(m_degree);
+            new_node->set_parent(cursor->get_parent());
 
             //copy m_item
-            T* item_copy = new T[cursor->m_size + 1];
-            for(int i=0; i<cursor->m_size; i++){
-                item_copy[i] = cursor->m_item[i];
+            T* item_copy = new T[cursor->get_size()+ 1];
+            for(int i=0; i<cursor->get_size(); i++){
+                item_copy[i] = cursor->get_item(i);
             }
-            item_copy = item_insert(item_copy,data,cursor->m_size);
+            item_copy = item_insert(item_copy,data,cursor->get_size());
 
-            auto** child_copy = new BP_Node<T>*[cursor->m_size + 2];
-            for(int i=0; i< cursor->m_size + 1; i++){
+            auto** child_copy = new BP_Node<T>*[cursor->get_size() + 2];
+            for(int i=0; i< cursor->get_size() + 1; i++){
                 child_copy[i] = cursor->m_children[i];
             }
             child_copy[cursor->m_size + 1] = nullptr;
@@ -175,10 +175,10 @@ public:
             //split nodes
             cursor->m_size = (this->m_degree) / 2;
             if((this->m_degree) % 2 == 0){
-                Newnode->m_size = (this->m_degree) / 2 - 1;
+                new_node->m_size = (this->m_degree) / 2 - 1;
             }
             else{
-                Newnode->m_size = (this->m_degree) / 2;
+                new_node->m_size = (this->m_degree) / 2;
             }
 
             for(int i=0; i<cursor->m_size; i++){
@@ -187,13 +187,13 @@ public:
             }
             cursor->m_children[cursor->m_size] = child_copy[cursor->m_size];
 
-            for(int i=0; i < Newnode->m_size; i++){
-                Newnode->m_item[i] = item_copy[cursor->m_size + i + 1];
-                Newnode->m_children[i] = child_copy[cursor->m_size + i + 1];
-                Newnode->m_children[i]->m_parent=Newnode;
+            for(int i=0; i < new_node->m_size; i++){
+                new_node->m_item[i] = item_copy[cursor->m_size + i + 1];
+                new_node->m_children[i] = child_copy[cursor->m_size + i + 1];
+                new_node->m_children[i]->m_parent=new_node;
             }
-            Newnode->m_children[Newnode->m_size] = child_copy[cursor->m_size + Newnode->m_size + 1];
-            Newnode->m_children[Newnode->m_size]->m_parent=Newnode;
+            new_node->m_children[new_node->m_size] = child_copy[cursor->m_size + new_node->m_size + 1];
+            new_node->m_children[new_node->m_size]->m_parent=new_node;
 
             T paritem = item_copy[this->m_degree / 2];
 
@@ -204,20 +204,20 @@ public:
             if(cursor->m_parent == nullptr){//if there are no m_parent node(m_root case)
                 auto* new_parent = new BP_Node<T>(this->m_degree);
                 cursor->m_parent = new_parent;
-                Newnode->m_parent = new_parent;
+                new_node->m_parent = new_parent;
 
                 new_parent->m_item[0] = paritem;
                 new_parent->m_size++;
 
                 new_parent->m_children[0] = cursor;
-                new_parent->m_children[1] = Newnode;
+                new_parent->m_children[1] = new_node;
 
                 this->m_root = new_parent;
 
                 //delete new_parent;
             }
             else{//if there already have m_parent node
-                insert_prnt(cursor->m_parent, Newnode, paritem);
+                insert_prnt(cursor->m_parent, new_node, paritem);
             }
         }
     }
