@@ -4,7 +4,6 @@
 CMakeFiles/curl-demo.dir/Main.cpp.o
  /cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/Main.cpp
  /cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/ADT/BP_Tree.h
- /cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/ADT/BP_Node.h
  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/iostream
  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin/bits/c++config.h
  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin/bits/os_defines.h
@@ -152,11 +151,7 @@ CMakeFiles/curl-demo.dir/Main.cpp.o
  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/ostream.tcc
  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/istream
  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/istream.tcc
- /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/vector
- /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_uninitialized.h
- /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_vector.h
- /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_bvector.h
- /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/vector.tcc
+ /cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/ADT/BP_Node.h
 
 CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o
  /cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/contentful/contenful.cpp

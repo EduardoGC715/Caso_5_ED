@@ -3,7 +3,6 @@
 
 CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
   ../ADT/BP_Tree.h \
-  ../ADT/BP_Node.h \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/iostream \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin/bits/c++config.h \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin/bits/os_defines.h \
@@ -151,11 +150,7 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/ostream.tcc \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/istream \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/istream.tcc \
-  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/vector \
-  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_uninitialized.h \
-  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_vector.h \
-  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_bvector.h \
-  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/vector.tcc
+  ../ADT/BP_Node.h
 
 CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o: ../contentful/contenful.cpp \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/iostream \
@@ -426,6 +421,10 @@ CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o: ../contentful/contenful.cpp
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/forward_list:
 
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_bvector.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_vector.h:
+
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_numeric.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward/auto_ptr.h:
@@ -439,6 +438,10 @@ CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o: ../contentful/contenful.cpp
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/unique_ptr.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bit:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/vector:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_raw_storage_iter.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/refwrap.h:
 
@@ -473,14 +476,6 @@ CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o: ../contentful/contenful.cpp
 /usr/include/machine/_time.h:
 
 ../contentful/contenful.cpp:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_bvector.h:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_vector.h:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_raw_storage_iter.h:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/vector:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/atomic_base.h:
 
@@ -519,10 +514,6 @@ CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o: ../contentful/contenful.cpp
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/locale_classes.tcc:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/basic_string.tcc:
-
-/usr/include/cygwin/if.h:
-
-/usr/include/sys/errno.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/stdint.h:
 
@@ -576,11 +567,23 @@ CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o: ../contentful/contenful.cpp
 
 /usr/include/sys/features.h:
 
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/cmath:
+
+/usr/include/stdint.h:
+
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/exception_defines.h:
 
-/usr/include/sys/_sigset.h:
+../contentful/json.hpp:
 
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/stdarg.h:
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/cwchar:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/ios:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/locale_facets.tcc:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/move.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/cxxabi_forced.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/exception_ptr.h:
 
@@ -601,18 +604,6 @@ CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o: ../contentful/contenful.cpp
 /usr/include/sys/_types.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stringfwd.h:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/ios:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/locale_facets.tcc:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/move.h:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/cxxabi_forced.h:
-
-../contentful/json.hpp:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/cwchar:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/ios_base.h:
 
@@ -647,6 +638,10 @@ CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o: ../contentful/contenful.cpp
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/iostream:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/localefwd.h:
+
+/usr/include/sys/_sigset.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/stdarg.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_algobase.h:
 
@@ -722,6 +717,10 @@ CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o: ../contentful/contenful.cpp
 
 /usr/include/newlib.h:
 
+/usr/include/cygwin/if.h:
+
+/usr/include/sys/errno.h:
+
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/indirect_array.h:
 
 /usr/include/sys/_stdint.h:
@@ -735,10 +734,6 @@ CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o: ../contentful/contenful.cpp
 /usr/include/stdlib.h:
 
 /usr/include/alloca.h:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/cmath:
-
-/usr/include/stdint.h:
 
 /usr/include/sys/_timeval.h:
 
