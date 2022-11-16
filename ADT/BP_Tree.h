@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include"BP_Node.h"
+#include <vector>
 
 template <typename T>
 class BP_Tree {
@@ -16,8 +17,11 @@ public:
         clear(m_root);
     }
 
-    BP_Node<T>* getroot(){
+    BP_Node<T>* get_root(){
         return m_root;
+    }
+    void set_root(BP_Node<T>* t_root){
+        m_root=t_root;
     }
 
     BP_Node<T>* BPlusTreeSearch(BP_Node<T>* t_node, T t_key){
@@ -332,5 +336,24 @@ public:
                 }
             }
         }
+    }
+
+    int get_match_value(BP_Node<T>* cursor){
+        std::vector<T> leafs;
+        int value=0;
+        if (cursor->get_is_leaf()) {
+            for (int i = 0; i < cursor->get_size() + 1; ++i){
+                leafs.push_back(cursor->get_item(i));
+            }
+        }
+        else{
+            for (int i = 0; i < cursor->get_size() + 1; ++i) {
+                get_match_value(cursor->get_child(i));
+            }
+        }
+        for(int i=0;i<leafs.size();i++){
+            value+=count(leafs.begin(), leafs.end(), leafs[i]);
+        }
+        return value;
     }
 };
