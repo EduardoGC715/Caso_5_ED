@@ -18,11 +18,11 @@ public:
         m_degree = t_degree;
         m_size = 0;
 
-        for(int i=0; i<m_degree-1; i++){
+        for(int i=0; i<m_degree; i++){
             m_keys.push_back(nullptr);
         }
 
-        for(int i=0; i<m_degree; i++){
+        for(int i=0; i<m_degree+1; i++){
             m_children.push_back(nullptr);
         }
         m_parent = nullptr;
