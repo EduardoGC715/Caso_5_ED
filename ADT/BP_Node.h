@@ -59,7 +59,7 @@ public:
         return m_item;
     }
     void set_item(int pos, T* t_key){
-        m_item[pos]=t_key;
+        m_item[pos]=*t_key;
     }
     T* get_item(int pos){
         return m_item[pos];
