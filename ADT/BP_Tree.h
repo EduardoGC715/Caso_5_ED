@@ -59,7 +59,7 @@ public:
 
             while(!cursor->get_is_leaf()){ // until cusor pointer arrive leaf
                 for(int i=0; i<cursor->get_size(); i++){ //in this index node, find what we want key
-                    if(key < *cursor->get_item(i)){ //find some range, and let find their child also.
+                    if(key < cursor->get_item(i)){ //find some range, and let find their child also.
                         cursor = cursor->get_child(i);
                         break;
                     }
@@ -167,9 +167,9 @@ public:
 
             auto** child_copy = new BP_Node<T>*[cursor->get_size() + 2];
             for(int i=0; i< cursor->get_size() + 1; i++){
-                child_copy[i] = cursor->m_children[i];
+                child_copy[i] = cursor->get_child(i);
             }
-            child_copy[cursor->m_size + 1] = nullptr;
+            child_copy[cursor->get_size() + 1] = nullptr;
             child_copy = child_insert(child_copy, child, cursor->m_size + 1, find_index(item_copy, data, cursor->m_size + 1));
 
             //split nodes
@@ -252,7 +252,7 @@ public:
                 //copy m_item
                 T* item_copy = new T[cursor->get_size() + 1];
                 for(int i=0; i<cursor->get_size(); i++){
-                    item_copy[i] = *cursor->get_item(i);
+                    item_copy[i] = cursor->get_item(i);
                 }
 
                 //insert and rearrange
@@ -281,7 +281,7 @@ public:
                 delete[] item_copy;
 
                 //m_parent check
-                T prnt_item = *new_node->get_item(0);
+                T prnt_item = new_node->get_item(0);
 
                 if(cursor->get_parent() == nullptr){//if there are no m_parent node(m_root case)
                     auto* new_parent = new BP_Node<T>(this->m_degree);
