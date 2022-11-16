@@ -118,32 +118,32 @@ public:
         t_child_arr[t_index] = t_child;
         return t_child_arr;
     }
-    BP_Node<T>* child_item_insert(BP_Node<T>* node, T t_data, BP_Node<T>* child){
+    BP_Node<T>* child_item_insert(BP_Node<T>* t_node, T t_data, BP_Node<T>* t_child){
         int item_index=0;
         int child_index=0;
-        for(int i=0; i< node->get_size(); i++){
-            if(t_data < node->get_item(i)){
+        for(int i=0; i < t_node->get_size(); i++){
+            if(t_data < t_node->get_item(i)){
                 item_index = i;
                 child_index = i+1;
                 break;
             }
-            if(i== node->get_size() - 1){
-                item_index = node->get_size();
-                child_index = node->get_size() + 1;
+            if(i == t_node->get_size() - 1){
+                item_index = t_node->get_size();
+                child_index = t_node->get_size() + 1;
                 break;
             }
         }
-        for(int i = node->get_size(); i > item_index; i--){
-            node->set_item(i,node->get_item(i - 1));
+        for(int i = t_node->get_size(); i > item_index; i--){
+            t_node->set_item(i, t_node->get_item(i - 1));
         }
-        for(int i= node->get_size() + 1; i > child_index; i--){
-            node->set_child(i, node->get_child(i-1));
+        for(int i= t_node->get_size() + 1; i > child_index; i--){
+            t_node->set_child(i, t_node->get_child(i - 1));
         }
 
-        node->set_item(item_index, t_data);
-        node->m_children[child_index] = child;
+        t_node->set_item(item_index, t_data);
+        t_node->set_child(child_index, t_child);
 
-        return node;
+        return t_node;
     }
     void insert_prnt(BP_Node<T>* par, BP_Node<T>* child, T data){
         //overflow check
@@ -321,14 +321,14 @@ public:
     void print(BP_Node<T>* cursor,int level) {
         // You must NOT edit this function.
         if (cursor != NULL) {
-            for (int i = 0; i < cursor->m_size; ++i) {
-                std::cout << cursor->m_item[i] << " ";
+            for (int i = 0; i < cursor->get_size(); ++i) {
+                std::cout << cursor->get_item(i) << " ";
             }
             std::cout <<"level:"<<level++<< "\n";
 
-            if (!cursor->m_is_leaf) {
-                for (int i = 0; i < cursor->m_size + 1; ++i) {
-                    print(cursor->m_children[i], level);
+            if (!cursor->get_is_leaf()) {
+                for (int i = 0; i < cursor->get_size() + 1; ++i) {
+                    print(cursor->get_child(i), level);
                 }
             }
         }
