@@ -153,30 +153,6 @@ Main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/curl-demo.dir/build.make CMakeFiles/curl-demo.dir/Main.cpp.s
 .PHONY : Main.cpp.s
 
-contentful/contenful.o: contentful/contenful.cpp.o
-.PHONY : contentful/contenful.o
-
-# target to build an object file
-contentful/contenful.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/curl-demo.dir/build.make CMakeFiles/curl-demo.dir/contentful/contenful.cpp.o
-.PHONY : contentful/contenful.cpp.o
-
-contentful/contenful.i: contentful/contenful.cpp.i
-.PHONY : contentful/contenful.i
-
-# target to preprocess a source file
-contentful/contenful.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/curl-demo.dir/build.make CMakeFiles/curl-demo.dir/contentful/contenful.cpp.i
-.PHONY : contentful/contenful.cpp.i
-
-contentful/contenful.s: contentful/contenful.cpp.s
-.PHONY : contentful/contenful.s
-
-# target to generate assembly for a file
-contentful/contenful.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/curl-demo.dir/build.make CMakeFiles/curl-demo.dir/contentful/contenful.cpp.s
-.PHONY : contentful/contenful.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -189,9 +165,6 @@ help:
 	@echo "... Main.o"
 	@echo "... Main.i"
 	@echo "... Main.s"
-	@echo "... contentful/contenful.o"
-	@echo "... contentful/contenful.i"
-	@echo "... contentful/contenful.s"
 .PHONY : help
 
 

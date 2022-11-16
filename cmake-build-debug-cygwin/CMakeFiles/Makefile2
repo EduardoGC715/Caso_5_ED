@@ -81,12 +81,12 @@ clean: CMakeFiles/curl-demo.dir/clean
 CMakeFiles/curl-demo.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/curl-demo.dir/build.make CMakeFiles/curl-demo.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/curl-demo.dir/build.make CMakeFiles/curl-demo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin/CMakeFiles --progress-num=1,2,3 "Built target curl-demo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin/CMakeFiles --progress-num=1,2 "Built target curl-demo"
 .PHONY : CMakeFiles/curl-demo.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/curl-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/curl-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/c/Users/joseg/Desktop/Work/Repositories/ED/Caso_5_ED/cmake-build-debug-cygwin/CMakeFiles 0
 .PHONY : CMakeFiles/curl-demo.dir/rule
