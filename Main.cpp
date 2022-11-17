@@ -9,7 +9,7 @@ int main(){
     }
 
 
-    /*
+
     auto tree= new BP_Tree<string>(5);
     tree->insert("a");
     tree->insert("b");
@@ -18,10 +18,7 @@ int main(){
     tree->insert("e");
     tree->insert("f");
     tree->insert("a");
-
-    if(tree->search("b")){
-        cout<<"found\n";
-    }
-    tree->bpt_print();*/
+    tree->get_leaves_s();
+    tree->bpt_print();
     return 0;
 }

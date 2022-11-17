@@ -320,13 +320,15 @@ public:
         }
     }
     void bpt_print(){
-        print(this->m_root, 0);
+        std::cout <<"\n";
+        print(m_root, 0);
     }
     void print(BP_Node<T>* cursor,int level) {
         // You must NOT edit this function.
         if (cursor != NULL) {
             for (int i = 0; i < cursor->get_size(); ++i) {
-                std::cout << cursor->get_item(i) << " ";
+                    std::cout << cursor->get_item(i) << " ";
+
             }
             std::cout <<"level:"<<level++<< "\n";
 
@@ -337,26 +339,48 @@ public:
             }
         }
     }
-    int get_match_value_s(){
-        return get_match_value(m_root);
+    std::vector<T> get_leaves_s(){
+        return get_leaves(m_root);
+    }
+    std::vector<T> get_leaves(BP_Node<T>* cursor){
+        std::vector<T> leaves;
+        if (cursor != NULL) {
+            for (int i = 0; i < cursor->get_size(); ++i) {
+                if(cursor->get_is_leaf()){
+                    leaves.push_back(cursor->get_item(i));
+                }
+            }
+            if (!cursor->get_is_leaf()) {
+                for (int i = 0; i < cursor->get_size() + 1; ++i) {
+                    get_leaves(cursor->get_child(i));
+                }
+            }
+        }
+        return leaves;
     }
 
-    int get_match_value(BP_Node<T>* cursor){
+    int get_match_value_s(){
         std::vector<T> leafs;
-        int value=0;
-        if (cursor->get_is_leaf()) {
-            for (int i = 0; i < cursor->get_size(); ++i){
-                leafs.push_back(cursor->get_item(i));
-            }
-        }
-        else{
-            for (int i = 0; i < cursor->get_size() + 1; ++i) {
-                get_match_value(cursor->get_child(i));
-            }
-        }
+        int value;
+        value=get_match_value(m_root,leafs,value);
+        return value;
+    }
+    int get_match_value(BP_Node<T>* cursor,std::vector<T> leafs,int value){
+        std::string current;
+        int aux;//TODO: borrar
         for(int i=0;i<leafs.size();i++){
-            value+=count(leafs.begin(), leafs.end(), leafs[i]);
+            aux=0;
+            current=leafs[i];
+            std::cout<<"matching: "<<current;
+            for(int j=0;j<leafs.size();j++){
+                if(current==leafs[j]){
+                    value++;
+                    aux++;
+                }
+            }
+            std::cout<<" found: "<<aux<<std::endl;
         }
+        std::cout<<" final value: "<<value<<std::endl;
         return value;
     }
 };

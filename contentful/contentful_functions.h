@@ -65,7 +65,6 @@ public:
 
     vector<int> match_maker(string t_nick, int t_opt){//TODO: include date
         int found=find_nickname(t_nick);
-        BP_Tree<string> nick_tree (5);
         vector<int> match_values;
 
         if(found!=-1){
@@ -74,21 +73,23 @@ public:
             if(t_opt==1){//on the nick´s offer see the demand
                 offer = string_minimizer(found,t_opt);
                 for(int pos=0;pos<all_regs.size();pos++){
+                    BP_Tree<string> nick_tree (5);
                     bp_insert(offer,nick_tree);
                     demand = string_minimizer(pos,2);
                     bp_insert(demand,nick_tree);
                     match_values.push_back(nick_tree.get_match_value_s());
-                    nick_tree.clear();
+                    nick_tree.bpt_print();
                 }
             }
             else{
                 demand = string_minimizer(found,t_opt);
-                bp_insert(demand,nick_tree);
                 for(int pos=0;pos<all_regs.size();pos++){
-                    aux_tree.set_root(nick_tree.get_root());
+                    BP_Tree<string> nick_tree (5);
+                    bp_insert(demand,nick_tree);
                     offer = string_minimizer(pos,1);
-                    bp_insert(offer, aux_tree);
-                    match_values.push_back(aux_tree.get_match_value_s());
+                    bp_insert(offer, nick_tree);
+                    match_values.push_back(nick_tree.get_match_value_s());
+                    nick_tree.bpt_print();
                 }
             }
         }
