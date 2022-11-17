@@ -3,14 +3,12 @@ using namespace std;
 int main(){
     auto contentful_f= new contentful_functions();
     contentful_f->print_all_regs();
-    vector<int> matches =contentful_f->match_maker("rock_odin_gold",1);
+    vector<int> matches =contentful_f->match_maker("metal_year_2000",2);
     for(int i=0;i<matches.size();i++){
-        cout<<"match "<<i<<" :"<< matches[i]<<endl;
+        cout<<"\nmatch "<<i<<" :"<< matches[i];
     }
 
-
-
-    auto tree= new BP_Tree<string>(5);
+    /*auto tree= new BP_Tree<string>(5);
     tree->insert("a");
     tree->insert("b");
     tree->insert("c");
@@ -18,7 +16,9 @@ int main(){
     tree->insert("e");
     tree->insert("f");
     tree->insert("a");
-    tree->get_leaves_s();
-    tree->bpt_print();
+    for(int i=0;i<tree->get_leaves_s().size();i++){
+        cout<<tree->get_leaves_s()[i];
+    }
+    tree->bpt_print();*/
     return 0;
 }
