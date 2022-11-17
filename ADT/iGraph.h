@@ -5,21 +5,16 @@
 template<typename T>
 class iGraph {
     private:
-        int queued_ID = 1;
-        map<int, Vertex<T>*>* vertices;
+        vector<Vertex<T>*>* vertices;
 
     public:
         iGraph() {
-            vertices = new map<int, Vertex<T>*>;
+            vertices = new vector<Vertex<T>*>;
         }
 
         ~iGraph() {
             clear();
             delete vertices;
-        }
-
-        map<int, Vertex<T>*>* get_vertices() {
-            return vertices;
         }
 
         Vertex<T>* get_vertex(int pIndex) {
@@ -35,21 +30,24 @@ class iGraph {
         }
 
         void insert_vertex(T* pData) {
-            Vertex<T>* node = new Vertex<T>(queued_ID, pData);
-            vertices->emplace(queued_ID, node);
-            ++queued_ID;
+            int ID = get_size();
+            Vertex<T>* node = new Vertex<T>(ID, pData);
+            vertices->push_back(node);
         }
 
         T* erase_vertex(int pIndex) {
             T* data = nullptr;
             Vertex<T>* target = get_vertex(pIndex);
             if (target != nullptr) {
-                vertices->erase(pIndex);
-                for (auto iter = vertices->begin(); iter != vertices->end(); ++iter)
-                {// Eliminar arcos que lleguen al vertice objetivo
-                    Vertex<T>* vertex = iter->second;
-                    if (are_linked(vertex, target)) {
-                        detach(vertex, target);
+                vertices->erase(vertices->begin() + pIndex);
+                for (int index = 0; index < get_size(); ++index) {
+                    Vertex<T>* node = get_vertex(index);
+                    if (are_linked(node, target)) {
+                        detach(node, target);
+                    }
+                    if (index >= pIndex) { // Update keys to match index
+                        int stored_key = node->get_key();
+                        node->set_key(--stored_key);
                     }
                 }
                 data = target->get_data();
@@ -59,20 +57,20 @@ class iGraph {
         }
 
         void clear() {
-            for (auto iter = vertices->begin(); iter != vertices->end(); ++iter) {
-                Vertex<T>* vertex = iter->second;
-                delete vertex; // Elimina nodos individuales
+            for (int index = 0; index < get_size(); ++index) {
+                Vertex<T>* node = get_vertex(index);
+                delete node;
             }
             vertices->clear();
         }
 
         bool are_linked(int pIndexA, int pIndexB) {
+            bool result = false;
             Vertex<T>* node_A = get_vertex(pIndexA);
             if (node_A != nullptr) {
-                return node_A->is_joined(pIndexB);
-            } else {
-                return false;
+                result = node_A->is_joined(pIndexB);
             }
+            return result;
         }
 
         bool are_linked(Vertex<T>* pNodeA, Vertex<T>* pNodeB) {

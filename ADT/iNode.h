@@ -15,6 +15,10 @@ class iNode {
             return key;
         }
 
+        void set_key(K pKey) {
+            key = pKey;
+        }
+
         T* get_data() {
             return data;
         }
