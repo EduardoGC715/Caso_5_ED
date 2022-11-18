@@ -6,12 +6,8 @@
 # include "../ADT/Graph.h"
 # include "../ADT/Digraph.h"
 
-using std::vector;
 using std::stack;
 using std::queue;
-
-template<typename T>
-using VertexSet = vector<Vertex<T>*>;
 
 template<typename T>
 void reset_nodes(iGraph<T>* pGraph) {
@@ -46,7 +42,7 @@ Vertex<T>* find_unprocessed(iGraph<T>* pGraph) {
 
 template<typename T>
 VertexSet<T>* depth_search(iGraph<T>* pGraph, int pIndex = 0, bool pReset = false) {
-    printf("\nDescendant search (DFS)\n");
+    // printf("\nDescendant search (DFS)\n");
     VertexSet<T>* visited_nodes = new VertexSet<T>;
     stack<Vertex<T>*> search_stack;
 
@@ -56,7 +52,7 @@ VertexSet<T>* depth_search(iGraph<T>* pGraph, int pIndex = 0, bool pReset = fals
         current_node->set_processed(true);
         while (! search_stack.empty()) {
             current_node = search_stack.top();
-            printf("Visited V#%d\n", current_node->get_key());
+            // printf("Visited V#%d\n", current_node->get_key());
             visited_nodes->push_back(current_node);
             current_node->set_visited(true);
             search_stack.pop();
@@ -67,7 +63,7 @@ VertexSet<T>* depth_search(iGraph<T>* pGraph, int pIndex = 0, bool pReset = fals
                     search_stack.push(endpoint);
                     endpoint->set_previous(current_node);
                     endpoint->set_processed(true);
-                    printf("Processed V#%d\n", endpoint->get_key());
+                    // printf("Processed V#%d\n", endpoint->get_key());
                 }
             }
         }
@@ -80,7 +76,7 @@ VertexSet<T>* depth_search(iGraph<T>* pGraph, int pIndex = 0, bool pReset = fals
 
 template<typename T>
 VertexSet<T>* depth_rsearch(iGraph<T>* pGraph, int pIndex = 0, bool pReset = false) {
-    printf("\nAncestor search (reverse DFS)\n");
+    // printf("\nAncestor search (reverse DFS)\n");
     VertexSet<T>* visited_nodes = new VertexSet<T>;
     stack<Vertex<T>*> search_stack;
 
@@ -90,7 +86,7 @@ VertexSet<T>* depth_rsearch(iGraph<T>* pGraph, int pIndex = 0, bool pReset = fal
         current_node->set_processed(true);
         while (! search_stack.empty()) {
             current_node = search_stack.top();
-            printf("Visited V#%d\n", current_node->get_key());
+            // printf("Visited V#%d\n", current_node->get_key());
             visited_nodes->push_back(current_node);
             current_node->set_visited(true);
             search_stack.pop();
@@ -100,7 +96,7 @@ VertexSet<T>* depth_rsearch(iGraph<T>* pGraph, int pIndex = 0, bool pReset = fal
                 if (! origin->is_processed() && pGraph->are_linked(origin, current_node)) {
                     search_stack.push(origin);
                     origin->set_processed(true);
-                    printf("Processed V#%d\n", origin->get_key());
+                    // printf("Processed V#%d\n", origin->get_key());
                 }
             }
         }
@@ -136,14 +132,14 @@ vector<VertexSet<T>*>* connected_components(Digraph<T>* pGraph) {
     }
 
     // Print de todas las componentes conexas
-    for (int indexA = 0; indexA < all_components->size(); ++indexA) {
-        printf("\nComponents #%d: [", indexA);
+    /* for (int indexA = 0; indexA < all_components->size(); ++indexA) {
+        printf("Components #%d: [", indexA);
         VertexSet<T>* components = all_components->at(indexA);
         for (int indexB = 0; indexB < components->size(); ++indexB) {
             Vertex<T>* node = components->at(indexB);
             printf(" V#%d", node->get_key());
         }
         printf("]\n");
-    }
+    }printf("\n"); */
     return all_components;
 }

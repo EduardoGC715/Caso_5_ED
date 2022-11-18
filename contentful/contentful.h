@@ -1,9 +1,9 @@
 #pragma once
-
 #include <iostream>
 #include <string>
 #include <cstdio>
 #include <curl/curl.h>
+#include "Registered.h"
 #include "json.hpp"
 
 using namespace std;
@@ -39,38 +39,6 @@ typedef struct {
     size_t len;
     size_t buflen;
 } get_request;
-
-class Registered {
-private:
-    string nickname;
-    string offer;
-    string demand;
-    string postdate;
-
-public:
-    Registered(string pNickname, string pOffer, string pDemand, string pPostdate) {
-        this->nickname = pNickname;
-        this->offer = pOffer;
-        this->demand = pDemand;
-        this->postdate = pPostdate;
-    }
-
-    string getNickname() {
-        return this->nickname;
-    }
-
-    string getOffer() {
-        return this->offer;
-    }
-
-    string getDemand() {
-        return this->demand;
-    }
-
-    string getPostdate() {
-        return this->postdate;
-    }
-};
 
 // static method to act as callback for curl
 size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
