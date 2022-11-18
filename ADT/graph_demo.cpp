@@ -6,16 +6,15 @@
 
 template<typename T>
 void print_graph(iGraph<T>* pGraph) {
-    auto vertices = pGraph->get_vertices();
-    for (auto iter = vertices->begin(); iter != vertices->end(); ++iter) {
-        int ID = iter->first;
-        Vertex<T>* vertex = iter->second;
-        auto links = vertex->get_links();
-        printf("Vertex #%d: [", ID);
-        for (auto it = links->begin(); it != links->end(); ++it) {
-            ID = it->first;
-            int weight = it->second->get_weight();
-            printf("{#%d - W:%d}, ", ID, weight);
+    for (int indexV = 0; indexV < pGraph->get_size(); ++indexV) {
+        Vertex<T>* vertex = pGraph->get_vertex(indexV);
+        printf("Vertex #%d: [", indexV+1);
+        int link_size = vertex->link_quantity();
+        for (int indexL = 0; indexL < link_size; ++indexL) {
+            NodeLink<T>* link = vertex->get_link(indexL);
+            int ID = link->get_endpoint()->get_key();
+            int weight = link->get_weight();
+            printf("{#%d - W:%d}, ", ID+1, weight);
         }
         printf("]\n");
     }
@@ -28,19 +27,14 @@ void graph_test(iGraph<T>* pGraph) {
     printf("Graph Size: %d\n", size);
     print_graph(pGraph);
 
-    auto vertices = pGraph->get_vertices();
-    for (auto itrA = vertices->begin(); itrA != vertices->end(); ++itrA) {
-        int keyA = itrA->first;
-        auto links = itrA->second->get_links();
-        printf("\nVertex #%d's Links:\n", keyA);
+    for (int indexA = 0; indexA < size; ++indexA) {
+        Vertex<T>* vertex = pGraph->get_vertex(indexA);
+        printf("\nVertex #%d's Links:\n", indexA+1);
 
-        for (auto itrB = links->begin(); itrB != links->end(); ++itrB) {
-            int keyB = itrB->first;
-            bool result = pGraph->are_linked(keyA, keyB);
-            if (! result) {
-                continue;
-            }
-            printf("Joined to #%d: %d\n", keyB, result);
+        for (int indexB = 0; indexB < vertex->link_quantity(); ++indexB) {
+            NodeLink<T>* link = vertex->get_link(indexB);
+            int ID = link->get_endpoint()->get_key();
+            printf("Joined to #%d\n", ID+1);
         }
         printf("- end -\n");
     }
@@ -61,19 +55,19 @@ void output_graph(iGraph<T>* pGraph) {
 
     // Insertar datos nodos en formato ['{Origin Data}', '{Endpoint Data}', {weight}]
     string output;
-    auto vertices = pGraph->get_vertices();
-    for (auto itr = vertices->begin(); itr != vertices->end(); ++itr) {
-        Vertex<T>* origin_node = itr->second;
-        origin_node->set_processed(true);
-        auto links = origin_node->get_links();
+    for (int indexA = 0; indexA < pGraph->get_size(); ++indexA) {
+        Vertex<T>* origin_node = pGraph->get_vertex(indexA);
         T* origin_data = origin_node->get_data();
-        for (auto itrB = links->begin(); itrB != links->end(); ++itrB) {
-            Vertex<T>* end_node = itrB->second->get_endpoint();
+        origin_node->set_processed(true);
+        
+        for (int indexB = 0; indexB < origin_node->link_quantity(); ++indexB) {
+            NodeLink<T>* link = origin_node->get_link(indexB);
+            Vertex<T>* end_node = link->get_endpoint();
             if (end_node->is_processed()) {
                 continue;
             }
             T* end_data = end_node->get_data();
-            int weight = itrB->second->get_weight();
+            int weight = link->get_weight();
             output = "['" + to_string(*origin_data) + "', '" + to_string(*end_data) + "', " + to_string(weight) + "],\n";
             file << output;
         }
@@ -94,15 +88,15 @@ int main() {
         graph->insert_vertex(new char(c));
     }
 
-    graph->join(1, 2, 1); // A-B
-    graph->join(1, 3, 7); // A-C
+    graph->join(0, 1, 1); // A-B
+    graph->join(0, 2, 7); // A-C
 
-    graph->join(2, 3, 5); // B-C
-    graph->join(2, 4, 4); // B-D
-    graph->join(2, 5, 3); // B-E
+    graph->join(1, 2, 5); // B-C
+    graph->join(1, 3, 4); // B-D
+    graph->join(1, 4, 3); // B-E
 
-    graph->join(5, 3, 6); // D-E
-    graph->join(5, 4, 2); // E-C
+    graph->join(4, 2, 6); // D-E
+    graph->join(4, 3, 2); // E-C
     /* Graph
            (A)
           /   \
@@ -112,9 +106,9 @@ int main() {
     */
     graph_test(graph);
 
-    graph->join(1, 2, 10); // Update existing link's weight
-    graph->join(5, 5, 16); // Add link to self
-    graph->erase_vertex(2); // Erase vertex and links that point to it
+    graph->join(0, 2, 10); // Update existing link's weight
+    graph->join(4, 4, 16); // Add link to self
+    graph->erase_vertex(1); // Erase vertex and links that point to it
     graph->erase_vertex(20); // Attempt to erase non-existing vertex
     graph_test(graph);
 
@@ -123,15 +117,15 @@ int main() {
         digraph->insert_vertex(new char(c));
     }
 
-    digraph->join(1, 2, 1); // A->B
-    digraph->join(1, 5, 3); // A->E
+    digraph->join(0, 1, 1); // A->B
+    digraph->join(0, 4, 3); // A->E
 
-    digraph->join(2, 3, 2); // B->C
-    digraph->join(2, 4, 3); // B->D
+    digraph->join(1, 2, 2); // B->C
+    digraph->join(1, 3, 3); // B->D
 
-    digraph->join(5, 4, 4); // E->D
+    digraph->join(4, 3, 4); // E->D
 
-    digraph->join(4, 2, 3); // D->B
+    digraph->join(3, 1, 3); // D->B
     /* Digraph
         (A)  ---->  (B) -> (C)
          |           |
@@ -139,9 +133,9 @@ int main() {
     */
     graph_test(digraph);
 
-    digraph->join(3, 5, 7); // Add new directed link
-    digraph->join(2, 3, 5); // Update existing link
-    digraph->erase_vertex(4); // Erase existing vertex
+    digraph->join(2, 4, 7); // Add new directed link
+    digraph->join(1, 2, 5); // Update existing link
+    digraph->erase_vertex(3); // Erase existing vertex
     digraph->erase_vertex(10); // Erase non-existing vertex
     graph_test(digraph);
 

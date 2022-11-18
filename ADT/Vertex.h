@@ -1,25 +1,46 @@
 # pragma once
-# include <map>
+# include <vector>
 # include "iNode.h"
 # include "NodeLink.h"
 
-using std::map;
+# define NOT_FOUND -1
+
+using std::vector;
 
 template<typename T>
 class Vertex : public iNode<int,T> {
-    typedef NodeLink<T> Link;
-
     private:
         bool processed;
         bool visited;
         Vertex<T>* previous;
-        map<int, Link*>* link_list;
+        vector<NodeLink<T>*>* link_list;
+
+        int find_key(int pKey) {
+            int stored_key;
+            for (int index = 0; index < link_list->size(); ++index) {
+                NodeLink<T>* stored_link = link_list->at(index);
+                stored_key = stored_link->get_endpoint()->get_key();
+                if (pKey == stored_key) {
+                    return index;
+                }
+            } return NOT_FOUND;
+        }
+
+        int find_endpoint(Vertex<T>* pNode) {
+            for (int index = 0; index < link_list->size(); ++index) {
+                NodeLink<T>* stored_link = link_list->at(index);
+                Vertex<T>* endpoint = stored_link->get_endpoint();
+                if (pNode == endpoint) {
+                    return index;
+                }
+            } return NOT_FOUND;
+        }
     
     public:
-        Vertex(int pKey, T* pData = nullptr): iNode<int, T>(pKey, pData) {
+        Vertex(int pKey, T* pData): iNode<int, T>(pKey, pData) {
             processed = visited = false;
             previous = nullptr;
-            link_list = new map<int, Link*>;
+            link_list = new vector<NodeLink<T>*>;
         }
 
         ~Vertex() {
@@ -27,58 +48,70 @@ class Vertex : public iNode<int,T> {
             delete link_list;
         }
 
-        map<int, Link*>* get_links() {
-            return link_list;
+        int link_quantity() {
+            return link_list->size();
         }
 
-        Link* get_link(int pKey) {
-            try {
-                return link_list->at(pKey);
-            } catch (const std::out_of_range& exception) {
-                return nullptr;
-            }
+        NodeLink<T>* find_link(int pKey) {
+            int index = find_key(pKey);
+            return get_link(index);
         }
 
-        Link* get_link(Vertex<T>* pNode) {
-            return get_link(pNode->get_key());
+        NodeLink<T>* find_link(Vertex<T>* pNode) {
+            int index = find_endpoint(pNode);
+            return get_link(index);
+        }
+
+        NodeLink<T>* get_link(int pIndex) {
+            NodeLink<T>* result = nullptr;
+            if (pIndex < link_quantity() && pIndex > NOT_FOUND) {
+                result = link_list->at(pIndex);
+            } 
+            return result;
         }
 
         // Interfaz para adyacencias
         void join(Vertex<T>* pNode, int pWeight) {
-            Link* link = new Link(this, pNode, pWeight);
-            link_list->emplace(pNode->get_key(), link);
+            NodeLink<T>* link = new NodeLink<T>(this, pNode, pWeight);
+            link_list->push_back(link);
         }
 
-        void detach(Vertex<T>* pNode) {
-            detach(pNode->get_key());
-        }
-
-        void detach(int pKey) {
-            Link* link = link_list->at(pKey);
-            if (link != nullptr) {
-                link_list->erase(pKey);
-                delete link;
+        void erase_link(int pIndex) {
+            if (pIndex != NOT_FOUND) {
+                NodeLink<T>* target = link_list->at(pIndex);
+                link_list->erase(link_list->begin() + pIndex);
+                delete target;
             }
         }
 
+        void detach(Vertex<T>* pNode) {
+            int index = find_endpoint(pNode);
+            erase_link(index);
+        }
+
+        void detach(int pKey) {
+            int index = find_key(pKey);
+            erase_link(index);
+        }
+
         void clear_links() {
-            for (auto iter = link_list->begin(); iter != link_list->end(); ++iter) {
-                Link* link = iter->second;
-                delete link; // Elimina punteros del dato
+            for (int index = 0; index < link_list->size(); ++index) {
+                NodeLink<T>* link = link_list->at(index);
+                delete link;
             }
             link_list->clear(); // Vacia contenedor
         }
 
         bool is_joined(Vertex<T>* pNode) {
-            return is_joined(pNode->get_key());
+            return (find_endpoint(pNode) != NOT_FOUND);
         }
 
         bool is_joined(int pKey) {
-            return (link_list->find(pKey) != link_list->end());
+            return (find_key(pKey) != NOT_FOUND);
         }
 
         // Interfaz para recorridos
-        Vertex<T>* is_previous() {
+        Vertex<T>* get_previous() {
             return previous;
         }
 
