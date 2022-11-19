@@ -21,11 +21,37 @@ void reset_nodes(iGraph<T>* pGraph) {
 }
 
 template<typename T>
-void reset_processed(iGraph<T>* pGraph) {
-    for (int index = 0; index < pGraph->get_size(); ++index) {
-        Vertex<T>* current = pGraph->get_vertex(index);
+void reset_nodes(VertexSet<T>* pSet) {
+    for (int index = 0; index < pSet->size(); ++index) {
+        Vertex<T>* current = pSet->at(index);
+        current->set_previous(nullptr);
         current->set_processed(false);
+        current->set_visited(false);
     }
+}
+
+template<typename T>
+void process_all(VertexSet<T>* pSet) {
+    for (int index = 0; index < pSet->size(); ++index) {
+        Vertex<T>* current = pSet->at(index);
+        current->set_processed(true);
+    }
+}
+
+template<typename T>
+bool are_sets_equal(VertexSet<T>* pSetA, VertexSet<T>* pSetB) {
+    bool result = false;
+    if (pSetA->size() == pSetB->size()) {
+        process_all(pSetA);
+        for (int index = 0; index < pSetB->size(); ++index) {
+            Vertex<T>* node = pSetB->at(index);
+            if (! node->is_processed()) {
+                reset_nodes(pSetA);
+                return result;
+            }
+        } result = true;
+        reset_nodes(pSetA);
+    } return result;
 }
 
 template<typename T>
@@ -82,7 +108,7 @@ VertexSet<T>* depth_search(iGraph<T>* pGraph, int pIndex = 0, bool pReset = fals
         }
     }
     if (pReset) {
-        reset_nodes(pGraph);
+        reset_nodes(visited_nodes);
     }
     return visited_nodes;
 }
@@ -115,7 +141,7 @@ VertexSet<T>* depth_rsearch(iGraph<T>* pGraph, int pIndex = 0, bool pReset = fal
         }
     }
     if (pReset) {
-        reset_nodes(pGraph);
+        reset_nodes(visited_nodes);
     }
     return visited_nodes;
 }
@@ -214,7 +240,7 @@ Tree<Vertex<T>>* get_set_map(VertexSet<T>* pVertices) {
         }
     }
 
-    print_path_tree(path_tree->get_root());
+    // print_path_tree(path_tree->get_root());
     return path_tree;
 }
 
@@ -225,36 +251,46 @@ void get_all_loops(VertexSet<T>* pVertices, vector<VertexSet<T>*>* pFullset) {
 
     for (int index = 0; index < pVertices->size(); ++index) {
         Vertex<T>* current_node = pVertices->at(index);
-        if (! current_node->is_processed()) { // Ref.point for loop start/end
+        if (! current_node->is_processed()) {
             continue;
-        }
-        
-        // TODO:
-        // 1. Cambiar para reconstruir path de root -> end, no end -> root
-        // 2. Validar que si los path no conectan se descarte
-        //    Revisar arbol de E-F-H en graph 3, pues el diseño
-        //    actual tiene posibles fallas en arboles mas dispersos
-        // Notas (2):
-        //    - while (curr_path != end_path && curr_path != nullptr)
-        //    - if (curr_path == nullptr) { delete defective loop_set}
-        //    - else {loop_set.push_back(end_path) to conclude cycle}
+        }// Else, use marked node as reference point for loops
+        current_node->set_processed(false);
         queue<Path*>* ref_points = path_map->find_all(current_node);
-        Path* root_path;
+        Path* root_path = ref_points->front();
         Path* end_path;
-        VertexSet<T>* loop_set;
 
-        root_path = ref_points->front();
         ref_points->pop();
-        while (! ref_points->empty()) {
-            loop_set = new VertexSet<T>;
+        while (! ref_points->empty()) {// Obtain all loops from root's data
+            VertexSet<T>* loop_set = new VertexSet<T>;
             end_path = ref_points->front();
             ref_points->pop();
-            do {
-                loop_set->push_back( end_path->get_data() );
+            while (end_path != root_path && end_path != nullptr)
+            {// Retrace path from end_path to root_path
+                loop_set->emplace(loop_set->begin(), end_path->get_data());
                 end_path = end_path->get_parent();
-            } while (end_path != root_path->get_parent());
-            pFullset->push_back(loop_set);
+            } if (end_path != nullptr && loop_set->size() > 2) {
+                pFullset->push_back(loop_set);
+            } else {// no link from end to root in branch || loop too small
+                delete loop_set;
+            }
         } delete ref_points;
+    } delete path_map;
+}
+
+template<typename T>
+void sanitize_loop_sets(vector<VertexSet<T>*>* pFullset, int pStart) {
+    auto position = pFullset->begin() + pStart;
+    auto next = position + 1;
+    while (position != pFullset->end()) {
+        VertexSet<T>* set_reference = *position;
+        for (auto iter = position+1; iter != pFullset->end();) {
+            VertexSet<T>* current_set = *iter;
+            if (are_sets_equal(set_reference, current_set)) {
+                iter = pFullset->erase(iter);
+            } else {
+                ++iter;
+            }
+        } ++position;
     }
 }
 
@@ -263,10 +299,14 @@ vector<VertexSet<T>*>* cyclic_components(Digraph<T>* pGraph) {
     vector<VertexSet<T>*>* loop_fullset = new vector<VertexSet<T>*>;
     vector<VertexSet<T>*>* connected_sets = get_connected_sets(pGraph);
 
+    int index_queue = 0;
     for (int index = 0; index < connected_sets->size(); ++index) {
         VertexSet<T>* stored_set = connected_sets->at(index);
         if (stored_set->size() > 2) {
             get_all_loops(stored_set, loop_fullset);
+            reset_nodes(stored_set);
+            sanitize_loop_sets(loop_fullset, index_queue);
+            index_queue = loop_fullset->size();
         } else {
             delete stored_set;
             continue;
@@ -274,7 +314,7 @@ vector<VertexSet<T>*>* cyclic_components(Digraph<T>* pGraph) {
     }
 
     // Print de todas las componentes conexas
-    for (int indexA = 0; indexA < loop_fullset->size(); ++indexA) {
+    /* for (int indexA = 0; indexA < loop_fullset->size(); ++indexA) {
         printf("Set #%d: [", indexA);
         VertexSet<T>* loop_set = loop_fullset->at(indexA);
         for (int indexB = 0; indexB < loop_set->size(); ++indexB) {
@@ -282,7 +322,7 @@ vector<VertexSet<T>*>* cyclic_components(Digraph<T>* pGraph) {
             printf(" V#%d", node->get_key());
         }
         printf("]\n");
-    }printf("\n");
+    }printf("\n"); */
     return loop_fullset;
 }
 
