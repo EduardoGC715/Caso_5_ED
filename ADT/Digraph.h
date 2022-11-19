@@ -11,7 +11,7 @@ class Digraph : public iGraph<T> {
             if (! this->are_linked(pNodeA, pNodeB)) {
                 pNodeA->join(pNodeB, pWeight);
             } else {// Update weight if already linked
-                pNodeA->get_link(pNodeB)->set_weight(pWeight);
+                pNodeA->find_link(pNodeB)->set_weight(pWeight);
             }
         }
         

@@ -15,9 +15,9 @@ class Graph : public iGraph<T> {
                     pNodeB->join(pNodeA, pWeight);
                 }
             } else { // Update if already linked
-                pNodeA->get_link(pNodeB)->set_weight(pWeight);
+                pNodeA->find_link(pNodeB)->set_weight(pWeight);
                 if (! looped) {
-                    pNodeB->get_link(pNodeA)->set_weight(pWeight);
+                    pNodeB->find_link(pNodeA)->set_weight(pWeight);
                 }
             }
         }
