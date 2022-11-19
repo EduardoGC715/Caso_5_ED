@@ -74,5 +74,33 @@ int main() {
     graph_3->join(10, 4); // K->E
 
     delete connected_components(graph_3);
+
+    Digraph<string>* graph_4 = new Digraph<string>;
+    string data_4[] = {"A", "B", "C", "D", "E", "F", "G", "H"};
+    for (int index = 0; index < 8; ++index) {
+        graph_4->insert_vertex(data_2 + index);
+    }
+
+    // A0, B1, C2, D3, E4, F5, G6, H7
+    graph_4->join(0, 1); // A->B
+    graph_4->join(0, 4); // A->E
+    graph_4->join(0, 6); // A->G
+
+    graph_4->join(1, 3); // B->D
+
+    graph_4->join(2, 4); // C->E
+    graph_4->join(2, 3); // C->D
+    graph_4->join(2, 0); // C->A
+
+    graph_4->join(3, 5); // D->F
+    graph_4->join(3, 7); // D->H
+    graph_4->join(3, 2); // D->C
+
+    graph_4->join(4, 0); // E->A
+    graph_4->join(7, 2); // H->C
+
+    vector<VertexSet<string>*>* cc = connected_components(graph_4);
+    cyclic_components(cc->at(0));
+    delete cc;
     return 0;
 }
