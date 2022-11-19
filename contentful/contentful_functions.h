@@ -72,16 +72,20 @@ public:
         return value;
     }
 
-    void match_maker(vector<string> &users){//TODO: vector de struct User
-            for(int pos=0;pos<users.size();pos++){
-                if(users[pos+1].type=="offerer" || user[pos+1=="both"]){
+    void match_maker(vector<string> &users){//TODO: struct User vector
+        int mtch_value;
+        for(int pos_i=0;pos_i<users.size();pos_i++){
+            for(int pos_j=pos_i+1;pos_j<users.size();pos_j++){
+                if(users[pos_j].type=="demander" || users[pos_j].type=="both"){
                     BP_Tree<string> match_tree (5);
-
-                    bp_insert(string_minimizer(),nick_tree);
+                    bp_insert(string_minimizer(users[pos_i].offer),match_tree);
+                    bp_insert(string_minimizer(users[pos_j].demand),match_tree);
+                    mtch_value = get_match_value(match_tree.get_leaves());
+                    if(mtch_value>4){//TODO: condition to add to graph
+                        //add link
+                    }
                 }
-                demand = string_minimizer(pos,2);
-                bp_insert(demand,nick_tree);
-                match_values.push_back(get_match_value(nick_tree.get_leaves()));
             }
+        }
     }
 };
