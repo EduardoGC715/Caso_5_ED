@@ -32,25 +32,18 @@ public:
         }
         return -1;
     }
-    vector<string> string_minimizer(int t_index, int t_opt){
-        string to_min;
+    vector<string> string_minimizer(string to_min){
         vector<string> minimized;
-        if(t_opt==1){//minimize offer
-            to_min = all_regs.at(t_index)->getOffer();
-        }
-        else{//minimize demand
-            to_min = all_regs.at(t_index)->getDemand();
-        }
         istringstream iss(to_min);
         int wrd_size;
         string word;
         while (iss>>word){
             wrd_size=int(word.length());
-            if(wrd_size==3){
+            if(wrd_size==4){
                 minimized.insert(minimized.end(),word + " ");
             }
-            else if(wrd_size>3){
-                for(int j=0; j<wrd_size*0.3;j++){
+            else if(wrd_size>4){
+                for(int j=0; j<wrd_size*0.4;j++){
                     word.pop_back();
                 }
                 minimized.insert(minimized.end(),word + " ");
@@ -70,45 +63,25 @@ public:
         int value=0;
         for(int i=0;i<leaves.size();i++){
             current=leaves[i];
-            for(int j=0;j<leaves.size();j++){
+            for(int j=i+1;j<leaves.size();j++){
                 if(current==leaves[j]){
                     value++;
                 }
             }
-            value--;
         }
-        value=value/2;
         return value;
     }
 
-    vector<int> match_maker(string t_nick, int t_opt){//TODO: include date
-        int found=find_nickname(t_nick);
-        vector<int> match_values;
+    void match_maker(vector<string> &users){//TODO: vector de struct User
+            for(int pos=0;pos<users.size();pos++){
+                if(users[pos+1].type=="offerer" || user[pos+1=="both"]){
+                    BP_Tree<string> match_tree (5);
 
-        if(found!=-1){
-            vector<string> offer;
-            vector<string> demand;
-            if(t_opt==1){//on the nick´s offer see the demand
-                offer = string_minimizer(found,t_opt);
-                for(int pos=0;pos<all_regs.size();pos++){
-                    BP_Tree<string> nick_tree (5);
-                    bp_insert(offer,nick_tree);
-                    demand = string_minimizer(pos,2);
-                    bp_insert(demand,nick_tree);
-                    match_values.push_back(get_match_value(nick_tree.get_leaves_s()));
+                    bp_insert(string_minimizer(),nick_tree);
                 }
+                demand = string_minimizer(pos,2);
+                bp_insert(demand,nick_tree);
+                match_values.push_back(get_match_value(nick_tree.get_leaves()));
             }
-            else{
-                demand = string_minimizer(found,t_opt);
-                for(int pos=0;pos<all_regs.size();pos++){
-                    BP_Tree<string> nick_tree (5);
-                    bp_insert(demand,nick_tree);
-                    offer = string_minimizer(pos,1);
-                    bp_insert(offer, nick_tree);
-                    match_values.push_back(get_match_value(nick_tree.get_leaves_s()));
-                }
-            }
-        }
-        return match_values;
     }
 };

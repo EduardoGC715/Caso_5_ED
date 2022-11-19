@@ -8,7 +8,7 @@ int main(){
         cout<<"\nmatch "<<i<<" :"<< matches[i];
     }
 
-    /*auto tree= new BP_Tree<string>(5);
+    auto tree= new BP_Tree<string>(5);
     tree->insert("a");
     tree->insert("b");
     tree->insert("c");
@@ -16,9 +16,9 @@ int main(){
     tree->insert("e");
     tree->insert("f");
     tree->insert("a");
-    for(int i=0;i<tree->get_leaves_s().size();i++){
-        cout<<tree->get_leaves_s()[i];
+    for(int i=0;i<tree->get_leaves().size();i++){
+        cout<<tree->get_leaves()[i];
     }
-    tree->bpt_print();*/
+    tree->print_s();
     return 0;
 }
