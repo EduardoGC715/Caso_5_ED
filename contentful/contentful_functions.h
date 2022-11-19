@@ -49,6 +49,7 @@ public:
                 minimized.insert(minimized.end(),word + " ");
             }
         }
+        minimized.erase( std::unique(minimized.begin(), minimized.end()), minimized.end());
         return minimized;
     }
 
@@ -60,17 +61,18 @@ public:
 
     int get_match_value(std::vector<string> leaves){
         std::string current;
-        int value=0;
+        int value;
         for(int i=0;i<leaves.size();i++){
             current=leaves[i];
             for(int j=i+1;j<leaves.size();j++){
                 if(current==leaves[j]){
-                    value++;
+                    value+=value+1;
                 }
             }
         }
         return value;
     }
+
 
     void match_maker(vector<Registered> &users){
         int mtch_value;
@@ -82,7 +84,7 @@ public:
                         bp_insert(string_minimizer(users[pos_i].getOffer()),match_tree);
                         bp_insert(string_minimizer(users[pos_j].getDemand()),match_tree);
                         mtch_value = get_match_value(match_tree.get_leaves());
-                        if(mtch_value>3){
+                        if(mtch_value>4){
                             //TODO: add link
                         }
                     }
@@ -91,12 +93,34 @@ public:
         }
     }
 
-    string most_repeated(string to_analize){//TODO:change
-        istringstream iss(to_analize);
+    vector<string> most_repeated(vector<string> to_analize){
+        vector<string> simp_descrptns;
+        string all_descrptns;
+        vector<string> ocurrences;
         string word;
-
-        while (iss >> word){
-
+        BP_Tree<string> ocurrences_tree(5);
+        for(auto descrptn:to_analize){
+            simp_descrptns = string_minimizer(descrptn);
         }
+        for(auto simp_descr:simp_descrptns){
+            all_descrptns+=" "+simp_descr;
+        }
+        istringstream iss(all_descrptns);
+        while (iss>>word) {
+            ocurrences_tree.insert(word);
+        }
+        ocurrences = ocurrences_tree.get_leaves();
+        int aux_value;
+        for(int pos_i=0;pos_i<ocurrences.size();pos_i++){
+            aux_value=0;
+            //if(ocurrence[pos_i] not in prio queue){
+                for(int pos_j=pos_i+1;pos_j<ocurrences.size();pos_j++){
+                    if(ocurrences[pos_i]==ocurrences[pos_j]){
+                        aux_value++;
+                    }
+                }
+                //prio queue.append}
+        }
+        //return prio queue
     }
 };
