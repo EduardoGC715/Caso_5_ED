@@ -1,7 +1,7 @@
 # include "Date.h"
 
 int main() {
-    string begin = "21/01/1996";
+    string begin = "01/01/1970";
     string end = "07/10/2012";
 
     string dates[] = {
@@ -20,6 +20,11 @@ int main() {
         Date curr_date(*date);
         bool result = curr_date.in_range(begin_date, end_date);
         printf("Curr_date in range(begin, end): %d\n\n", result);
+    }
+
+    for (int i = 0; i < 9; ++i) {
+        Date rand_date;
+        printf("to_string: %s\n\n", rand_date.to_string()->c_str());
     }
 
     return 0;
