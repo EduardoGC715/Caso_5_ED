@@ -2,6 +2,7 @@
 #include <sstream>
 #include "../ADT/BP_Tree.h"
 #include "contentful.h"
+#include <queue>
 
 class contentful_functions {
 private:
@@ -93,12 +94,27 @@ public:
         }
     }
 
-    vector<string> most_repeated(vector<string> to_analize){
+    vector<string> remove_repeated(string repeated,vector<string> descrptn){//removes ALL reeated words in a vector given the word to remove
+        std::vector<string>::iterator itr;
+        while(true){
+            itr = find(descrptn.begin(), descrptn.end(), repeated);
+            if(itr!=descrptn.end()){
+                descrptn.erase(itr);
+            }
+            else{
+                break;
+            }
+        }
+    }
+
+    priority_queue<tuple<int, string>> most_repeated(vector<string> to_analize){
         vector<string> simp_descrptns;
         string all_descrptns;
         vector<string> ocurrences;
         string word;
         BP_Tree<string> ocurrences_tree(5);
+        priority_queue<tuple<int, string>> rankings;
+
         for(auto descrptn:to_analize){
             simp_descrptns = string_minimizer(descrptn);
         }
@@ -110,17 +126,23 @@ public:
             ocurrences_tree.insert(word);
         }
         ocurrences = ocurrences_tree.get_leaves();
+
         int aux_value;
-        for(int pos_i=0;pos_i<ocurrences.size();pos_i++){
-            aux_value=0;
-            //if(ocurrence[pos_i] not in prio queue){
+        string current;
+        tuple<int, string> rank;
+        while(!ocurrences.empty()){
+            for(int pos_i=0;pos_i<ocurrences.size();pos_i++){
+                current=ocurrences[pos_i];
+                aux_value=0;
                 for(int pos_j=pos_i+1;pos_j<ocurrences.size();pos_j++){
                     if(ocurrences[pos_i]==ocurrences[pos_j]){
                         aux_value++;
                     }
                 }
-                //prio queue.append}
+                rank= make_tuple(aux_value,current);
+                rankings.
+            }
+            //return prio queue
         }
-        //return prio queue
     }
 };
