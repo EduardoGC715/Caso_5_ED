@@ -307,7 +307,7 @@ public:
             }
         }
         m_leaves.clear();
-        gen_leaves(m_root,m_leaves);
+        gen_leaves_cs(m_root,m_leaves);
     }
 
     void clear(BP_Node<T>* cursor){
@@ -346,7 +346,7 @@ public:
         return m_leaves;
     }
 
-    void gen_leaves(BP_Node<T>* cursor, std::vector<T> &leaves){
+    void gen_leaves_cs(BP_Node<T>* cursor, std::vector<T> &leaves){
         if (cursor != NULL) {
             for (int i = 0; i < cursor->get_size(); ++i) {
                 if(cursor->get_is_leaf()){
@@ -355,7 +355,7 @@ public:
             }
             if (!cursor->get_is_leaf()) {
                 for (int i = 0; i < cursor->get_size() + 1; ++i) {
-                    gen_leaves(cursor->get_child(i),leaves);
+                    gen_leaves_cs(cursor->get_child(i),leaves);
                 }
             }
         }

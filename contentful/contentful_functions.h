@@ -93,16 +93,10 @@ public:
 
     string most_repeated(string to_analize){//TODO:change
         istringstream iss(to_analize);
-        map<string, int> count;
         string word;
-        decltype(count)::const_iterator most_occurring;
+
         while (iss >> word){
-            auto itr = count.emplace(word, 0).first;
-            ++itr->second;
-            if (count.size() == 1 || itr->second > most_occurring->second){
-                most_occurring = itr;
-            }
+
         }
-        return most_occurring->first;
     }
 };
