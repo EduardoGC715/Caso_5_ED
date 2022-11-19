@@ -133,7 +133,7 @@ VertexSet<T>* common_endpoints(VertexSet<T>* pVertices, Vertex<T>* origin) {
 }
 
 template<typename T>
-vector<VertexSet<T>*>* connected_components(Digraph<T>* pGraph) {
+vector<VertexSet<T>*>* get_connected_sets(Digraph<T>* pGraph) {
     vector<VertexSet<T>*>* all_components = new vector<VertexSet<T>*>;
     bool search_list[pGraph->get_size()] = {};
     for (int search = 0; search < pGraph->get_size(); ++search) {
@@ -157,7 +157,7 @@ vector<VertexSet<T>*>* connected_components(Digraph<T>* pGraph) {
     }
 
     // Print de todas las componentes conexas
-    for (int indexA = 0; indexA < all_components->size(); ++indexA) {
+    /* for (int indexA = 0; indexA < all_components->size(); ++indexA) {
         printf("Components #%d: [", indexA);
         VertexSet<T>* components = all_components->at(indexA);
         for (int indexB = 0; indexB < components->size(); ++indexB) {
@@ -165,7 +165,7 @@ vector<VertexSet<T>*>* connected_components(Digraph<T>* pGraph) {
             printf(" V#%d", node->get_key());
         }
         printf("]\n");
-    }printf("\n");
+    }printf("\n"); */
     return all_components;
 }
 
@@ -181,34 +181,109 @@ bool is_path_repeated(TreeNode<Vertex<T>>* pPath, Vertex<T>* pNode) {
 }
 
 template<typename T>
-void cyclic_components(VertexSet<T>* pVertices) {
+Tree<Vertex<T>>* get_set_map(VertexSet<T>* pVertices) {
     typedef TreeNode<Vertex<T>> Path;
-    queue< Path* > path_queue;
-    Vertex<T>* current_node = pVertices->at(0);
-    Tree<Vertex<T>>* path_tree = new Tree<Vertex<T>>(current_node);
-    Path* current_path = path_tree->get_root();
+    Tree<Vertex<T>>* path_tree; // Path tree to map all routes
+    queue< Path* > path_queue; // Queue for current path mapping
+    Vertex<T>* current_node;
+    Path* current_path;
 
+    // Init required conditions
+    current_node = pVertices->at(0);
+    path_tree = new Tree<Vertex<T>>(current_node);
+    current_path = path_tree->get_root();
     path_queue.push(current_path);
 
-    while (! path_queue.empty()) {
+    while (! path_queue.empty())
+    { // BFS-like design to exhaust all potential paths
         current_path = path_queue.front();
         path_queue.pop();
         current_node = current_path->get_data();
-        printf("Dequeued V#%d\n", current_node->get_key());
         VertexSet<T>* endpoints = common_endpoints(pVertices, current_node);
+        // printf("Dequeued V#%d\n", current_node->get_key());
         for (int index = 0; index < endpoints->size(); ++index) {
             current_node = endpoints->at(index);
-            if (! is_path_repeated(current_path, current_node)) {
-                printf("Enqueued V#%d\n", current_node->get_key());
+            if (! is_path_repeated(current_path, current_node))
+            {// Insert path option AND enqueue to check its paths
+                // printf("Enqueued V#%d\n", current_node->get_key());
                 path_queue.push(path_tree->insert(current_node, current_path));
-            } else {
+            } else { // Insert looped path as leaf
                 path_tree->insert(current_node, current_path);
-                current_node->set_processed(true);
+                current_node->set_processed(true); // For later use as ref.point
             }
         }
     }
 
     print_path_tree(path_tree->get_root());
+    return path_tree;
+}
+
+template<typename T>
+void get_all_loops(VertexSet<T>* pVertices, vector<VertexSet<T>*>* pFullset) {
+    typedef TreeNode<Vertex<T>> Path;
+    Tree<Vertex<T>>* path_map = get_set_map(pVertices);
+
+    for (int index = 0; index < pVertices->size(); ++index) {
+        Vertex<T>* current_node = pVertices->at(index);
+        if (! current_node->is_processed()) { // Ref.point for loop start/end
+            continue;
+        }
+        
+        // TODO:
+        // 1. Cambiar para reconstruir path de root -> end, no end -> root
+        // 2. Validar que si los path no conectan se descarte
+        //    Revisar arbol de E-F-H en graph 3, pues el diseño
+        //    actual tiene posibles fallas en arboles mas dispersos
+        // Notas (2):
+        //    - while (curr_path != end_path && curr_path != nullptr)
+        //    - if (curr_path == nullptr) { delete defective loop_set}
+        //    - else {loop_set.push_back(end_path) to conclude cycle}
+        queue<Path*>* ref_points = path_map->find_all(current_node);
+        Path* root_path;
+        Path* end_path;
+        VertexSet<T>* loop_set;
+
+        root_path = ref_points->front();
+        ref_points->pop();
+        while (! ref_points->empty()) {
+            loop_set = new VertexSet<T>;
+            end_path = ref_points->front();
+            ref_points->pop();
+            do {
+                loop_set->push_back( end_path->get_data() );
+                end_path = end_path->get_parent();
+            } while (end_path != root_path->get_parent());
+            pFullset->push_back(loop_set);
+        } delete ref_points;
+    }
+}
+
+template<typename T>
+vector<VertexSet<T>*>* cyclic_components(Digraph<T>* pGraph) {
+    vector<VertexSet<T>*>* loop_fullset = new vector<VertexSet<T>*>;
+    vector<VertexSet<T>*>* connected_sets = get_connected_sets(pGraph);
+
+    for (int index = 0; index < connected_sets->size(); ++index) {
+        VertexSet<T>* stored_set = connected_sets->at(index);
+        if (stored_set->size() > 2) {
+            get_all_loops(stored_set, loop_fullset);
+        } else {
+            delete stored_set;
+            continue;
+        }
+    }
+
+    // Print de todas las componentes conexas
+    for (int indexA = 0; indexA < loop_fullset->size(); ++indexA) {
+        printf("Set #%d: [", indexA);
+        VertexSet<T>* loop_set = loop_fullset->at(indexA);
+        for (int indexB = 0; indexB < loop_set->size(); ++indexB) {
+            Vertex<T>* node = loop_set->at(indexB);
+            printf(" V#%d", node->get_key());
+        }
+        printf("]\n");
+    }printf("\n");
+    return loop_fullset;
 }
 
 template<typename T> // TODO: Borrar este metodo de prueba
@@ -223,7 +298,7 @@ void print_path_tree(TreeNode<Vertex<T>>* pPath, int pLevel = 0) {
         printf("Vertex #%d:\n", key);
     }
     
-    for (int index = 0; index < pPath->children_count(); ++index) {
+    for (int index = 0; index < pPath->child_count(); ++index) {
         print_path_tree(pPath->get_child(index), pLevel);
     }
 }

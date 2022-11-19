@@ -1,5 +1,7 @@
 # pragma once
+# include <queue>
 # include "TreeNode.h"
+using std::queue;
 
 template<typename T>
 class Tree {
@@ -42,5 +44,25 @@ class Tree {
                 root = node;
             }
             return node;
+        }
+
+        queue<TreeNode<T>*>* find_all(T* pData) {
+            queue<TreeNode<T>*>* results = new queue<TreeNode<T>*>;
+            queue<TreeNode<T>*> options;
+            TreeNode<T>* current;
+
+            options.push(root);
+            while (! options.empty()) {
+                current = options.front();
+                options.pop();
+                if (pData == current->get_data()) {
+                    results->push(current);
+                }
+                int index = 0;
+                while (index < current->child_count()) {
+                    options.push(current->get_child(index++));
+                }
+            }
+            return results;
         }
 };

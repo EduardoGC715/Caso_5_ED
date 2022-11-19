@@ -4,6 +4,7 @@
 using namespace std;
 
 int main() {
+    vector<VertexSet<string>*>* connected_comps;
     Digraph<string>* graph_1 = new Digraph<string>;
     string data_1[] = {"A", "B", "C", "D", "E"};
     for (int index = 0; index < 5; ++index) {
@@ -22,7 +23,7 @@ int main() {
 
     graph_1->join(4, 2); // E->C
 
-    delete connected_components<string>(graph_1);
+    delete cyclic_components(graph_1);
 
     Digraph<string>* graph_2 = new Digraph<string>;
     string data_2[] = {"A", "B", "C", "D", "E", "F", "G", "H"};
@@ -50,7 +51,7 @@ int main() {
     graph_2->join(7, 4); // H->E
     graph_2->join(7, 5); // H->F
 
-    delete connected_components<string>(graph_2);
+    delete cyclic_components(graph_2);
 
     Digraph<string>* graph_3 = new Digraph<string>;
     string data_3[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"};
@@ -73,7 +74,7 @@ int main() {
     graph_3->join(9, 0); // J->A
     graph_3->join(10, 4); // K->E
 
-    delete connected_components(graph_3);
+    delete cyclic_components(graph_3);
 
     Digraph<string>* graph_4 = new Digraph<string>;
     string data_4[] = {"A", "B", "C", "D", "E", "F", "G", "H"};
@@ -99,8 +100,6 @@ int main() {
     graph_4->join(4, 0); // E->A
     graph_4->join(7, 2); // H->C
 
-    vector<VertexSet<string>*>* cc = connected_components(graph_4);
-    cyclic_components(cc->at(0));
-    delete cc;
+    delete cyclic_components(graph_4);
     return 0;
 }

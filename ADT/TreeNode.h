@@ -24,7 +24,7 @@ class TreeNode: public iNode<int, T> {
             delete children;
         }
 
-        int children_count() {
+        int child_count() {
             return children->size();
         }
 
