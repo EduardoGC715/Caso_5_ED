@@ -52,7 +52,7 @@ public:
         return minimized;
     }
 
-    void bp_insert(vector<string> &to_add,BP_Tree<string> &t_tree){
+    void bp_insert(vector<string> to_add,BP_Tree<string> &t_tree){
         for(auto & word : to_add){
             t_tree.insert(word);
         }
@@ -72,17 +72,19 @@ public:
         return value;
     }
 
-    void match_maker(vector<string> &users){//TODO: struct User vector
+    void match_maker(vector<Registered> &users){
         int mtch_value;
         for(int pos_i=0;pos_i<users.size();pos_i++){
-            for(int pos_j=pos_i+1;pos_j<users.size();pos_j++){
-                if(users[pos_j].type=="demander" || users[pos_j].type=="both"){
-                    BP_Tree<string> match_tree (5);
-                    bp_insert(string_minimizer(users[pos_i].offer),match_tree);
-                    bp_insert(string_minimizer(users[pos_j].demand),match_tree);
-                    mtch_value = get_match_value(match_tree.get_leaves());
-                    if(mtch_value>4){//TODO: condition to add to graph
-                        //add link
+            if(users[pos_i].getType()!="demander"){
+                for(int pos_j=pos_i+1;pos_j<users.size();pos_j++){
+                    if(users[pos_j].getType()!="offerer"){
+                        BP_Tree<string> match_tree (5);
+                        bp_insert(string_minimizer(users[pos_i].getOffer()),match_tree);
+                        bp_insert(string_minimizer(users[pos_j].getDemand()),match_tree);
+                        mtch_value = get_match_value(match_tree.get_leaves());
+                        if(mtch_value>3){
+                            //TODO: add link
+                        }
                     }
                 }
             }

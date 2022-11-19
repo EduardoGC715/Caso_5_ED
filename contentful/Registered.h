@@ -9,6 +9,7 @@ private:
     string offer;
     string demand;
     string postdate;
+    string type;
 
 public:
     Registered(string pNickname, string pOffer, string pDemand, string pPostdate) {
@@ -16,6 +17,15 @@ public:
         this->offer = pOffer;
         this->demand = pDemand;
         this->postdate = pPostdate;
+        if(!offer.empty() && !demand.empty()){
+            type="both";
+        }
+        else if(!offer.empty()){
+            type="offerer";
+        }
+        else{
+            type="demander";
+        }
     }
 
     string getNickname() {
@@ -32,5 +42,9 @@ public:
 
     string getPostdate() {
         return this->postdate;
+    }
+
+    string getType(){
+        return this->type;
     }
 };
