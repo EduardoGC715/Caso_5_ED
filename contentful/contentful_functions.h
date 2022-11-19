@@ -129,20 +129,18 @@ public:
 
         int aux_value;
         string current;
-        tuple<int, string> rank;
         while(!ocurrences.empty()){
-            for(int pos_i=0;pos_i<ocurrences.size();pos_i++){
-                current=ocurrences[pos_i];
-                aux_value=0;
-                for(int pos_j=pos_i+1;pos_j<ocurrences.size();pos_j++){
-                    if(ocurrences[pos_i]==ocurrences[pos_j]){
-                        aux_value++;
-                    }
+            current=ocurrences[0];
+            aux_value=1;
+            for(int pos_j=1;pos_j<ocurrences.size();pos_j++){
+                if(current==ocurrences[pos_j]){
+                    aux_value++;
                 }
-                rank= make_tuple(aux_value,current);
-                rankings.
             }
-            //return prio queue
+            tuple<int, string> rank = make_tuple(aux_value,current);
+            rankings.push(rank);
+            ocurrences = remove_repeated(current,ocurrences);
         }
+        return rankings;
     }
 };
