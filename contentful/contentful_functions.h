@@ -20,10 +20,12 @@ public:
         while(!valid){
             scanf("%32s", nick );
             nickname=nick;
-            if(nickname.length()>10){
-                valid=true;
+            if(find_nickname(nickname)==-1){
+                if(nickname.length()>10){
+                    valid=true;
+                }
+                //unvalid
             }
-            //unvalid
         }
         return nickname;
     }
