@@ -7,6 +7,7 @@ template <typename T>
 class BP_Tree {
     BP_Node<T>* m_root;
     std::size_t m_degree;
+    std::vector<T> m_leaves;
 
 public:
     BP_Tree(std::size_t _degree) {// Constructor
@@ -305,6 +306,8 @@ public:
                 }
             }
         }
+        m_leaves.clear();
+        gen_leaves_cs(m_root,m_leaves);
     }
 
     void clear(BP_Node<T>* cursor){
@@ -319,7 +322,7 @@ public:
             delete cursor;
         }
     }
-    void bpt_print(){
+    void print_s(){
         std::cout <<"\n";
         print(m_root, 0);
     }
@@ -339,12 +342,11 @@ public:
             }
         }
     }
-    std::vector<T> get_leaves_s(){
-        std::vector<T> leaves;
-        get_leaves(m_root,leaves);
-        return leaves;
+    std::vector<T> get_leaves(){
+        return m_leaves;
     }
-    void get_leaves(BP_Node<T>* cursor, std::vector<T>&leaves){
+
+    void gen_leaves_cs(BP_Node<T>* cursor, std::vector<T> &leaves){
         if (cursor != NULL) {
             for (int i = 0; i < cursor->get_size(); ++i) {
                 if(cursor->get_is_leaf()){
@@ -353,10 +355,9 @@ public:
             }
             if (!cursor->get_is_leaf()) {
                 for (int i = 0; i < cursor->get_size() + 1; ++i) {
-                    get_leaves(cursor->get_child(i),leaves);
+                    gen_leaves_cs(cursor->get_child(i),leaves);
                 }
             }
         }
     }
-
 };

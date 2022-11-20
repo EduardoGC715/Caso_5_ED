@@ -184,6 +184,7 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
   /usr/include/curl/urlapi.h \
   /usr/include/curl/options.h \
   /usr/include/curl/header.h \
+  ../contentful/Registered.h \
   ../contentful/json.hpp \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/algorithm \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/utility \
@@ -251,8 +252,19 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
-  /usr/include/sys/string.h
+  /usr/include/sys/string.h \
+  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/queue \
+  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/deque \
+  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_deque.h \
+  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/deque.tcc \
+  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_queue.h
 
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_deque.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/deque:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/queue:
 
 /usr/include/strings.h:
 
@@ -294,8 +306,6 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_tempbuf.h:
 
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_heap.h:
-
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/invoke.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_algo.h:
@@ -306,7 +316,13 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/utility:
 
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_heap.h:
+
+../contentful/Registered.h:
+
 /usr/include/curl/easy.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_queue.h:
 
 /usr/include/machine/_time.h:
 
@@ -409,6 +425,8 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 ../ADT/BP_Tree.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_algobase.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/deque.tcc:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/exception.h:
 

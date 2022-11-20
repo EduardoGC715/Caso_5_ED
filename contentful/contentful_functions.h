@@ -2,6 +2,7 @@
 #include <sstream>
 #include "../ADT/BP_Tree.h"
 #include "contentful.h"
+#include <queue>
 
 class contentful_functions {
 private:
@@ -32,34 +33,28 @@ public:
         }
         return -1;
     }
-    vector<string> string_minimizer(int t_index, int t_opt){
-        string to_min;
+    vector<string> string_minimizer(string to_min){
         vector<string> minimized;
-        if(t_opt==1){//minimize offer
-            to_min = all_regs.at(t_index)->getOffer();
-        }
-        else{//minimize demand
-            to_min = all_regs.at(t_index)->getDemand();
-        }
         istringstream iss(to_min);
         int wrd_size;
         string word;
         while (iss>>word){
             wrd_size=int(word.length());
-            if(wrd_size==3){
+            if(wrd_size==4){
                 minimized.insert(minimized.end(),word + " ");
             }
-            else if(wrd_size>3){
-                for(int j=0; j<wrd_size*0.3;j++){
+            else if(wrd_size>4){
+                for(int j=0; j<wrd_size*0.4;j++){
                     word.pop_back();
                 }
                 minimized.insert(minimized.end(),word + " ");
             }
         }
+        minimized.erase( std::unique(minimized.begin(), minimized.end()), minimized.end());
         return minimized;
     }
 
-    void bp_insert(vector<string> &to_add,BP_Tree<string> &t_tree){
+    void bp_insert(vector<string> to_add,BP_Tree<string> &t_tree){
         for(auto & word : to_add){
             t_tree.insert(word);
         }
@@ -67,48 +62,87 @@ public:
 
     int get_match_value(std::vector<string> leaves){
         std::string current;
-        int value=0;
+        int value;
         for(int i=0;i<leaves.size();i++){
             current=leaves[i];
-            for(int j=0;j<leaves.size();j++){
+            for(int j=i+1;j<leaves.size();j++){
                 if(current==leaves[j]){
-                    value++;
+                    value+=value+1;
                 }
             }
-            value--;
         }
-        value=value/2;
         return value;
     }
 
-    vector<int> match_maker(string t_nick, int t_opt){//TODO: include date
-        int found=find_nickname(t_nick);
-        vector<int> match_values;
 
-        if(found!=-1){
-            vector<string> offer;
-            vector<string> demand;
-            if(t_opt==1){//on the nick´s offer see the demand
-                offer = string_minimizer(found,t_opt);
-                for(int pos=0;pos<all_regs.size();pos++){
-                    BP_Tree<string> nick_tree (5);
-                    bp_insert(offer,nick_tree);
-                    demand = string_minimizer(pos,2);
-                    bp_insert(demand,nick_tree);
-                    match_values.push_back(get_match_value(nick_tree.get_leaves_s()));
-                }
-            }
-            else{
-                demand = string_minimizer(found,t_opt);
-                for(int pos=0;pos<all_regs.size();pos++){
-                    BP_Tree<string> nick_tree (5);
-                    bp_insert(demand,nick_tree);
-                    offer = string_minimizer(pos,1);
-                    bp_insert(offer, nick_tree);
-                    match_values.push_back(get_match_value(nick_tree.get_leaves_s()));
+    void match_maker(vector<Registered> &users){
+        int mtch_value;
+        for(int pos_i=0;pos_i<users.size();pos_i++){
+            if(users[pos_i].getType()!="demander"){
+                for(int pos_j=pos_i+1;pos_j<users.size();pos_j++){
+                    if(users[pos_j].getType()!="offerer"){
+                        BP_Tree<string> match_tree (5);
+                        bp_insert(string_minimizer(users[pos_i].getOffer()),match_tree);
+                        bp_insert(string_minimizer(users[pos_j].getDemand()),match_tree);
+                        mtch_value = get_match_value(match_tree.get_leaves());
+                        if(mtch_value>4){
+                            //TODO: add link
+                        }
+                    }
                 }
             }
         }
-        return match_values;
+    }
+
+    vector<string> remove_repeated(string repeated,vector<string> descrptn){//removes ALL reeated words in a vector given the word to remove
+        std::vector<string>::iterator itr;
+        while(true){
+            itr = find(descrptn.begin(), descrptn.end(), repeated);
+            if(itr!=descrptn.end()){
+                descrptn.erase(itr);
+            }
+            else{
+                break;
+            }
+        }
+        return descrptn;
+    }
+
+    priority_queue<tuple<int, string>> most_repeated(vector<string> to_analize){
+        vector<string> simp_descrptns;
+        string all_descrptns;
+        vector<string> ocurrences;
+        string word;
+        BP_Tree<string> ocurrences_tree(5);
+        priority_queue<tuple<int, string>> rankings;
+        string simplified;
+
+        for(auto descrptn:to_analize){
+            vector<string> analized =  string_minimizer(descrptn);
+            for(auto word_s:analized){
+                simplified+=" "+word_s;
+            }
+        }
+        istringstream iss(simplified);
+        while (iss>>word) {
+            ocurrences_tree.insert(word);
+        }
+        ocurrences = ocurrences_tree.get_leaves();
+
+        int aux_value;
+        string current;
+        while(!ocurrences.empty()){
+            current=ocurrences[0];
+            aux_value=1;
+            for(int pos_j=1;pos_j<ocurrences.size();pos_j++){
+                if(current==ocurrences[pos_j]){
+                    aux_value++;
+                }
+            }
+            tuple<int, string> rank = make_tuple(aux_value,current);
+            rankings.push(rank);
+            ocurrences = remove_repeated(current,ocurrences);
+        }
+        return rankings;
     }
 };
