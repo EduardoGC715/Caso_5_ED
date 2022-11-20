@@ -254,4 +254,9 @@ CMakeFiles/curl-demo.dir/Main.cpp.o
  /usr/include/string.h
  /usr/include/strings.h
  /usr/include/sys/string.h
+ /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/queue
+ /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/deque
+ /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_deque.h
+ /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/deque.tcc
+ /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_queue.h
 

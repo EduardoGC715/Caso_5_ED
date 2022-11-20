@@ -116,7 +116,12 @@ public:
         priority_queue<tuple<int, string>> rankings;
 
         for(auto descrptn:to_analize){
-            simp_descrptns = string_minimizer(descrptn);
+            vector<string> analized =  string_minimizer(descrptn);
+            string simplified;
+            for(auto word:analized){
+                simplified+=" "+word;
+            }
+            simp_descrptns.push_back(simplified);
         }
         for(auto simp_descr:simp_descrptns){
             all_descrptns+=" "+simp_descr;

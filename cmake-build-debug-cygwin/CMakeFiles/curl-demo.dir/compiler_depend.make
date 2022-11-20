@@ -252,8 +252,19 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
-  /usr/include/sys/string.h
+  /usr/include/sys/string.h \
+  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/queue \
+  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/deque \
+  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_deque.h \
+  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/deque.tcc \
+  /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_queue.h
 
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_deque.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/deque:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/queue:
 
 /usr/include/strings.h:
 
@@ -310,6 +321,8 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 ../contentful/Registered.h:
 
 /usr/include/curl/easy.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_queue.h:
 
 /usr/include/machine/_time.h:
 
@@ -412,6 +425,8 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 ../ADT/BP_Tree.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_algobase.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/deque.tcc:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/exception.h:
 
