@@ -105,6 +105,7 @@ public:
                 break;
             }
         }
+        return descrptn;
     }
 
     priority_queue<tuple<int, string>> most_repeated(vector<string> to_analize){
@@ -114,19 +115,15 @@ public:
         string word;
         BP_Tree<string> ocurrences_tree(5);
         priority_queue<tuple<int, string>> rankings;
+        string simplified;
 
         for(auto descrptn:to_analize){
             vector<string> analized =  string_minimizer(descrptn);
-            string simplified;
-            for(auto word:analized){
-                simplified+=" "+word;
+            for(auto word_s:analized){
+                simplified+=" "+word_s;
             }
-            simp_descrptns.push_back(simplified);
         }
-        for(auto simp_descr:simp_descrptns){
-            all_descrptns+=" "+simp_descr;
-        }
-        istringstream iss(all_descrptns);
+        istringstream iss(simplified);
         while (iss>>word) {
             ocurrences_tree.insert(word);
         }
