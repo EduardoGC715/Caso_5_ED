@@ -1,5 +1,6 @@
 # pragma once
 # include <string>
+#include "../utils/Date.h"
 
 using std::string;
 
@@ -8,7 +9,8 @@ private:
     string nickname;
     string offer;
     string demand;
-    string postdate;
+    Date* postdate;
+    Date* matchdate;
     string type;
 
 public:
@@ -16,7 +18,8 @@ public:
         this->nickname = pNickname;
         this->offer = pOffer;
         this->demand = pDemand;
-        this->postdate = pPostdate;
+        this->postdate = new Date(pPostdate);
+        this->matchdate= new Date();
         if(!offer.empty() && !demand.empty()){
             type="both";
         }
@@ -40,8 +43,11 @@ public:
         return this->demand;
     }
 
-    string getPostdate() {
+    Date* getPostdate() {
         return this->postdate;
+    }
+    Date* getMatchdate() {
+        return this->matchdate;
     }
 
     string getType(){

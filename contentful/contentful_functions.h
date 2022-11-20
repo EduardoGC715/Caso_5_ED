@@ -56,7 +56,7 @@ public:
         description=descri;
         return description;
     }
-    
+
     void reg_user(string t_nick, string t_offer, string t_demand, string t_password, int t_day, int t_month, int t_year){
         m_regs.registerUser(t_nick,t_offer,t_demand,t_password,t_day,t_month,t_year);
     }
