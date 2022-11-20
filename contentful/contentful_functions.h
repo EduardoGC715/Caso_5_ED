@@ -74,7 +74,6 @@ public:
         return value;
     }
 
-
     void match_maker(vector<Registered> &users){
         int mtch_value;
         for(int pos_i=0;pos_i<users.size();pos_i++){
@@ -94,7 +93,7 @@ public:
         }
     }
 
-    vector<string> remove_repeated(string repeated,vector<string> descrptn){//removes ALL reeated words in a vector given the word to remove
+    vector<string> remove_repeated(string repeated,vector<string> descrptn){//removes ALL repeated words in a vector given the word to remove
         std::vector<string>::iterator itr;
         while(true){
             itr = find(descrptn.begin(), descrptn.end(), repeated);
