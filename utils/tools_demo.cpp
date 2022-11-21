@@ -101,5 +101,6 @@ int main() {
     graph_4->join(7, 2); // H->C
 
     delete cyclic_components(graph_4);
+    // get_longest_chain(graph_4, graph_4->get_vertex(3));
     return 0;
 }

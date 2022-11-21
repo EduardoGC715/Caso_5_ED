@@ -8,15 +8,26 @@ template<typename T>
 void print_graph(iGraph<T>* pGraph) {
     for (int indexV = 0; indexV < pGraph->get_size(); ++indexV) {
         Vertex<T>* vertex = pGraph->get_vertex(indexV);
-        printf("Vertex #%d: [", indexV+1);
+        printf("Vertex #%d:\n", indexV);
+        VertexSet<T>* links_from = vertex->vertices_linked_from();
+
+        auto iterA = links_from->begin();
+        printf("    From_[ ");
+        while (iterA != links_from->end()) {
+            Vertex<T>* node = *iterA;
+            printf("V#%d, ", node->get_key());
+            ++iterA;
+        } printf("]\n    To_[ ");
+
+
         int link_size = vertex->link_quantity();
         for (int indexL = 0; indexL < link_size; ++indexL) {
             NodeLink<T>* link = vertex->get_link(indexL);
             int ID = link->get_endpoint()->get_key();
             int weight = link->get_weight();
-            printf("{#%d - W:%d}, ", ID+1, weight);
+            printf("{#%d - W:%d}, ", ID, weight);
         }
-        printf("]\n");
+        printf("]\n\n");
     }
 }
 

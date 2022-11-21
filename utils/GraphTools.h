@@ -2,13 +2,27 @@
 # include <vector>
 # include <stack>
 # include <queue>
+# include <map>
 # include <iostream>
 # include "../ADT/Tree.h"
 # include "../ADT/Graph.h"
 # include "../ADT/Digraph.h"
 
+using std::vector;
 using std::stack;
 using std::queue;
+using std::map;
+
+template<typename T>
+void print_set(VertexSet<T>* pSet) {
+    auto iter = pSet->begin();
+    auto end = pSet->end();
+    printf("[");
+    for (; iter != end; ++iter) {
+        Vertex<T>* node = *iter;
+        printf(" V#%d ", node->get_key());
+    } printf("]\n");
+}
 
 template<typename T>
 void reset_nodes(iGraph<T>* pGraph) {
@@ -31,7 +45,7 @@ void reset_nodes(VertexSet<T>* pSet) {
 }
 
 template<typename T>
-void process_all(VertexSet<T>* pSet) {
+void process_nodes(VertexSet<T>* pSet) {
     for (int index = 0; index < pSet->size(); ++index) {
         Vertex<T>* current = pSet->at(index);
         current->set_processed(true);
@@ -42,7 +56,7 @@ template<typename T>
 bool are_sets_equal(VertexSet<T>* pSetA, VertexSet<T>* pSetB) {
     bool result = false;
     if (pSetA->size() == pSetB->size()) {
-        process_all(pSetA);
+        process_nodes(pSetA);
         for (int index = 0; index < pSetB->size(); ++index) {
             Vertex<T>* node = pSetB->at(index);
             if (! node->is_processed()) {
@@ -55,143 +69,132 @@ bool are_sets_equal(VertexSet<T>* pSetA, VertexSet<T>* pSetB) {
 }
 
 template<typename T>
-Vertex<T>* find_unprocessed(iGraph<T>* pGraph) {
-    Vertex<T>* result = nullptr;
-    for (int index = 0; index < pGraph->get_size(); ++index) {
-        Vertex<T>* current = pGraph->get_vertex(index);
-        if (! current->is_processed()) {
-            result = current;
-            break;
+void intersect_sets(VertexSet<T>* pSetA, VertexSet<T>* pSetB) {
+    process_nodes(pSetB);
+    auto iter = pSetA->begin();
+    while (iter != pSetA->end()) {
+        Vertex<T>* node = *iter;
+        if (! node->is_processed()) {
+            iter = pSetA->erase(iter);
+            continue;
+        } ++iter;
+    } reset_nodes(pSetB);
+}
+
+template<typename T>
+void join_sets(VertexSet<T>* pSetA, VertexSet<T>* pSetB) {
+    process_nodes(pSetA);
+    for (int index = 0; index < pSetB->size(); ++index) {
+        Vertex<T>* node = pSetB->at(index);
+        if (! node->is_processed()) {
+            pSetA->push_back(node);
         }
-    }
+    } reset_nodes(pSetA);
+}
+
+template<typename T>
+VertexSet<T>* all_vertex_links(Digraph<T>* pGraph, Vertex<T>* pNode) {
+    VertexSet<T>* result = vertex_order_in(pGraph, pNode);
+    VertexSet<T>* order_out = vertex_order_out(pNode);
+    join_sets(result, order_out);
+    delete order_out;
     return result;
 }
 
 template<typename T>
-int vertex_order_input(Digraph<T>* pGraph, Vertex<T>* pNode) {
-    int count = 0;
-    for (int index = 0; index < pGraph->get_size(); ++index) {
-        Vertex<T>* current_node = pGraph->get_vertex(index);
-        if (pGraph->are_linked(current_node, pNode)) {
-            ++count;
-        }
-    }
-    return count;
-}
-
-template<typename T>
-VertexSet<T>* depth_search(iGraph<T>* pGraph, int pIndex = 0, bool pReset = false) {
+VertexSet<T>* depth_search(iGraph<T>* pGraph, int pIndex = 0) {
     // printf("\nDescendant search (DFS)\n");
     VertexSet<T>* visited_nodes = new VertexSet<T>;
     stack<Vertex<T>*> search_stack;
 
     Vertex<T>* current_node = pGraph->get_vertex(pIndex);
-    if (current_node != nullptr) {
-        search_stack.push(current_node);
-        current_node->set_processed(true);
-        while (! search_stack.empty()) {
-            current_node = search_stack.top();
-            // printf("Visited V#%d\n", current_node->get_key());
-            visited_nodes->push_back(current_node);
-            current_node->set_visited(true);
-            search_stack.pop();
-            for (int index = 0; index < current_node->link_quantity(); ++index) {
-                NodeLink<T>* link = current_node->get_link(index);
-                Vertex<T>* endpoint = link->get_endpoint();
-                if (! endpoint->is_processed()) {
-                    search_stack.push(endpoint);
-                    endpoint->set_previous(current_node);
-                    endpoint->set_processed(true);
-                    // printf("Processed V#%d\n", endpoint->get_key());
-                }
+    search_stack.push(current_node);
+    current_node->set_processed(true);
+    while (! search_stack.empty()) {
+        current_node = search_stack.top();
+        // printf("Visited V#%d\n", current_node->get_key());
+        visited_nodes->push_back(current_node);
+        current_node->set_visited(true);
+        search_stack.pop();
+        for (int index = 0; index < current_node->link_quantity(); ++index) {
+            NodeLink<T>* link = current_node->get_link(index);
+            Vertex<T>* endpoint = link->get_endpoint();
+            if (! endpoint->is_processed()) {
+                search_stack.push(endpoint);
+                endpoint->set_previous(current_node);
+                endpoint->set_processed(true);
+                // printf("Processed V#%d\n", endpoint->get_key());
             }
         }
-    }
-    if (pReset) {
-        reset_nodes(visited_nodes);
     }
     return visited_nodes;
 }
 
 template<typename T>
-VertexSet<T>* depth_rsearch(iGraph<T>* pGraph, int pIndex = 0, bool pReset = false) {
+VertexSet<T>* depth_rsearch(iGraph<T>* pGraph, int pIndex = 0) {
     // printf("\nAncestor search (reverse DFS)\n");
     VertexSet<T>* visited_nodes = new VertexSet<T>;
     stack<Vertex<T>*> search_stack;
 
     Vertex<T>* current_node = pGraph->get_vertex(pIndex);
-    if (current_node != nullptr) {
-        search_stack.push(current_node);
-        current_node->set_processed(true);
-        while (! search_stack.empty()) {
-            current_node = search_stack.top();
-            // printf("Visited V#%d\n", current_node->get_key());
-            visited_nodes->push_back(current_node);
-            current_node->set_visited(true);
-            search_stack.pop();
+    search_stack.push(current_node);
+    current_node->set_processed(true);
+    while (! search_stack.empty()) {
+        current_node = search_stack.top();
+        // printf("Visited V#%d\n", current_node->get_key());
+        visited_nodes->push_back(current_node);
+        current_node->set_visited(true);
+        search_stack.pop();
 
-            for (int index = 0; index < pGraph->get_size(); ++index) {
-                Vertex<T>* origin = pGraph->get_vertex(index);
-                if (! origin->is_processed() && pGraph->are_linked(origin, current_node)) {
-                    search_stack.push(origin);
-                    origin->set_processed(true);
-                    // printf("Processed V#%d\n", origin->get_key());
-                }
+        VertexSet<T>* links_from = current_node->vertices_linked_from();
+        for (int index = 0; index < links_from->size(); ++index) {
+            Vertex<T>* origin = links_from->at(index);
+            if (! origin->is_processed() && pGraph->are_linked(origin, current_node)) {
+                search_stack.push(origin);
+                origin->set_processed(true);
+                // printf("Processed V#%d\n", origin->get_key());
             }
         }
-    }
-    if (pReset) {
-        reset_nodes(visited_nodes);
     }
     return visited_nodes;
 }
 
-template<typename T>
-VertexSet<T>* common_endpoints(VertexSet<T>* pVertices, Vertex<T>* origin) {
+template<typename T> // Finds all of origin's endpoints available in a set
+VertexSet<T>* common_endpoints(VertexSet<T>* pSet, Vertex<T>* origin) {
     VertexSet<T>* endpoints = new VertexSet<T>;
-    for (int index = 0; index < pVertices->size(); ++index) {
-        Vertex<T>* current_node = pVertices->at(index);
+    for (int index = 0; index < pSet->size(); ++index) {
+        Vertex<T>* current_node = pSet->at(index);
         if (origin->is_joined(current_node)) {
             endpoints->push_back(current_node);
         }
-    }
-    return endpoints;
+    } return endpoints;
 }
 
 template<typename T>
 vector<VertexSet<T>*>* get_connected_sets(Digraph<T>* pGraph) {
     vector<VertexSet<T>*>* all_components = new vector<VertexSet<T>*>;
-    bool search_list[pGraph->get_size()] = {};
+    map<int, bool> search_map;
     for (int search = 0; search < pGraph->get_size(); ++search) {
-        if (! search_list[search]) {
-            search_list[search] = true;
-            VertexSet<T>* components = new VertexSet<T>;
-            VertexSet<T>* descendants = depth_search(pGraph, search, true); // Resets nodes
+        if (! search_map[search]) {
+            search_map[search] = true;
+            VertexSet<T>* components = depth_search(pGraph, search); // aka descendants
+            reset_nodes(components);
             VertexSet<T>* ancestors = depth_rsearch(pGraph, search);
-            for (int index = 0; index < descendants->size(); ++index)
-            {// Interseccion viene de cuales nodos marco reverse_DFS en ancestors
-                Vertex<T>* node = descendants->at(index);
-                if (node->is_processed()) {
-                    components->push_back(node);
-                    search_list[node->get_key()] = true; // Descartar busqueda de comp.conexo
-                }
-            } all_components->push_back(components);
-            delete descendants;
-            delete ancestors;
-            reset_nodes(pGraph);
+            intersect_sets(components, ancestors);
+            for (int index = 0; index < components->size(); ++index) {
+                Vertex<T>* node = components->at(index);
+                search_map[node->get_key()] = true; // Descartar busqueda de comp.conexo
+            } delete ancestors;
+            all_components->push_back(components);
         }
     }
 
     // Print de todas las componentes conexas
     /* for (int indexA = 0; indexA < all_components->size(); ++indexA) {
-        printf("Components #%d: [", indexA);
         VertexSet<T>* components = all_components->at(indexA);
-        for (int indexB = 0; indexB < components->size(); ++indexB) {
-            Vertex<T>* node = components->at(indexB);
-            printf(" V#%d", node->get_key());
-        }
-        printf("]\n");
-    }printf("\n"); */
+        printf("Components #%d: ", indexA);
+        print_set(components);
+    } printf("\n"); */
     return all_components;
 }
 
@@ -207,7 +210,7 @@ bool is_path_repeated(TreeNode<Vertex<T>>* pPath, Vertex<T>* pNode) {
 }
 
 template<typename T>
-Tree<Vertex<T>>* get_set_map(VertexSet<T>* pVertices) {
+Tree<Vertex<T>>* get_set_map(VertexSet<T>* pSet) {
     typedef TreeNode<Vertex<T>> Path;
     Tree<Vertex<T>>* path_tree; // Path tree to map all routes
     queue< Path* > path_queue; // Queue for current path mapping
@@ -215,7 +218,7 @@ Tree<Vertex<T>>* get_set_map(VertexSet<T>* pVertices) {
     Path* current_path;
 
     // Init required conditions
-    current_node = pVertices->at(0);
+    current_node = pSet->at(0);
     path_tree = new Tree<Vertex<T>>(current_node);
     current_path = path_tree->get_root();
     path_queue.push(current_path);
@@ -225,7 +228,7 @@ Tree<Vertex<T>>* get_set_map(VertexSet<T>* pVertices) {
         current_path = path_queue.front();
         path_queue.pop();
         current_node = current_path->get_data();
-        VertexSet<T>* endpoints = common_endpoints(pVertices, current_node);
+        VertexSet<T>* endpoints = common_endpoints(pSet, current_node);
         // printf("Dequeued V#%d\n", current_node->get_key());
         for (int index = 0; index < endpoints->size(); ++index) {
             current_node = endpoints->at(index);
@@ -254,7 +257,6 @@ void get_all_loops(VertexSet<T>* pVertices, vector<VertexSet<T>*>* pFullset) {
         if (! current_node->is_processed()) {
             continue;
         }// Else, use marked node as reference point for loops
-        current_node->set_processed(false);
         queue<Path*>* ref_points = path_map->find_all(current_node);
         Path* root_path = ref_points->front();
         Path* end_path;
@@ -313,16 +315,12 @@ vector<VertexSet<T>*>* cyclic_components(Digraph<T>* pGraph) {
         }
     }
 
-    // Print de todas las componentes conexas
-    /* for (int indexA = 0; indexA < loop_fullset->size(); ++indexA) {
-        printf("Set #%d: [", indexA);
+    // Print de todas las componentes ciclicas
+    for (int indexA = 0; indexA < loop_fullset->size(); ++indexA) {
         VertexSet<T>* loop_set = loop_fullset->at(indexA);
-        for (int indexB = 0; indexB < loop_set->size(); ++indexB) {
-            Vertex<T>* node = loop_set->at(indexB);
-            printf(" V#%d", node->get_key());
-        }
-        printf("]\n");
-    }printf("\n"); */
+        printf("Set #%d: ", indexA);
+        print_set(loop_set);
+    } printf("\n");
     return loop_fullset;
 }
 
@@ -341,4 +339,9 @@ void print_path_tree(TreeNode<Vertex<T>>* pPath, int pLevel = 0) {
     for (int index = 0; index < pPath->child_count(); ++index) {
         print_path_tree(pPath->get_child(index), pLevel);
     }
+}
+
+template<typename T>
+VertexSet<T>* get_longest_chain(Digraph<T>* pGraph, Vertex<T>* pNode) {
+
 }
