@@ -12,13 +12,12 @@ public:
     contentful_functions(){
         all_regs= m_regs.getRecords();
     }
-
     string get_nickname(){
         bool valid=false;
         char nick[33];
         string nickname;
         while(!valid){
-            scanf("%32s", nick );
+            scanf("%32s", &nick );
             nickname=nick;
             if(find_nickname(nickname)==-1){
                 if(nickname.length()>10){
@@ -38,10 +37,10 @@ public:
         string password_con;
 
         while(!valid){
-            scanf("%20s",pass);
+            scanf("%20s",&pass);
             password=pass;
             //confirmation
-            scanf("%20s",pass_con);
+            scanf("%20s",&pass_con);
             password_con=pass_con;
             if(password==password_con){
                 valid=true;
@@ -54,11 +53,10 @@ public:
     string get_description(){//in GUI add option to choose where to add; if offer or if demand
         char descri[251];
         string description;
-        scanf("%250s",descri);
+        scanf("%250s",&descri);
         description=descri;
         return description;
     }
-
     void reg_user(string t_nick, string t_offer, string t_demand, string t_password, int t_day, int t_month, int t_year){
         m_regs.registerUser(t_nick,t_offer,t_demand,t_password,t_day,t_month,t_year);
     }

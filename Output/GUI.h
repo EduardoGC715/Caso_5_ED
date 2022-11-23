@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <windows.h>
+#include "../contentful/contentful_functions.h"
 #include "../contentful/Registered.h"
 
 void show_html(LPCTSTR path){
@@ -163,3 +164,55 @@ void create_graph_UI(vector<Registered*> regs){
                "</script>";
     graph_GUI << html_file;
 }
+
+void display_menu(contentful_functions regs){
+    int opt;
+    bool done=false;
+    printf("Bienvenido a Gobiz !"
+           "Para registrate digita 1."
+           "Para consultar matches de demanda de un usuario digita 2."
+           "Para consultar matches de oferta de un usuario digita 3."
+           "Para visualizar los comercios circulares de un usuario digita 4."
+           "Para vizualizar la cadena de valor mas larga con mayor concurrencia digita 5."
+           "Para vizualizar la cadena de valor mas larga con menor concurrencia digita 6."
+           "Para visualizar el Top 10 de productos y servicios mas codiciados digita 7."
+           "Para visualizar las areas de mercado conexas digita 8."
+           "Para cerrar el programa digite 9.");
+    scanf("%d",&opt);
+    while(!done){
+        switch(opt) {
+            case 1:
+                // code block
+                break;
+            case 2:
+                // code block
+                break;
+            case 3:
+                // code block
+                break;
+            case 4:
+                // code block
+                break;
+            case 5:
+                // code block
+                break;
+            case 6:
+                // code block
+                break;
+            case 7:
+                // code block
+                break;
+            case 8:
+                // code block
+                break;
+            case 9:
+                printf("Gracias por usar Gobiz, hasta pronto !")
+                done=true;
+                break;
+            default:
+                // code block
+        }
+    }
+
+}
+
