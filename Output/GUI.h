@@ -51,7 +51,8 @@ void create_graph_UI(vector<Registered*> regs){
     html_file+= reg_to_string(regs);
     html_file+="var simulation = d3\n"
                "         .forceSimulation(graphData.nodes)\n"
-               "         .force(\"charge\", d3.forceManyBody().strength(-750))\n"
+               "         .force(\"collide\",d3.forceCollide(40))\n"
+               "         .force(\"charge\", d3.forceManyBody().strength(100))\n"
                "         .force(\"center\", d3.forceCenter(width / 2, height / 2))\n"
                "         .force(\"link\", d3.forceLink(graphData.links).id(d => d.name))\n"
                "         .on(\"tick\", ticked);\n"
