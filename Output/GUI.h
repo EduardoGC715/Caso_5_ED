@@ -2,14 +2,39 @@
 #include <iostream>
 #include <fstream>
 #include <windows.h>
+#include "../contentful/Registered.h"
 
 void show_html(LPCTSTR path){
-    ShellExecute(NULL, "open", path, NULL, NULL, SW_SHOWNORMAL);
+    ShellExecute(nullptr, "open", path, nullptr, nullptr, SW_SHOWNORMAL);
 }
 
-void create_html(){
+string reg_to_string(vector<Registered*> regs){
+    string html_nodes;
+    string html_links="\n  ],\n"   "  links: [";
+    for(auto reg:regs){
+        html_nodes+="\n   { name: \""+reg->getNickname()+"\" ,offer:\""+reg->getOffer()+"\",demand:\""+reg->getOffer()+"\"},";
+        //html_links+="\n   { source: \""+reg.getNickname()+"\", target: \""get.al que cumple"\" },"; debe ser un ciclo
+    }
+    html_nodes.pop_back();
+    //html_links.pop_back()
+    //TODO temporary
+    html_links+="\n   { source: \"OriSolis25\", target: \"poly_bridgers\" },\n"
+                "   { source: \"poly_bridgers\", target: \"Green_Lion\" },\n"
+                "   { source: \"Green_Lion\", target: \"SuperSmashCoders122\" },\n"
+                "   { source: \"SuperSmashCoders122\", target: \"PapaNoel2512\" },\n"
+                "   { source: \"PapaNoel2512\", target: \"SantaClaus37\" },\n"
+                "   { source: \"SantaClaus37\", target: \"the_agustd7\" }";
+
+    html_links+="      \n]\n"
+                "     };\n";
+
+    html_nodes+=html_links;
+    return html_nodes;
+}
+
+void create_graph_UI(vector<Registered*> regs){
     const char *path="..\\Output\\test.html";
-    std::ofstream graph_GUI(path); //open in constructor
+    std::ofstream graph_GUI(path);
     string html_file;
 
     html_file="<!DOCTYPE html>\n"
@@ -35,26 +60,8 @@ void create_html(){
                         "\n"
                         " //intialize data\n"
                         " var graph = {\n"
-                        "  nodes: [\n";
-    html_file+="   { name: \"Alice\" ,offer:\"blahblahblah\",demand:\"sisisisissisiis\"},\n"
-               "   { name: \"Bob\" ,offer:\"blahblahblah\",demand:\"sisisisissisiis\"},\n"
-               "   { name: \"Chen\" ,offer:\"blahblahblah\",demand:\"sisisisissisiis\"},\n"
-               "   { name: \"Dawg\" ,offer:\"blahblahblah\",demand:\"sisisisissisiis\"},\n"
-               "   { name: \"Ethan\" ,offer:\"blahblahblah\",demand:\"sisisisissisiis\"},\n"
-               "   { name: \"George\" ,offer:\"blahblahblah\",demand:\"sisisisissisiis\"},\n"
-               "   { name: \"Frank\" ,offer:\"blahblahblah\",demand:\"sisisisissisiis\"},\n"
-               "   { name: \"Hanes\" ,offer:\"blahblahblah\",demand:\"sisisisissisiis\"}\n"
-               "  ],\n"
-               "  links: [\n"
-               "   { source: \"Alice\", target: \"Bob\" },\n"
-               "   { source: \"Chen\", target: \"Bob\" },\n"
-               "   { source: \"Dawg\", target: \"Chen\" },\n"
-               "   { source: \"Hanes\", target: \"Frank\" },\n"
-               "   { source: \"Hanes\", target: \"George\" },\n"
-               "   { source: \"Dawg\", target: \"Ethan\" }\n"
-               "  ]\n"
-               " };\n";
-
+                        "  nodes: [";
+    html_file+= reg_to_string(regs);
     html_file+="var simulation = d3\n"
                "         .forceSimulation(graph.nodes)\n"
                "         .force(\n"

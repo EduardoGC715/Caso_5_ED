@@ -191,4 +191,7 @@ public:
         }
         return rankings;
     }
+    vector<Registered*> get_all_regs(){
+        return all_regs;
+    }
 };
