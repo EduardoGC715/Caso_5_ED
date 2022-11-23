@@ -23,7 +23,7 @@ int main() {
 
     graph_1->join(4, 2); // E->C
 
-    delete cyclic_components(graph_1);
+    // delete cyclic_components(graph_1);
 
     Digraph<string>* graph_2 = new Digraph<string>;
     string data_2[] = {"A", "B", "C", "D", "E", "F", "G", "H"};
@@ -51,7 +51,7 @@ int main() {
     graph_2->join(7, 4); // H->E
     graph_2->join(7, 5); // H->F
 
-    delete cyclic_components(graph_2);
+    // delete cyclic_components(graph_2);
 
     Digraph<string>* graph_3 = new Digraph<string>;
     string data_3[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"};
@@ -74,12 +74,12 @@ int main() {
     graph_3->join(9, 0); // J->A
     graph_3->join(10, 4); // K->E
 
-    delete cyclic_components(graph_3);
+    // delete cyclic_components(graph_3);
 
     Digraph<string>* graph_4 = new Digraph<string>;
     string data_4[] = {"A", "B", "C", "D", "E", "F", "G", "H"};
     for (int index = 0; index < 8; ++index) {
-        graph_4->insert_vertex(data_2 + index);
+        graph_4->insert_vertex(data_4 + index);
     }
 
     // A0, B1, C2, D3, E4, F5, G6, H7
@@ -100,7 +100,45 @@ int main() {
     graph_4->join(4, 0); // E->A
     graph_4->join(7, 2); // H->C
 
-    delete cyclic_components(graph_4);
-    // get_longest_chain(graph_4, graph_4->get_vertex(3));
+    // delete cyclic_components(graph_4);
+    // delete get_connected_sets(graph_4);
+
+    Digraph<string>* graph_5 = new Digraph<string>;
+    string data_5[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"};
+    for (int index = 0; index < 15; ++index) {
+        graph_5->insert_vertex(data_5 + index);
+    }
+
+    graph_5->join(0, 1); // A -> B
+    graph_5->join(0, 4); // A -> E
+    graph_5->join(0, 8); // A -> I
+
+    graph_5->join(1, 2); // B -> C
+    graph_5->join(2, 3); // C -> D
+
+    graph_5->join(3, 12); // D -> M
+    graph_5->join(3, 13); // D -> N
+    graph_5->join(3, 14); // D -> O
+
+    graph_5->join(4, 5); // E -> F
+    graph_5->join(4, 6); // E -> G
+    graph_5->join(4, 7); // E -> H
+
+    graph_5->join(5, 1); // F -> B
+    graph_5->join(5, 6); // F -> G
+
+    graph_5->join(6, 5); // G -> F
+    graph_5->join(7, 5); // H -> F
+
+    graph_5->join(8, 9); // I -> J
+    graph_5->join(8, 10); // I -> K
+    graph_5->join(8, 11); // I -> L
+
+    graph_5->join(14, 12); // O -> M
+    graph_5->join(14, 13); // O -> N
+
+
+    // max_concurrency_chain(graph_5, graph_5->get_vertex(0));
+    // min_concurrency_chain(graph_5, graph_5->get_vertex(0));
     return 0;
 }
