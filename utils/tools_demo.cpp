@@ -82,7 +82,7 @@ int main() {
         graph_4->insert_vertex(data_4 + index);
     }
 
-    // A0, B1, C2, D3, E4, F5, G6, H7
+    // A0, B1, C2, D3, E4, F5, XG6, H7
     graph_4->join(0, 1); // A->B
     graph_4->join(0, 4); // A->E
     graph_4->join(0, 6); // A->G
@@ -101,7 +101,7 @@ int main() {
     graph_4->join(7, 2); // H->C
 
     // delete cyclic_components(graph_4);
-    // delete get_connected_sets(graph_4);
+    delete get_connected_sets(graph_4);
 
     Digraph<string>* graph_5 = new Digraph<string>;
     string data_5[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"};
