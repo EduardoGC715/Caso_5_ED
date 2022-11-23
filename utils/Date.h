@@ -18,7 +18,7 @@ class Date {
             date_time = localtime(&time_value);
             int day = random(1, 31);
             int month = random(0, 11);
-            int year = random(100, date_time->tm_year);
+            int year = random(123, date_time->tm_year + 6);
             date_time->tm_hour = date_time->tm_min = date_time->tm_sec = 0;
             date_time->tm_year = year;
             date_time->tm_mon = month;

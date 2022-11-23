@@ -8,17 +8,24 @@
 using std::vector;
 
 template<typename T>
+using VertexSet = vector<Vertex<T>*>;
+
+template<typename T>
+using LinkSet = vector<NodeLink<T>*>;
+
+template<typename T>
 class Vertex : public iNode<int,T> {
     private:
         bool processed;
         bool visited;
         Vertex<T>* previous;
-        vector<NodeLink<T>*>* link_list;
+        VertexSet<T>* links_from;
+        LinkSet<T>* links_to;
 
         int find_key(int pKey) {
             int stored_key;
-            for (int index = 0; index < link_list->size(); ++index) {
-                NodeLink<T>* stored_link = link_list->at(index);
+            for (int index = 0; index < links_to->size(); ++index) {
+                NodeLink<T>* stored_link = links_to->at(index);
                 stored_key = stored_link->get_endpoint()->get_key();
                 if (pKey == stored_key) {
                     return index;
@@ -27,29 +34,42 @@ class Vertex : public iNode<int,T> {
         }
 
         int find_endpoint(Vertex<T>* pNode) {
-            for (int index = 0; index < link_list->size(); ++index) {
-                NodeLink<T>* stored_link = link_list->at(index);
+            for (int index = 0; index < links_to->size(); ++index) {
+                NodeLink<T>* stored_link = links_to->at(index);
                 Vertex<T>* endpoint = stored_link->get_endpoint();
                 if (pNode == endpoint) {
                     return index;
                 }
             } return NOT_FOUND;
         }
+
+        void erase_link_from(Vertex<T>* pNode) {
+            auto iter = links_from->begin();
+            while (iter != links_from->end()) {
+                Vertex<T>* origin = *iter;
+                if (pNode == origin) {
+                    break;
+                } ++iter;
+            } links_from->erase(iter);
+        }
     
     public:
         Vertex(int pKey, T* pData): iNode<int, T>(pKey, pData) {
             processed = visited = false;
             previous = nullptr;
-            link_list = new vector<NodeLink<T>*>;
+            links_from = new VertexSet<T>;
+            links_to = new LinkSet<T>;
         }
 
         ~Vertex() {
             clear_links();
-            delete link_list;
+            links_from->clear();
+            delete links_to;
+            delete links_from;
         }
 
         int link_quantity() {
-            return link_list->size();
+            return links_to->size();
         }
 
         NodeLink<T>* find_link(int pKey) {
@@ -65,7 +85,7 @@ class Vertex : public iNode<int,T> {
         NodeLink<T>* get_link(int pIndex) {
             NodeLink<T>* result = nullptr;
             if (pIndex < link_quantity() && pIndex > NOT_FOUND) {
-                result = link_list->at(pIndex);
+                result = links_to->at(pIndex);
             } 
             return result;
         }
@@ -73,15 +93,35 @@ class Vertex : public iNode<int,T> {
         // Interfaz para adyacencias
         void join(Vertex<T>* pNode, int pWeight) {
             NodeLink<T>* link = new NodeLink<T>(this, pNode, pWeight);
-            link_list->push_back(link);
+            links_to->push_back(link);
+            pNode->links_from->push_back(this);
         }
 
         void erase_link(int pIndex) {
             if (pIndex != NOT_FOUND) {
-                NodeLink<T>* target = link_list->at(pIndex);
-                link_list->erase(link_list->begin() + pIndex);
+                NodeLink<T>* target = links_to->at(pIndex);
+                Vertex<T>* endpoint = target->get_endpoint(); 
+                links_to->erase(links_to->begin() + pIndex);
+                endpoint->erase_link_from(this);
                 delete target;
             }
+        }
+
+        VertexSet<T>* vertices_linked_from() {
+            VertexSet<T>* set = new VertexSet<T>;
+            for (int index = 0; index < links_from->size(); ++index) {
+                Vertex<T>* node = links_from->at(index);
+                set->push_back(node);
+            } return set;
+        }
+
+        VertexSet<T>* vertices_linked_to() {
+            VertexSet<T>* set = new VertexSet<T>;
+            for (int index = 0; index < links_to->size(); ++index) {
+                NodeLink<T>* link = links_to->at(index);
+                Vertex<T>* node = link->get_endpoint();
+                set->push_back(node);
+            } return set;
         }
 
         void detach(Vertex<T>* pNode) {
@@ -95,11 +135,11 @@ class Vertex : public iNode<int,T> {
         }
 
         void clear_links() {
-            for (int index = 0; index < link_list->size(); ++index) {
-                NodeLink<T>* link = link_list->at(index);
+            for (int index = 0; index < links_to->size(); ++index) {
+                NodeLink<T>* link = links_to->at(index);
                 delete link;
             }
-            link_list->clear(); // Vacia contenedor
+            links_to->clear(); // Vacia contenedor
         }
 
         bool is_joined(Vertex<T>* pNode) {
