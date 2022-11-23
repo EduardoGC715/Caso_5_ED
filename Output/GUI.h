@@ -4,8 +4,8 @@
 #include <windows.h>
 #include "../contentful/Registered.h"
 
-void show_html(LPCTSTR path){
-    ShellExecute(nullptr, "open", path, nullptr, nullptr, SW_SHOWNORMAL);
+void show_html(string& pPath){
+    ShellExecute(nullptr, "open", pPath.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
 }
 
 string reg_to_string(vector<Registered*> regs){
