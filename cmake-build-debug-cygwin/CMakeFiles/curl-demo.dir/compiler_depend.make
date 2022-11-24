@@ -151,14 +151,19 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/ostream.tcc \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/istream.tcc \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/sstream.tcc \
-  ../ADT/BP_Tree.h \
+  ../ADT/Digraph.h \
+  ../ADT/iGraph.h \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/iostream \
-  ../ADT/BP_Node.h \
+  ../ADT/Vertex.h \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/vector \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_uninitialized.h \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_vector.h \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_bvector.h \
   /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/vector.tcc \
+  ../ADT/iNode.h \
+  ../ADT/NodeLink.h \
+  ../ADT/BP_Tree.h \
+  ../ADT/BP_Node.h \
   ../contentful/contentful.h \
   /usr/include/curl/curl.h \
   /usr/include/curl/curlver.h \
@@ -681,8 +686,6 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/xsaveoptintrin.h:
 
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/xsaveintrin.h:
-
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/wbnoinvdintrin.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/uintrintrin.h:
@@ -737,8 +740,6 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/x86intrin.h:
 
-/usr/include/w32api/basetsd.h:
-
 /usr/include/w32api/psdk_inc/intrin-impl.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/avx5124fmapsintrin.h:
@@ -782,6 +783,20 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/deque:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/queue:
+
+/usr/include/w32api/sysinfoapi.h:
+
+/usr/include/sys/string.h:
+
+/usr/include/strings.h:
+
+/usr/include/string.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/cstring:
+
+/usr/include/w32api/_mingw.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/indirect_array.h:
 
 /usr/include/stdio.h:
 
@@ -965,10 +980,6 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 
 /usr/include/sys/_stdint.h:
 
-/usr/include/w32api/_mingw.h:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/indirect_array.h:
-
 /usr/include/locale.h:
 
 /usr/include/cygwin/if.h:
@@ -1054,8 +1065,6 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 /usr/include/sys/_pthreadtypes.h:
 
 /usr/include/sys/config.h:
-
-/usr/include/string.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/exception:
 
@@ -1169,10 +1178,6 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/ext/type_traits.h:
 
-/usr/include/w32api/sysinfoapi.h:
-
-/usr/include/sys/string.h:
-
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/cstdio:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/mask_array.h:
@@ -1195,6 +1200,8 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/postypes.h:
 
+../ADT/Vertex.h:
+
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_relops.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/avx512vpopcntdqintrin.h:
@@ -1212,6 +1219,10 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/ctime:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/cpp_type_traits.h:
+
+/usr/include/w32api/basetsd.h:
+
+../ADT/NodeLink.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/std_function.h:
 
@@ -1279,8 +1290,6 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/locale_facets.h:
 
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/cstring:
-
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/avx512cdintrin.h:
 
 /usr/include/wctype.h:
@@ -1305,6 +1314,22 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/atomic_base.h:
 
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/xsaveintrin.h:
+
+../ADT/iGraph.h:
+
+/usr/include/w32api/ioapiset.h:
+
+/usr/include/features.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/random:
+
+/usr/include/w32api/mcx.h:
+
+/usr/include/sys/_types.h:
+
+/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/ext/concurrence.h:
+
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/vector:
 
 /usr/include/w32api/sdkddkver.h:
@@ -1318,6 +1343,8 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_vector.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/stl_bvector.h:
+
+../ADT/iNode.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/cwctype:
 
@@ -1361,18 +1388,6 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 
 ../utils/Date.h:
 
-/usr/include/w32api/ioapiset.h:
-
-/usr/include/features.h:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/random:
-
-/usr/include/w32api/mcx.h:
-
-/usr/include/sys/_types.h:
-
-/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/ext/concurrence.h:
-
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/clzerointrin.h:
 
 /usr/include/w32api/_mingw_mac.h:
@@ -1398,6 +1413,8 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bit:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/cetintrin.h:
+
+../ADT/Digraph.h:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/utility:
 
@@ -1458,5 +1475,3 @@ CMakeFiles/curl-demo.dir/Main.cpp.o: ../Main.cpp \
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/valarray_array.tcc:
 
 /usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/bits/gslice_array.h:
-
-/usr/include/strings.h:

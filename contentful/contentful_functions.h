@@ -14,12 +14,15 @@ public:
         all_regs= m_regs.getRecords();
     }
 
+
+
+
     string get_nickname(){
         bool valid=false;
         char nick[33];
         string nickname;
         while(!valid){
-            scanf("%32s", nick );
+            scanf("%32s", &nick );
             nickname=nick;
             if(find_nickname(nickname)==-1){
                 if(nickname.length()>10){
@@ -39,10 +42,10 @@ public:
         string password_con;
 
         while(!valid){
-            scanf("%20s",pass);
+            scanf("%20s",&pass);
             password=pass;
             //confirmation
-            scanf("%20s",pass_con);
+            scanf("%20s",&pass_con);
             password_con=pass_con;
             if(password==password_con){
                 valid=true;
@@ -55,11 +58,10 @@ public:
     string get_description(){//in GUI add option to choose where to add; if offer or if demand
         char descri[251];
         string description;
-        scanf("%250s",descri);
+        scanf("%250s",&descri);
         description=descri;
         return description;
     }
-
     void reg_user(string t_nick, string t_offer, string t_demand, string t_password, int t_day, int t_month, int t_year){
         m_regs.registerUser(t_nick,t_offer,t_demand,t_password,t_day,t_month,t_year);
     }
@@ -109,20 +111,24 @@ public:
     }
 
     int get_match_value(std::vector<string> leaves){
-        std::string current;
-        int value = 0;
+        std::string current_i;
+        string current_j;
+        int total=0;
         for(int i=0;i<leaves.size();i++){
-            current=leaves[i];
+            int value = 0;
+            current_i=leaves[i];
             for(int j=i+1;j<leaves.size();j++){
-                if(current!=leaves[j]){
-                    break;
-                } ++value;
+                current_j=leaves[j];
+                if(current_i==current_j){
+                    value+=value+1;
+                }
             }
-        } return value;
+            total+=value;
+        } return total;
     }
 
     void match_maker(vector<Registered*> &users, Digraph<Registered>* pGraph){
-        int match_value;
+        int match_value=0;
         for(int pos_i=0;pos_i<users.size();pos_i++){
             Registered* user_i = users.at(pos_i);
             if (user_i->getType() != "demander"){
@@ -133,7 +139,7 @@ public:
                         bp_insert(string_minimizer(user_i->getOffer()), match_tree);
                         bp_insert(string_minimizer(user_j->getDemand()),match_tree);
                         match_value = get_match_value(match_tree.get_leaves());
-                        if(match_value>4){
+                        if(match_value>5){
                             pGraph->join(pos_i, pos_j, match_value);
                         }
                     }

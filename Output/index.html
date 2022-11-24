@@ -2,6 +2,14 @@
 <meta charset="utf-8" />
 <svg width="1920" height="1080"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<style>
+    text {
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        fill: black;
+    }
+</style>
 <script>
     //initilize svg or grab svg
     var svg = d3.select("svg");
@@ -48,38 +56,36 @@
             { name: "josearnoldowood", offer: "esta es la oferta", demand: "esta es la demanda", postdate: "24/07/2024", colorID: "5"},
         ],
         links: [
-            { source: "costarica_espana", target: "Wakanda_Med", weight: "7"},
-            { source: "rather_than_luck", target: "PapaNoel2512", weight: "5"},
-            { source: "Green_Lion", target: "BobTheBuilder250", weight: "5"},
-            { source: "PapaNoel2512", target: "Green_Lion", weight: "5"},
-            { source: "BobTheBuilder250", target: "poly_bridgers", weight: "5"},
-            { source: "BobTheBuilder250", target: "AstraMedical222", weight: "5"},
-            { source: "BobTheBuilder250", target: "Wakanda_Med", weight: "6"},
-            { source: "OlcoManGold", target: "OriSolis25", weight: "7"},
-            { source: "OlcoManGold", target: "PapaNoel2512", weight: "5"},
-            { source: "OlcoManGold", target: "BobTheBuilder250", weight: "5"},
-            { source: "OlcoManGold", target: "AstraMedical222", weight: "6"},
-            { source: "OlcoManGold", target: "Wakanda_Med", weight: "8"},
-            { source: "Mesa_School", target: "OriSolis25", weight: "6"},
-            { source: "Mesa_School", target: "PapaNoel2512", weight: "6"},
-            { source: "Mesa_School", target: "BobTheBuilder250", weight: "11"},
-            { source: "Mesa_School", target: "AstraMedical222", weight: "6"},
-            { source: "Mesa_School", target: "EstructurasMina", weight: "7"},
-            { source: "AstraMedical222", target: "OriSolis25", weight: "7"},
-            { source: "AstraMedical222", target: "PapaNoel2512", weight: "6"},
-            { source: "AstraMedical222", target: "BobTheBuilder250", weight: "7"},
-            { source: "AstraMedical222", target: "Mesa_School", weight: "11"},
-            { source: "AstraMedical222", target: "EstructurasMina", weight: "6"},
-            { source: "AstraMedical222", target: "Wakanda_Med", weight: "5"},
-            { source: "RealSolutions", target: "Wakanda_Med", weight: "9"},
-            { source: "EstructurasMina", target: "BobTheBuilder250", weight: "5"},
-            { source: "EstructurasMina", target: "AstraMedical222", weight: "5"},
+            { source: "costarica_espana", target: "Wakanda_Med", weight: "9"},
+            { source: "rather_than_luck", target: "PapaNoel2512", weight: "6"},
+            { source: "Green_Lion", target: "BobTheBuilder250", weight: "6"},
+            { source: "BobTheBuilder250", target: "AstraMedical222", weight: "6"},
+            { source: "BobTheBuilder250", target: "Wakanda_Med", weight: "7"},
+            { source: "OlcoManGold", target: "OriSolis25", weight: "9"},
+            { source: "OlcoManGold", target: "PapaNoel2512", weight: "6"},
+            { source: "OlcoManGold", target: "BobTheBuilder250", weight: "6"},
+            { source: "OlcoManGold", target: "AstraMedical222", weight: "7"},
+            { source: "OlcoManGold", target: "Wakanda_Med", weight: "9"},
+            { source: "Mesa_School", target: "OriSolis25", weight: "11"},
+            { source: "Mesa_School", target: "PapaNoel2512", weight: "11"},
+            { source: "Mesa_School", target: "BobTheBuilder250", weight: "16"},
+            { source: "Mesa_School", target: "AstraMedical222", weight: "11"},
+            { source: "Mesa_School", target: "EstructurasMina", weight: "12"},
+            { source: "AstraMedical222", target: "OriSolis25", weight: "12"},
+            { source: "AstraMedical222", target: "PapaNoel2512", weight: "11"},
+            { source: "AstraMedical222", target: "BobTheBuilder250", weight: "12"},
+            { source: "AstraMedical222", target: "Mesa_School", weight: "16"},
+            { source: "AstraMedical222", target: "EstructurasMina", weight: "11"},
+            { source: "AstraMedical222", target: "Wakanda_Med", weight: "6"},
+            { source: "RealSolutions", target: "Wakanda_Med", weight: "14"},
+            { source: "EstructurasMina", target: "BobTheBuilder250", weight: "6"},
+            { source: "EstructurasMina", target: "AstraMedical222", weight: "6"},
             { source: "EstructurasMina", target: "RealSolutions", weight: "8"},
-            { source: "Hospital_Tec", target: "BobTheBuilder250", weight: "6"},
+            { source: "Hospital_Tec", target: "BobTheBuilder250", weight: "7"},
             { source: "Hospital_Tec", target: "AstraMedical222", weight: "6"},
-            { source: "Hospital_Tec", target: "EstructurasMina", weight: "7"},
-            { source: "Wakanda_Med", target: "Mesa_School", weight: "5"},
-            { source: "Wakanda_Med", target: "AstraMedical222", weight: "8"},
+            { source: "Hospital_Tec", target: "EstructurasMina", weight: "8"},
+            { source: "Wakanda_Med", target: "Mesa_School", weight: "6"},
+            { source: "Wakanda_Med", target: "AstraMedical222", weight: "9"},
             { source: "Wakanda_Med", target: "Hospital_Tec", weight: "6"},
         ]
     };
@@ -87,7 +93,7 @@
     var simulation = d3
         .forceSimulation(graphData.nodes)
         .force("collide", d3.forceCollide().radius(40))
-        .force("charge", d3.forceManyBody().strength(50))
+        .force("charge", d3.forceManyBody().strength(20))
         .force("center", d3.forceCenter(width / 2, height / 2))
         .force("link", d3.forceLink(graphData.links).id(d => d.name))
         .on("tick", ticked);
@@ -100,7 +106,7 @@
         .append("line")
         .attr("stroke-width", 3)
         .attr('marker-end', 'url(#mark-end-arrow)')
-        .style("stroke", "Black");
+        .style("stroke", "darkgrey");
 
     links.append("text").text(d => d.name);
     var defs = svg.append('svg:defs');
@@ -112,7 +118,8 @@
         .attr('markerHeight', 2)
         .attr('orient', 'auto')
         .append('svg:path')
-        .attr('d', 'M0,-L10,0L0,5');
+        .attr('d', 'M0,-L10,0L0,5')
+        .style("fill", "darkgrey");
 
     // define arrow markers for leading arrow
     defs.append('svg:marker')
@@ -123,7 +130,8 @@
         .attr('markerHeight', 3.5)
         .attr('orient', 'auto')
         .append('svg:path')
-        .attr('d', 'M0,-5L10,0L0,5');
+        .attr('d', 'M0,-5L10,0L0,5')
+        .style("fill", "darkgrey");
 
     let color = [
         "#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#e5c494", "#b3b3b3", 
