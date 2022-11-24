@@ -37,7 +37,9 @@ public:
                    "7. Para visualizar el Top 10 de servicios o productos mas codiciados.\n"
                    "8. Para visualizar la areas de mercado conexas.\n"
                    "9. Para salir.\n");
-            scanf(" %d", &option_m);
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cin>>option_m;
             if (option_m == 1) {
                 nickname = get_nickname();
                 password = get_password();
@@ -45,17 +47,21 @@ public:
                        "1. Ofertar.\n"
                        "2. Demandar.\n"
                        "3. Ambas.\n");
-                scanf(" %d",&option_d);
                 while(!finished){
+                    cin.clear();
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    cin>>option_d;
                     if(option_d==1){
                         printf("Digite la oferta: ");
                         offer = get_description();
                         finished=true;
+                        option_d=0;
                     }
                     else if(option_d==2){
                         printf("Digite la demanda: ");
                         demand = get_description();
                         finished=true;
+                        option_d=0;
                     }
                     else if(option_d==3){
                         printf("Digite la oferta: ");
@@ -63,6 +69,7 @@ public:
                         printf("Digite la demanda: ");
                         demand = get_description();
                         finished=true;
+                        option_d=0;
                     }
                     else{
                         printf("Opcion incorrecta, intenta de nuevo.");
@@ -102,13 +109,12 @@ public:
     }
 
     string get_nickname(){
-        bool valid=false;
-        char nick[33];
         string nickname;
         while(true){
             printf("Digite el usuario: ");
-            scanf(" %32s", &nick );
-            nickname=nick;
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cin>>nickname;
             if(find_nickname(nickname)==-1){
                 if(nickname.length()>10){
                     break;
@@ -121,18 +127,16 @@ public:
 
     string get_password(){
         bool valid=false;
-        char pass[21];
-        char pass_con[21];
         string password;
         string password_con;
 
         while(true){
             printf("Digite una contraseña: ");
-            scanf(" %20s",&pass);
-            password=pass;
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cin>>password;
             printf("Digite la contraseña de nuevo: ");
-            scanf(" %20s",&pass_con);
-            password_con=pass_con;
+            cin>>password_con;
             if(password==password_con){
                 break;
             }
@@ -142,10 +146,10 @@ public:
     }
 
     string get_description(){//in GUI add option to choose where to add; if offer or if demand
-        char descri[251];
         string description;
-        scanf(" %250s",&descri);
-        description=descri;
+        cin.clear();
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cin>>description;
         return description;
     }
     void reg_user(string t_nick, string t_offer, string t_demand, string t_password, int t_day, int t_month, int t_year){
