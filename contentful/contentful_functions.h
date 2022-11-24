@@ -162,6 +162,16 @@ public:
         return descrptn;
     }
 
+    vector<string> get_all_strings(Digraph<Registered>* pGraph) {
+        vector<string> collection;
+        for (int index = 0; index < pGraph->get_size(); ++index) {
+            Vertex<Registered>* node = pGraph->get_vertex(index);
+            Registered* user = node->get_data();
+            collection.push_back(user->getOffer());
+            collection.push_back(user->getDemand());
+        } return collection;
+    }
+
     priority_queue<tuple<int, string>> most_repeated(vector<string> to_analize){
         vector<string> simp_descrptns;
         string all_descrptns;
