@@ -53,9 +53,9 @@ void fullgraph_html(Digraph<Registered>* pGraph) {
     string colors = "        \"#216be5\", \"#ff9440\"";
     ofstream file_output;
     ifstream file_template;
-    string path = "Output\\index.html";
+    string path = "..\\Output\\index.html";
     file_output.open(path, ostream::out | ofstream::trunc);
-    file_template.open("templates\\html_template.txt");
+    file_template.open("..\\templates\\html_template.txt");
 
     string line;
     int line_num = 1;

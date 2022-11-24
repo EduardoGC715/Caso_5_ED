@@ -13,7 +13,7 @@ int main(){
 
     regs.match_maker(all_users, graph);
     fullgraph_html(graph);
-    /* create_graph_UI(regs.get_all_regs());
-    string path = "Output\\test_2.html";
-    show_html(path); */
+    // create_graph_UI(regs.get_all_regs());
+    string path = "..\\Output\\index.html";
+    show_html(path);
 }
