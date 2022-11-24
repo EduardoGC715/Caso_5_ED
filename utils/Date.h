@@ -27,8 +27,8 @@ class Date {
         }
 
         Date(string& pString) {
-            int day = stoi( pString.substr(0, 2) );
-            int month = stoi( pString.substr(3, 2) );
+            int month = stoi( pString.substr(0, 2) );
+            int day = stoi( pString.substr(3, 2) );
             int year = stoi( pString.substr(6, 4) );
             date_time = localtime(&time_value);
             date_time->tm_year = (year - 1900);
@@ -41,6 +41,7 @@ class Date {
         string* to_string() {
             string* result;
             char buffer[80];
+            date_time = localtime(&time_value);
             strftime(buffer, 80, "%d/%m/%Y", date_time);
             result = new string(buffer);
             return result;

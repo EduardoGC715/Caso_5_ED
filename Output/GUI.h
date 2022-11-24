@@ -23,10 +23,11 @@ void show_html(string& pPath){
 string parse_user(Vertex<Registered>* pNode, int pColor) {
     string html_node = "            ";
     Registered* user = pNode->get_data();
+    string postdate = *(user->getPostdate()->to_string());
     html_node.append( "{ name: \"" + user->getNickname() 
         + "\", offer: \"" + user->getOffer()
         + "\", demand: \"" + user->getDemand()
-        + "\", postdate: \"" + *(user->getPostdate()->to_string())
+        + "\", postdate: \"" + postdate
         + "\", colorID: \"" + to_string(pColor)
         + "\"},\n");
     return html_node;
