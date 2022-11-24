@@ -2,6 +2,14 @@
 <meta charset="utf-8" />
 <svg width="1920" height="1080"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<style>
+    text {
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        fill: black;
+    }
+</style>
 <script>
     //initilize svg or grab svg
     var svg = d3.select("svg");
@@ -33,7 +41,7 @@
         .append("line")
         .attr("stroke-width", 3)
         .attr('marker-end', 'url(#mark-end-arrow)')
-        .style("stroke", "Black");
+        .style("stroke", "darkgrey");
 
     links.append("text").text(d => d.name);
     var defs = svg.append('svg:defs');
@@ -45,7 +53,8 @@
         .attr('markerHeight', 2)
         .attr('orient', 'auto')
         .append('svg:path')
-        .attr('d', 'M0,-L10,0L0,5');
+        .attr('d', 'M0,-L10,0L0,5')
+        .style("fill", "darkgrey");
 
     // define arrow markers for leading arrow
     defs.append('svg:marker')
@@ -56,7 +65,8 @@
         .attr('markerHeight', 3.5)
         .attr('orient', 'auto')
         .append('svg:path')
-        .attr('d', 'M0,-5L10,0L0,5');
+        .attr('d', 'M0,-5L10,0L0,5')
+        .style("fill", "darkgrey");
 
     let color = [
         // PLACEHOLDER

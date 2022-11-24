@@ -81,30 +81,6 @@ void fullgraph_html(Digraph<Registered>* pGraph) {
     return;
 }
 
+void display_menu(){
 
-
-
-
-string reg_to_string(vector<Registered*> regs){
-    string html_nodes="\nnodes: [";
-    string html_links="],\n"   "  links: [";
-    for(auto reg:regs){
-        html_nodes+="\n   { name: \""+reg->getNickname()+"\" ,offer:\""+reg->getOffer()+"\",demand:\""+reg->getOffer()+"\"},";
-        //html_links+="\n   { source: \""+reg.getNickname()+"\", target: \""get.al que cumple"\" },"; debe ser un ciclo
-    }
-    //TODO temporary
-    html_links+="\n { source: \"OriSolis25\", target: \"poly_bridgers\" },\n"
-                "   { source: \"poly_bridgers\", target: \"Green_Lion\" },\n"
-                "   { source: \"Green_Lion\", target: \"SuperSmashCoders122\" },\n"
-                "   { source: \"SuperSmashCoders122\", target: \"PapaNoel2512\" },\n"
-                "   { source: \"PapaNoel2512\", target: \"SantaClaus37\" },\n"
-                "   { source: \"SantaClaus37\", target: \"the_agustd7\" }";
-
-    html_nodes.pop_back();
-    //html_links.pop_back()
-    html_links+="      \n]\n"
-                "     };\n";
-
-    html_nodes+=html_links;
-    return html_nodes;
 }

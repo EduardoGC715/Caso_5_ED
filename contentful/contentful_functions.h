@@ -13,6 +13,10 @@ public:
     contentful_functions(){
         all_regs= m_regs.getRecords();
     }
+
+
+
+
     string get_nickname(){
         bool valid=false;
         char nick[33];

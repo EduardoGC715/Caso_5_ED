@@ -3,6 +3,12 @@
 # include "Output/GUI.h"
 using namespace std;
 int main(){
+    vector<string> options;
+
+
+
+
+
     contentful_functions regs;
     vector<Registered*> all_users = regs.get_all_regs();
     Digraph<Registered>* graph = new Digraph<Registered>;
