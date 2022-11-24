@@ -10,6 +10,7 @@ private:
     string offer;
     string demand;
     Date* postdate;
+    //TODO map de fechas.
     Date* matchdate;
     string type;
 
@@ -19,7 +20,7 @@ public:
         this->offer = pOffer;
         this->demand = pDemand;
         this->postdate = new Date(pPostdate);
-        this->matchdate= new Date();
+        this->matchdate= new Date(false);
         if(!offer.empty() && !demand.empty()){
             type="both";
         }

@@ -13,17 +13,23 @@ class Date {
         tm* date_time;
 
     public:
-        Date() {
-            time_value = time(NULL);
-            date_time = localtime(&time_value);
-            int day = random(1, 31);
-            int month = random(0, 11);
-            int year = random(123, date_time->tm_year + 6);
-            date_time->tm_hour = date_time->tm_min = date_time->tm_sec = 0;
-            date_time->tm_year = year;
-            date_time->tm_mon = month;
-            date_time->tm_mday = day;
-            time_value = mktime(date_time);
+        Date(bool t_random) {
+            if(t_random){
+                time_value = time(NULL);
+                date_time = localtime(&time_value);
+                int day = random(1, 31);
+                int month = random(0, 11);
+                int year = random(123, date_time->tm_year + 6);
+                date_time->tm_hour = date_time->tm_min = date_time->tm_sec = 0;
+                date_time->tm_year = year;
+                date_time->tm_mon = month;
+                date_time->tm_mday = day;
+                time_value = mktime(date_time);
+            }
+            else{
+                time_value = time(NULL);
+                date_time = localtime(&time_value);
+            }
         }
 
         Date(string& pString) {
@@ -36,6 +42,16 @@ class Date {
             date_time->tm_mday = (day);
             date_time->tm_hour = date_time->tm_min = date_time->tm_sec = 0;
             time_value = mktime(date_time);
+        }
+
+        int get_year(){
+            return date_time->tm_year+1900;
+        }
+        int get_month(){
+            return date_time->tm_mon;
+        }
+        int get_day(){
+            return date_time->tm_mday;
         }
 
         string* to_string() {

@@ -4,6 +4,7 @@
 #include "../ADT/BP_Tree.h"
 #include "contentful.h"
 #include <queue>
+#include "../utils/Date.h"
 
 class contentful_functions {
 private:
@@ -14,22 +15,106 @@ public:
         all_regs= m_regs.getRecords();
     }
 
-
-
+    void display_menu(){
+        int option_m=0;
+        int option_d=0;
+        string nickname;
+        string password;
+        string offer;
+        string demand;
+        Date current(false);
+        bool done=false;
+        bool finished=false;
+        while(!done) {
+            printf("Bienvenido a Gobiz!\n"
+                   "Digite el numero para seleccionar la opcion que desea.\n"
+                   "1. Para crear un nuevo usuario.\n"
+                   "2. Para consultar matches de oferta de un nickname.\n"
+                   "3. Para consultar matches de demanda de un nickname.\n"
+                   "4. Para visualizar los comercios circulares.\n"
+                   "5. Para visualizar la cadena de valor mas larga con mayor concurrencia.\n"
+                   "6. Para visualizar la cadena de valoe mas larga con menor concurrencia.\n"
+                   "7. Para visualizar el Top 10 de servicios o productos mas codiciados.\n"
+                   "8. Para visualizar la areas de mercado conexas.\n"
+                   "9. Para salir.\n");
+            scanf("%d", &option_m);
+            if (option_m == 1) {
+                nickname = get_nickname();
+                password = get_password();
+                printf("Seleccione si desea:\n"
+                       "1. Ofertar.\n"
+                       "2. Demandar.\n"
+                       "3. Ambas.\n");
+                scanf("%d",&option_d);
+                while(!finished){
+                    if(option_d==1){
+                        printf("Digite la oferta: ");
+                        offer = get_description();
+                        finished=true;
+                    }
+                    else if(option_d==2){
+                        printf("Digite la demanda: ");
+                        demand = get_description();
+                        finished=true;
+                    }
+                    else if(option_d==3){
+                        printf("Digite la oferta: ");
+                        offer = get_description();
+                        printf("Digite la demanda: ");
+                        demand = get_description();
+                        finished=true;
+                    }
+                    else{
+                        printf("Opcion incorrecta, intenta de nuevo.");
+                    }
+                }
+                cout<<nickname<< offer<<demand<< password<<current.get_day()<<current.get_month()<<current.get_year();
+                //reg_user(nickname, offer,demand, password,current.get_day(),current.get_month(),current.get_year());
+            }
+            else if (option_m == 2) {
+                printf("option 2");
+            }
+            else if (option_m == 3) {
+                printf("option 3");
+            }
+            else if (option_m == 4) {
+                printf("option 4");
+            }
+            else if (option_m == 5) {
+                printf("option 5");
+            }
+            else if (option_m == 6) {
+                printf("option 6");
+            }
+            else if (option_m == 7) {
+                printf("option 7");
+            }
+            else if (option_m == 8) {
+                printf("option 8");
+            }
+            else if (option_m == 9) {
+                done=true;
+            }
+            else{
+                printf("Opcion invalida, intenta de nuevo.");
+            }
+        }
+    }
 
     string get_nickname(){
         bool valid=false;
         char nick[33];
         string nickname;
-        while(!valid){
+        while(true){
+            printf("Digite el usuario: ");
             scanf("%32s", &nick );
             nickname=nick;
             if(find_nickname(nickname)==-1){
                 if(nickname.length()>10){
-                    valid=true;
+                    break;
                 }
-                //unvalid
             }
+            printf("El usuario ingresado es invalido.\n");
         }
         return nickname;
     }
@@ -41,16 +126,17 @@ public:
         string password;
         string password_con;
 
-        while(!valid){
+        while(true){
+            printf("Digite una contraseña: ");
             scanf("%20s",&pass);
             password=pass;
-            //confirmation
+            printf("Digite la contraseña de nuevo: ");
             scanf("%20s",&pass_con);
             password_con=pass_con;
             if(password==password_con){
-                valid=true;
+                break;
             }
-            //unvalid
+            printf("La contraseña no coincide.");
         }
         return password;
     }
@@ -140,6 +226,8 @@ public:
                         bp_insert(string_minimizer(user_j->getDemand()),match_tree);
                         match_value = get_match_value(match_tree.get_leaves());
                         if(match_value>5){
+
+                            //TODO fecha
                             pGraph->join(pos_i, pos_j, match_value);
                         }
                     }

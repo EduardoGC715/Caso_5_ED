@@ -3,12 +3,6 @@
 # include "Output/GUI.h"
 using namespace std;
 int main(){
-    vector<string> options;
-
-
-
-
-
     contentful_functions regs;
     vector<Registered*> all_users = regs.get_all_regs();
     Digraph<Registered>* graph = new Digraph<Registered>;
@@ -22,4 +16,5 @@ int main(){
     // create_graph_UI(regs.get_all_regs());
     string path = "..\\Output\\index.html";
     show_html(path);
+    regs.display_menu();
 }

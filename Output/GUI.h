@@ -81,6 +81,7 @@ void fullgraph_html(Digraph<Registered>* pGraph) {
     return;
 }
 
-void display_menu(){
-
+void ranking_html(){
+    
 }
+
