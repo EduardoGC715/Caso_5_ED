@@ -107,20 +107,22 @@ public:
     }
 
     int get_match_value(std::vector<string> leaves){
-        std::string current;
+        std::string current_i;
+        string current_j;
         int value = 0;
         for(int i=0;i<leaves.size();i++){
-            current=leaves[i];
+            current_i=leaves[i];
             for(int j=i+1;j<leaves.size();j++){
-                if(current!=leaves[j]){
-                    break;
-                } ++value;
+                current_j=leaves[j];
+                if(current_i==current_j){
+                    value++;
+                }
             }
         } return value;
     }
 
     void match_maker(vector<Registered*> &users, Digraph<Registered>* pGraph){
-        int match_value;
+        int match_value=0;
         for(int pos_i=0;pos_i<users.size();pos_i++){
             Registered* user_i = users.at(pos_i);
             if (user_i->getType() != "demander"){
