@@ -12,7 +12,8 @@ int main(){
     }
 
     regs.match_maker(all_users, graph);
-    fullgraph_html(graph);
+    output_graph(graph);
+    // output_connected_sets(graph);
     /* create_graph_UI(regs.get_all_regs());
     string path = "Output\\test_2.html";
     show_html(path); */
