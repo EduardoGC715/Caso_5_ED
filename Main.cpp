@@ -12,10 +12,11 @@ int main(){
     }
 
     regs.match_maker(all_users, graph);
-    fullgraph_html(graph);
-    // create_graph_UI(regs.get_all_regs());
-    //ranking_html(graph);
-    string path = "..\\Output\\index.html";
-    show_html(path);
-    regs.display_menu();
+
+    // output_graph(graph);
+    // output_connected_sets(graph);
+    output_longest_chain(graph, graph->get_vertex(28), Chain::MAX);
+    /* create_graph_UI(regs.get_all_regs());
+    string path = "Output\\test_2.html";
+    show_html(path); */
 }
