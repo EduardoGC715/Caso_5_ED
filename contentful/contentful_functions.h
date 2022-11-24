@@ -103,43 +103,37 @@ public:
     }
 
     void bp_insert(vector<string> to_add,BP_Tree<string> &t_tree){
-        printf("Word insertion: ");
         for(auto & word : to_add){
-            printf("%s", word.c_str());
             t_tree.insert(word);
-        }printf("\n");
+        }
     }
 
     int get_match_value(std::vector<string> leaves){
         std::string current;
-        int value;
-        for(int i=0;i<leaves.size();i++){ //[A,B,C] -> A:{B,C} -> B:{C}
+        int value = 0;
+        for(int i=0;i<leaves.size();i++){
             current=leaves[i];
             for(int j=i+1;j<leaves.size();j++){
                 if(current!=leaves[j]){
                     break;
                 } ++value;
-                 // hola hola adios progra progra cafe 
             }
-        }
-        return value;
+        } return value;
     }
 
     void match_maker(vector<Registered*> &users, Digraph<Registered>* pGraph){
-        int match_value; // [A, B, C, D] [A,B,C], [A,B,C,D]
+        int match_value;
         for(int pos_i=0;pos_i<users.size();pos_i++){
             Registered* user_i = users.at(pos_i);
             if (user_i->getType() != "demander"){
-                for(int pos_j=pos_i+1; pos_j<users.size(); pos_j++){
+                for(int pos_j=0; pos_j<users.size(); pos_j++){
                     Registered* user_j = users.at(pos_j);
                     if(user_j->getType() != "offerer" && pos_i != pos_j){
                         BP_Tree<string> match_tree (5);
-                        printf("Analyzing %s -> %s\n", user_i->getNickname().c_str(), user_j->getNickname().c_str());
                         bp_insert(string_minimizer(user_i->getOffer()), match_tree);
                         bp_insert(string_minimizer(user_j->getDemand()),match_tree);
                         match_value = get_match_value(match_tree.get_leaves());
-                        if(match_value>50){
-                            // printf("Match between %s ^ %s\n", user_i->getNickname().c_str(), user_j->getNickname().c_str());
+                        if(match_value>4){
                             pGraph->join(pos_i, pos_j, match_value);
                         }
                     }

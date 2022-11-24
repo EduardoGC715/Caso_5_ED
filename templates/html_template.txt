@@ -20,7 +20,7 @@
     var simulation = d3
         .forceSimulation(graphData.nodes)
         .force("collide", d3.forceCollide().radius(40))
-        .force("charge", d3.forceManyBody().strength(100))
+        .force("charge", d3.forceManyBody().strength(50))
         .force("center", d3.forceCenter(width / 2, height / 2))
         .force("link", d3.forceLink(graphData.links).id(d => d.name))
         .on("tick", ticked);
