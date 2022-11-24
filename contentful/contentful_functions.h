@@ -109,16 +109,18 @@ public:
     int get_match_value(std::vector<string> leaves){
         std::string current_i;
         string current_j;
-        int value = 0;
+        int total=0;
         for(int i=0;i<leaves.size();i++){
+            int value = 0;
             current_i=leaves[i];
             for(int j=i+1;j<leaves.size();j++){
                 current_j=leaves[j];
                 if(current_i==current_j){
-                    value++;
+                    value+=value+1;
                 }
             }
-        } return value;
+            total+=value;
+        } return total;
     }
 
     void match_maker(vector<Registered*> &users, Digraph<Registered>* pGraph){
@@ -133,7 +135,7 @@ public:
                         bp_insert(string_minimizer(user_i->getOffer()), match_tree);
                         bp_insert(string_minimizer(user_j->getDemand()),match_tree);
                         match_value = get_match_value(match_tree.get_leaves());
-                        if(match_value>4){
+                        if(match_value>5){
                             pGraph->join(pos_i, pos_j, match_value);
                         }
                     }
