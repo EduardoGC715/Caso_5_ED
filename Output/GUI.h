@@ -81,7 +81,37 @@ void fullgraph_html(Digraph<Registered>* pGraph) {
     return;
 }
 
-void ranking_html(){
-    
+vector<string> parse_graph_nicks(Digraph<Registered>* pGraph) {
+    vector<string> graph_data;
+    for (int index_a = 0; index_a < pGraph->get_size(); ++index_a) {
+        Vertex<Registered>* current = pGraph->get_vertex(index_a);
+        graph_data.push_back(current->get_data()->getNickname());
+    } return graph_data;
+}
+
+void ranking_html(Digraph<Registered>* pGraph){
+    ofstream file_output;
+    ifstream file_template;
+    string path = "..\\Output\\Rankings.html";
+    file_output.open(path, ostream::out | ofstream::trunc);
+    file_template.open("..\\templates\\RankingsTemplate.txt");
+
+    string line;
+    int line_num = 1;
+    while (getline(file_template, line) && line_num != 7) {
+        file_output << line << "\n";
+        ++line_num;
+    }
+    //file_output << pGraph->get_vertex();
+    while (getline(file_template, line) && line_num != 8) {
+        file_output << line << "\n";
+        ++line_num;
+    }
+
+    while (getline(file_template, line)) {
+        file_output << line << "\n";
+    } file_template.close();
+    file_output.close();
+    return;
 }
 

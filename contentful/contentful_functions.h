@@ -37,7 +37,7 @@ public:
                    "7. Para visualizar el Top 10 de servicios o productos mas codiciados.\n"
                    "8. Para visualizar la areas de mercado conexas.\n"
                    "9. Para salir.\n");
-            scanf("%d", &option_m);
+            scanf(" %d", &option_m);
             if (option_m == 1) {
                 nickname = get_nickname();
                 password = get_password();
@@ -45,7 +45,7 @@ public:
                        "1. Ofertar.\n"
                        "2. Demandar.\n"
                        "3. Ambas.\n");
-                scanf("%d",&option_d);
+                scanf(" %d",&option_d);
                 while(!finished){
                     if(option_d==1){
                         printf("Digite la oferta: ");
@@ -107,7 +107,7 @@ public:
         string nickname;
         while(true){
             printf("Digite el usuario: ");
-            scanf("%32s", &nick );
+            scanf(" %32s", &nick );
             nickname=nick;
             if(find_nickname(nickname)==-1){
                 if(nickname.length()>10){
@@ -128,10 +128,10 @@ public:
 
         while(true){
             printf("Digite una contraseña: ");
-            scanf("%20s",&pass);
+            scanf(" %20s",&pass);
             password=pass;
             printf("Digite la contraseña de nuevo: ");
-            scanf("%20s",&pass_con);
+            scanf(" %20s",&pass_con);
             password_con=pass_con;
             if(password==password_con){
                 break;
@@ -144,7 +144,7 @@ public:
     string get_description(){//in GUI add option to choose where to add; if offer or if demand
         char descri[251];
         string description;
-        scanf("%250s",&descri);
+        scanf(" %250s",&descri);
         description=descri;
         return description;
     }
@@ -249,6 +249,8 @@ public:
         }
         return descrptn;
     }
+
+    //TODO funcion que de todos los nodos del grafo me de un vector de string que contenga tanto las ofertas como las demandas de todos.
 
     priority_queue<tuple<int, string>> most_repeated(vector<string> to_analize){
         vector<string> simp_descrptns;

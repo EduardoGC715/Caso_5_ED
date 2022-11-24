@@ -14,6 +14,7 @@ int main(){
     regs.match_maker(all_users, graph);
     fullgraph_html(graph);
     // create_graph_UI(regs.get_all_regs());
+    //ranking_html(graph);
     string path = "..\\Output\\index.html";
     show_html(path);
     regs.display_menu();
