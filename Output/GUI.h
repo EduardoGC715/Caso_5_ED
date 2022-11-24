@@ -59,17 +59,17 @@ void fullgraph_html(Digraph<Registered>* pGraph) {
 
     string line;
     int line_num = 1;
-    while (getline(file_template, line) && line_num != 13) {
+    while (getline(file_template, line) && line_num != 21) {
         file_output << line << "\n";
         ++line_num;
     }
     file_output << graph_data->first; // Inserts node data
-    while (getline(file_template, line) && line_num != 15) {
+    while (getline(file_template, line) && line_num != 23) {
         file_output << line << "\n";
         ++line_num;
     }
     file_output << graph_data->second; // Inserts link data
-    while (getline(file_template, line) && line_num != 60) {
+    while (getline(file_template, line) && line_num != 70) {
         file_output << line << "\n";
         ++line_num;
     } file_output << colors << "\n";
