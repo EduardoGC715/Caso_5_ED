@@ -37,8 +37,6 @@ public:
                    "7. Para visualizar el Top 10 de servicios o productos mas codiciados.\n"
                    "8. Para visualizar la areas de mercado conexas.\n"
                    "9. Para salir.\n");
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             cin>>option_m;
             if (option_m == 1) {
                 nickname = get_nickname();
@@ -75,8 +73,7 @@ public:
                         printf("Opcion incorrecta, intenta de nuevo.");
                     }
                 }
-                cout<<nickname<< offer<<demand<< password<<current.get_day()<<current.get_month()<<current.get_year();
-                //reg_user(nickname, offer,demand, password,current.get_day(),current.get_month(),current.get_year());
+                reg_user(nickname, offer,demand, password,current.get_day(),current.get_month(),current.get_year());
             }
             else if (option_m == 2) {
                 printf("option 2");
@@ -149,7 +146,7 @@ public:
         string description;
         cin.clear();
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        cin>>description;
+        std::getline(std::cin >> std::ws, description);
         return description;
     }
     void reg_user(string t_nick, string t_offer, string t_demand, string t_password, int t_day, int t_month, int t_year){
