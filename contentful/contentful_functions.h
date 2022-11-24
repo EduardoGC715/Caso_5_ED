@@ -5,6 +5,7 @@
 #include "contentful.h"
 #include <queue>
 #include "../utils/Date.h"
+#include "../Output/GUI.h"
 
 class contentful_functions {
 private:
@@ -82,7 +83,7 @@ public:
                 printf("option 3");
             }
             else if (option_m == 4) {
-                printf("option 4");
+
             }
             else if (option_m == 5) {
                 printf("option 5");
