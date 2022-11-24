@@ -10,6 +10,12 @@ using std::pair;
 using std::ofstream;
 using std::ifstream;
 
+/*
+||=================================||
+||           HTML  Utils           ||
+||=================================||
+*/
+
 void show_html(string& pPath){
     ShellExecute(nullptr, "open", pPath.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
 }
@@ -37,20 +43,6 @@ string parse_link(NodeLink<Registered>* pLink) {
     return html_link;
 }
 
-pair<string, string>* parse_graph(Digraph<Registered>* pGraph, int pColorsize) {
-    pair<string, string>* graph_data = new pair<string,string>;
-    for (int index_a = 0; index_a < pGraph->get_size(); ++index_a) {
-        Vertex<Registered>* current = pGraph->get_vertex(index_a);
-        int color_id = random(0, pColorsize);
-        graph_data->first.append(parse_user(current, color_id));
-        for (int index_b = 0; index_b < current->link_quantity();) {
-            NodeLink<Registered>* link = current->get_link(index_b);
-            graph_data->second.append(parse_link(link));
-            ++index_b;
-        }
-    } return graph_data;
-}
-
 string parse_colors(vector<string>& pColors) {
     string html_colors = "        ";
     for (auto iter = pColors.begin(); iter != pColors.end();) {
@@ -64,9 +56,9 @@ void build_html_graph(vector<string>& pColors, pair<string, string>* pData) {
     string colors = parse_colors(pColors);
     ofstream file_output;
     ifstream file_template;
-    string path = "..\\Output\\index.html";
+    string path = "Output\\index.html";
     file_output.open(path, ostream::out | ofstream::trunc);
-    file_template.open("..\\templates\\html_template.txt");
+    file_template.open("templates\\html_template.txt");
 
     string line;
     int line_num = 1;
@@ -89,12 +81,39 @@ void build_html_graph(vector<string>& pColors, pair<string, string>* pData) {
         file_output << line << "\n";
     } file_template.close();
     file_output.close();
+    delete pData;
+}
+
+/*
+||=================================||
+||         Grafo  Completo         ||
+||=================================||
+*/
+
+pair<string, string>* parse_graph(Digraph<Registered>* pGraph, int pColorsize) {
+    pair<string, string>* graph_data = new pair<string,string>;
+    for (int index_a = 0; index_a < pGraph->get_size(); ++index_a) {
+        Vertex<Registered>* current = pGraph->get_vertex(index_a);
+        int color_id = random(0, pColorsize);
+        graph_data->first.append(parse_user(current, color_id));
+        for (int index_b = 0; index_b < current->link_quantity();) {
+            NodeLink<Registered>* link = current->get_link(index_b);
+            graph_data->second.append(parse_link(link));
+            ++index_b;
+        }
+    } return graph_data;
 }
 
 void output_graph(Digraph<Registered>* pGraph) {
     vector<string> colors = {"#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"};
     build_html_graph(colors, parse_graph(pGraph, colors.size()-1));
 }
+
+/*
+||=================================||
+||       Componentes Conexas       ||
+||=================================||
+*/
 
 void parse_connected_set(pair<string, string>* pData, VertexSet<Registered>* pSet, int pColor) {
     process_nodes(pSet);
@@ -103,7 +122,8 @@ void parse_connected_set(pair<string, string>* pData, VertexSet<Registered>* pSe
         pData->first.append(parse_user(node, pColor));
         for (int index = 0; index < node->link_quantity();) {
             NodeLink<Registered>* link = node->get_link(index);
-            if (link->get_endpoint()->is_processed()) {
+            Vertex<Registered>* target = link->get_endpoint();
+            if (target->is_processed()) {
                 pData->second.append(parse_link(link));
             } ++index;
         } ++iter;
@@ -121,6 +141,48 @@ void output_connected_sets(Digraph<Registered>* pGraph) {
         ++iter;
     } build_html_graph(colors, graph_data);
 }
+
+/*
+||=================================||
+||       Cadenas de Valor       ||
+||=================================||
+*/
+enum class Chain {
+    MAX,
+    MIN
+};
+
+pair<string, string>* parse_chain(Digraph<Registered>* pGraph) {
+    pair<string, string>* graph_data = new pair<string,string>;
+    for (int index_a = 0; index_a < pGraph->get_size(); ++index_a) {
+        Vertex<Registered>* current = pGraph->get_vertex(index_a);
+        int color_id = int(current->is_processed());
+        graph_data->first.append(parse_user(current, color_id));
+        for (int index_b = 0; index_b < current->link_quantity();) {
+            NodeLink<Registered>* link = current->get_link(index_b);
+            graph_data->second.append(parse_link(link));
+            ++index_b;
+        }
+    } return graph_data;
+}
+
+void output_longest_chain(Digraph<Registered>* pGraph, Vertex<Registered>* pStart, Chain pSearch) {
+    vector<string> colors = {"#8b7d92","#f75252"};
+    Vertex<Registered>* last_node = nullptr;
+    switch (pSearch) {
+        case Chain::MAX:
+            last_node = max_concurrency_chain(pGraph, pStart);
+            break;
+        case Chain::MIN:
+            last_node = min_concurrency_chain(pGraph, pStart);
+            break;
+    } while (last_node != nullptr) {
+        last_node->set_processed(true);
+        last_node = last_node->get_previous();
+    } build_html_graph(colors, parse_chain(pGraph));
+}
+
+
 
 void display_menu() {
 
