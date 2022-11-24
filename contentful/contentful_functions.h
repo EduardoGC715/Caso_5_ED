@@ -24,7 +24,7 @@ public:
         string password;
         string offer;
         string demand;
-        Date current(false);
+        Date current();
         bool done=false;
         bool finished=false;
         while(!done) {

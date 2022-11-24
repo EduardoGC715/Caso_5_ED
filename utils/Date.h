@@ -38,6 +38,16 @@ class Date {
             time_value = mktime(date_time);
         }
 
+        int get_year(){
+            return date_time->tm_year+1900;
+        }
+        int get_month(){
+            return date_time->tm_mon;
+        }
+        int get_day(){
+            return date_time->tm_mday;
+        }
+
         string* to_string() {
             string* result;
             char buffer[80];
