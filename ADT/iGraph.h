@@ -3,16 +3,13 @@
 # include "Vertex.h"
 
 template<typename T>
-using VertexSet = vector<Vertex<T>*>;
-
-template<typename T>
 class iGraph {
     private:
-        vector<Vertex<T>*>* vertices;
+        VertexSet<T>* vertices;
 
     public:
         iGraph() {
-            vertices = new vector<Vertex<T>*>;
+            vertices = new VertexSet<T>;
         }
 
         ~iGraph() {
